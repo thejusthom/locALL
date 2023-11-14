@@ -29,4 +29,4 @@ Join locAll today and be an active participant in building a vibrant and connect
 
 <h2>Object Model Diagram</h2>
 
-![locAll drawio](locAll.drawio.png)
+![locAll drawio](locAll.jpg)
