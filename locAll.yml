@@ -1,0 +1,746 @@
+openapi: 3.0.0
+info:
+  title: INFO6150 - Web Design and User Experience Engineering Final Project || LocAll
+  version: 1.0.0
+  description: An API for providing a centralized space for events, marketplace listings, weather updates, and community initiatives—all tailored to your specific location
+tags:
+  - name: Users
+    description: User endpoints
+  - name: Happenings
+    description: List of all endpoints related to Happenings
+  - name: Marketplace
+    description: List of all endpoints related to Marketplace
+paths:
+  /users:
+    post:
+        tags:
+          - Users
+        summary: Create a new user
+        requestBody:
+            required: true
+            content:
+                application/json:
+                    schema:
+                        $ref: "#/components/schemas/User"
+        responses:
+            "201":
+                description: User created successfully
+            "401":
+                description: Unauthenticated request
+                content:
+                  application/json: 
+                    schema:
+                      $ref: "#/components/schemas/Error"
+    get:
+        tags:
+          - Users
+        summary: Get all user
+        responses:
+            "200":
+                description: All the user details
+                content:
+                    application/json:
+                        schema:
+                            type: array
+                            items:
+                                $ref: "#/components/schemas/User"
+            "500":
+                description: Internal Server Error
+                content:
+                  application/json: 
+                    schema:
+                      $ref: "#/components/schemas/Error"
+  /users/{user_id}:
+    get:
+      tags:
+       - Users
+      summary: Retrieve a specific user by ID
+      parameters:
+        - name: user_id
+          in: path
+          description: ID of the specific user to retrieve
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: User Details
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/User"
+        "404":
+          description: User not found
+          content:
+            application/json: 
+              schema:
+               $ref: "#/components/schemas/Error"
+    put:
+      tags:
+       - Users
+      summary: Update an existing user by ID
+      parameters:
+        - name: user_id
+          in: path
+          description: ID of the specific user to update
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        description: Details of the user to update
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/User'
+        required: true
+      responses:
+        "200":
+          description: Updated User
+        "404":
+          description: User not found
+          content:
+            application/json: 
+              schema:
+               $ref: "#/components/schemas/Error"
+    delete:
+      tags:
+        - Users
+      summary: Delete user details by ID
+      parameters:
+        - name: user_id
+          in: path
+          description: Delete user by ID
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: User details deleted!
+        "404":
+          description: User not found
+          content:
+            application/json: 
+              schema:
+               $ref: "#/components/schemas/Error"
+        "500":
+          description: Internal Server Error
+          content:
+            application/json: 
+              schema:
+               $ref: "#/components/schemas/Error"  
+  /{location_id}/happenings:
+    post:
+        tags:
+          - Happenings
+        summary: Create a new happening for a particular location
+        parameters:  
+          - name: location_id
+            in: path
+            description: ID of the specific location to post happening
+            required: true
+            schema:
+              type: integer
+        requestBody:
+            required: true
+            content:
+                application/json:
+                    schema:
+                        $ref: "#/components/schemas/Happening"
+        responses:
+            "201":
+                description: Happening created successfully
+            "401":
+                description: Unauthenticated request
+                content:
+                  application/json: 
+                    schema:
+                      $ref: "#/components/schemas/Error"
+    get:
+        tags:
+          - Happenings
+        summary: Get all happenings
+        parameters:  
+          - name: location_id
+            in: path
+            description: ID of the specific location to retrieve happenings
+            required: true
+            schema:
+              type: integer
+        responses:
+            "200":
+                description: All the happening details
+                content:
+                    application/json:
+                        schema:
+                            type: array
+                            items:
+                                $ref: "#/components/schemas/Happening"
+            "500":
+                description: Internal Server Error
+                content:
+                  application/json: 
+                    schema:
+                      $ref: "#/components/schemas/Error"
+  /{location_id}/happenings/{happening_id}:
+    get:
+      tags:
+       - Happenings
+      summary: Retrieve a specific happening by ID
+      parameters:
+        - name: location_id
+          in: path
+          description: ID of the specific location to retrieve its happening
+          required: true
+          schema:
+            type: integer
+        - name: happening_id
+          in: path
+          description: ID of the specific happening to retrieve
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Happening Details
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Happening"
+        "404":
+          description: Happening not found
+          content:
+            application/json: 
+              schema:
+               $ref: "#/components/schemas/Error"
+    put:
+      tags:
+       - Happenings
+      summary: Update an existing happening by ID
+      parameters:
+        - name: location_id
+          in: path
+          description: ID of the specific location to retrieve its happening
+          required: true
+          schema:
+            type: integer
+        - name: happening_id
+          in: path
+          description: ID of the specific happening to retrieve
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        description: Details of the happening to update
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Happening'
+        required: true
+      responses:
+        "200":
+          description: Updated Happening
+        "404":
+          description: Happening not found
+          content:
+            application/json: 
+              schema:
+               $ref: "#/components/schemas/Error"
+    delete:
+      tags:
+        - Happenings
+      summary: Delete happening by ID
+      parameters:
+        - name: location_id
+          in: path
+          description: ID of the specific location to retrieve its happening
+          required: true
+          schema:
+            type: integer
+        - name: happening_id
+          in: path
+          description: ID of the specific happening to retrieve
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Happening deleted!
+        "404":
+          description: Happening not found
+          content:
+            application/json: 
+              schema:
+               $ref: "#/components/schemas/Error"
+        "500":
+          description: Internal Server Error
+          content:
+            application/json: 
+              schema:
+               $ref: "#/components/schemas/Error"
+
+  /{location_id}/marketplace:
+    get:
+      tags:
+      - Marketplace
+      summary: Retrives all marketplace listings in at a specific location
+      parameters:
+        - name: location_id
+          in: path
+          description: ID of the specific location to retrieve its listings
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: All the happening details
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Listing'
+        "500":
+            description: Internal Server Error
+            content:
+              application/json: 
+                schema:
+                  $ref: '#/components/schemas/Error'
+    post:
+      tags:
+      - Marketplace
+      summary: Retrives all marketplace listings in at a specific location
+      parameters:
+        - name: location_id
+          in: path
+          description: ID of the specific location to retrieve its listings
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Listing'
+      responses:
+        "201":
+          description: Happening created successfully
+        "401":
+          description: Unauthenticated request
+          content:
+            application/json: 
+              schema:
+                $ref: '#/components/schemas/Error'              
+
+                          
+
+  /{location_id}/marketplace/{listing_id}:
+    get:
+      tags:
+       - Marketplace
+      summary: Retrive a specific marketplace listing based on listingId and locationId
+      parameters:
+      - name: location_id
+        in: path
+        description: ID of the specific location to retrieve its listings
+        required: true
+        schema:
+          type: integer
+      - name: listing_id
+        in: path
+        description: ID to retrive required marketplace listing
+        required: true
+        schema:
+          type: integer
+      responses:
+        "200": 
+          description: Listing Details
+          content: 
+            application/json:
+              schema: 
+                $ref: '#/components/schemas/Listing'
+        "404":
+          description: Listing not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+    put:
+      tags:
+        - Marketplace
+      summary: Update an existing marketplace listing based on ID
+      parameters: 
+      - name: location_id
+        in: path
+        description: ID of the specific location to retrieve its listings
+        required: true
+        schema:
+          type: integer
+      - name: listing_id
+        in: path
+        description: ID to retrive required marketplace listing
+        required: true
+        schema:
+          type: integer
+      requestBody:
+        description: Details of the listing to update
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Listing'
+        required: true
+      responses:
+        "200":
+          description: Updated Listing
+        "404":
+          description: Listing not found
+          content:
+            application/json: 
+              schema:
+               $ref: "#/components/schemas/Error"
+    delete:
+      tags:
+        - Marketplace
+      summary: Delete an existing marketplace listing based on ID
+      parameters: 
+      - name: location_id
+        in: path
+        description: ID of the specific location to retrieve its listings
+        required: true
+        schema:
+          type: integer
+      - name: listing_id
+        in: path
+        description: ID to retrive required marketplace listing
+        required: true
+        schema:
+          type: integer
+      responses:
+        '200':
+          description: Listing deleted!
+        "404":
+          description: Listing not found
+          content:
+            application/json: 
+              schema:
+               $ref: "#/components/schemas/Error"
+        "500":
+          description: Internal Server Error
+          content:
+            application/json: 
+              schema:
+               $ref: '#/components/schemas/Error'      
+
+  /{location_id}/events:
+    post:
+        tags:
+          - Events
+        summary: Create a new event for a particular location
+        parameters:  
+          - name: location_id
+            in: path
+            description: ID of the specific location to post happening
+            required: true
+            schema:
+              type: integer
+        requestBody:
+            required: true
+            content:
+                application/json:
+                    schema:
+                        $ref: "#/components/schemas/Event"
+        responses:
+            "201":
+                description: Event created successfully
+            "401":
+                description: Unauthenticated request
+                content:
+                  application/json: 
+                    schema:
+                      $ref: "#/components/schemas/Error"
+    get:
+        tags:
+          - Events
+        summary: Get all Events
+        parameters:  
+          - name: location_id
+            in: path
+            description: ID of the specific location to retrieve happenings
+            required: true
+            schema:
+              type: integer
+        responses:
+            "200":
+                description: All of the events details
+                content:
+                    application/json:
+                        schema:
+                            type: array
+                            items:
+                                $ref: "#/components/schemas/Happening"
+            "500":
+                description: Internal Server Error
+                content:
+                  application/json: 
+                    schema:
+                      $ref: "#/components/schemas/Error"
+                      
+  /{location_id}/events/{event_id}:
+    get:
+      tags:
+       - Events
+      summary: Retrieve a specific event by ID
+      parameters:
+        - name: location_id
+          in: path
+          description: ID of the specific location to retrieve its happening
+          required: true
+          schema:
+            type: integer
+        - name: event_id
+          in: path
+          description: ID of the specific event to retrieve
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Event Details
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Event"
+        "404":
+          description: Happening not found
+          content:
+            application/json: 
+              schema:
+               $ref: "#/components/schemas/Error"
+    put:
+      tags:
+       - Events
+      summary: Update an existing event by ID
+      parameters:
+        - name: location_id
+          in: path
+          description: ID of the specific location to retrieve its happening
+          required: true
+          schema:
+            type: integer
+        - name: event_id
+          in: path
+          description: ID of the specific event to update
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        description: Details of the event to update
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Event'
+        required: true
+      responses:
+        "200":
+          description: Updated Event
+        "404":
+          description: Event not found
+          content:
+            application/json: 
+              schema:
+               $ref: "#/components/schemas/Error"
+    delete:
+      tags:
+        - Events
+      summary: Delete event by ID
+      parameters:
+        - name: location_id
+          in: path
+          description: ID of the specific location to retrieve its happening
+          required: true
+          schema:
+            type: integer
+        - name: event_id
+          in: path
+          description: ID of the specific event to delete
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Event deleted!
+        "404":
+          description: Event not found!
+          content:
+            application/json: 
+              schema:
+               $ref: "#/components/schemas/Error"
+        "500":
+          description: Internal Server Error
+          content:
+            application/json: 
+              schema:
+               $ref: "#/components/schemas/Error"
+
+components:
+  schemas:
+    Person:
+      type: object
+      properties:
+        firstName:
+          type: string
+          description: First name of the person
+          example: Pranav
+        lastName:
+          type: string
+          description: Last name of the person
+          example: Prakash
+        address:
+          type: string
+          description: Address of the person
+          example: 14 Crossing Street
+        zipcode:
+          type: integer
+          description: Zipcode of the address
+          example: 02001
+        phoneNumber:
+          type: integer
+          description: Phone number of the person
+          example: 8570023353
+        isActive:
+          type: boolean
+          description: Status of the person
+          example: Y
+      required:
+        - firstName
+        - lastName
+        - zipcode
+        - phoneNumber
+
+    Happening:
+      type: object
+      properties:
+        title:
+          type: string
+          description: Title of the happening
+          example: "Deer charges through crowded Roxbury restaurant"
+        content:
+          type: string
+          description: Content of the happening
+          example: "People go to Sambhar & Chutney to save a buck, not to have one interrupt their meal. But that’s what happened in Walnut Park, Roxbury, on Sunday when a deer came crashing through a restaurant window."
+        author:
+          type: string
+          description: Details of the author
+          example: Ashmiya VijayaChandran
+        postedDate:
+          type: string
+          format: date-time
+          description: Posted date of the happening
+          example: '2017-07-21T17:32:28Z'
+        image:
+          type: string
+          description: src of the image
+          example: /happening/image
+      required:
+        - title
+        - content
+        - author
+        - image  
+
+    User:
+      allOf:
+        - $ref: "#/components/schemas/Person"
+        - type: object
+          properties:
+            username:
+              type: string
+              description: Username of the person
+              example: name@gmail.com
+            password:
+              type: string
+              description: Password of the person
+              example: Password
+          required:
+           - username
+           - password       
+    
+    Listing:
+      type: object
+      properties: 
+        productName:
+          type: string
+          description: Listing Title
+          example: Patio table with 6 chairs
+        price:
+          type: string
+          description: Price of the listing
+          example: $40
+        listingDate:
+          type: string
+          format: date-time
+          description: Date of listing
+          example: '2017-07-21T17:32:28Z'
+        description:
+          type: string
+          description: Description of the listing
+          example: Grab this steal of a deal! $50 for a patio table with 6 chairs. Ideal for outdoor dining or lounging. Sturdy construction, weather-resistant, and versatile style. Transform your patio into a cozy retreat for gatherings. Don't miss out on this affordable and stylish addition to your outdoor space!
+        organizer:
+          type: string
+          description: Posted by
+          example: Joe Doe
+
+    Event:
+      type: object
+      properties:
+        eventId:
+          type: string
+          description: id of the Event
+          example: "EV001"
+        eventName:
+          type: string
+          description: Name of the Event
+          example: "GoFundMe Fundraiser event for the charity."
+        startDate:
+          type: string
+          format: date-time
+          description: Start date & time of the event
+          example: '2017-07-21T17:32:28Z'
+        endDate:
+          type: string
+          format: date-time
+          description: End date & time of the event
+          example: '2017-10-21T17:32:28Z'
+        descriptionInfo:
+          type: string
+          description: description of the event
+          example: "Join us in making a difference! Support our charity fundraiser on GoFundMe and contribute to impactful initiatives that bring positive change to communities in need. Your generous donations empower us to continue our mission of creating a brighter and more inclusive future for all."
+        address:
+          type: string
+          description: Address of the Event
+          example: "123 Generosity Lane Hopeville, Charityville 54321, United Givingdom"
+        catergory:
+          type: string
+          description: Type/Catergory of the Event
+          example: "Fundraiser for charity"
+        organizer:
+          type: string
+          description: Organizer Company Name of the Event
+          example: "HopeHarbor Philanthropy Solutions, LLC"
+      required:
+        - eventName
+        - startDate
+        - endDate
+        - address
+        - organizer
+
+    Error:
+      type: object
+      properties: 
+        code:
+          type: integer
+          description : Error code
+          example: 400
+        message:
+          type: string
+          description: Error message
+          example: User is not authenticated
