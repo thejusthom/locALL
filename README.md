@@ -28,4 +28,5 @@ Key Features:
 Join locAll today and be an active participant in building a vibrant and connected local community. Together, let's make every neighborhood a better place!
 
 <h2>Object Model Diagram</h2>
-![locAll drawio](/locAll.drawio.png)
+
+![locAll drawio](locAll.drawio.png)
