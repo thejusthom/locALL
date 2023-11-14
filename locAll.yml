@@ -159,6 +159,36 @@ components:
         - zipcode
         - phoneNumber
 
+    Happening:
+      type: object
+      properties:
+        title:
+          type: string
+          description: Title of the happening
+          example: Deer charges through crowded Roxbury restaurant
+        content:
+          type: string
+          description: Content of the happening
+          example: People go to Sambhar & Chutney to save a buck, not to have one interrupt their meal. But that’s what happened in Walnut Park, Roxbury, on Sunday when a deer came crashing through a restaurant window.
+        author:
+          type: string
+          description: Details of the author
+          example: Ashmiya VijayaChandran
+        postedDate:
+          type: string
+          format: date-time
+          description: Posted date of the happening
+          example: '2017-07-21T17:32:28Z'
+        image:
+          type: string
+          description: src of the image
+          example: /happening/image
+      required:
+        - title
+        - content
+        - author
+        - image  
+
     User:
       allOf:
         - $ref: "#/components/schemas/Person"
