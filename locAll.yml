@@ -103,7 +103,7 @@ paths:
         - Users
       summary: Delete user details by ID
       parameters:
-        - name: id
+        - name: user_id
           in: path
           description: Delete user by ID
           required: true
