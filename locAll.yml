@@ -123,7 +123,157 @@ paths:
           content:
             application/json: 
               schema:
+               $ref: "#/components/schemas/Error"  
+  /{location_id}/happenings:
+    post:
+        tags:
+          - Happenings
+        summary: Create a new happening for a particular location
+        parameters:  
+          - name: location_id
+            in: path
+            description: ID of the specific location to post happening
+            required: true
+            schema:
+              type: integer
+        requestBody:
+            required: true
+            content:
+                application/json:
+                    schema:
+                        $ref: "#/components/schemas/Happening"
+        responses:
+            "201":
+                description: Happening created successfully
+            "401":
+                description: Unauthenticated request
+                content:
+                  application/json: 
+                    schema:
+                      $ref: "#/components/schemas/Error"
+    get:
+        tags:
+          - Happenings
+        summary: Get all happenings
+        parameters:  
+          - name: location_id
+            in: path
+            description: ID of the specific location to retrieve happenings
+            required: true
+            schema:
+              type: integer
+        responses:
+            "200":
+                description: All the happening details
+                content:
+                    application/json:
+                        schema:
+                            type: array
+                            items:
+                                $ref: "#/components/schemas/Happening"
+            "500":
+                description: Internal Server Error
+                content:
+                  application/json: 
+                    schema:
+                      $ref: "#/components/schemas/Error"
+  /{location_id}/happenings/{happening_id}:
+    get:
+      tags:
+       - Happenings
+      summary: Retrieve a specific happening by ID
+      parameters:
+        - name: location_id
+          in: path
+          description: ID of the specific location to retrieve its happening
+          required: true
+          schema:
+            type: integer
+        - name: happening_id
+          in: path
+          description: ID of the specific happening to retrieve
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Happening Details
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Happening"
+        "404":
+          description: Happening not found
+          content:
+            application/json: 
+              schema:
+               $ref: "#/components/schemas/Error"
+    put:
+      tags:
+       - Happenings
+      summary: Update an existing happening by ID
+      parameters:
+        - name: location_id
+          in: path
+          description: ID of the specific location to retrieve its happening
+          required: true
+          schema:
+            type: integer
+        - name: happening_id
+          in: path
+          description: ID of the specific happening to retrieve
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        description: Details of the happening to update
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Happening'
+        required: true
+      responses:
+        "200":
+          description: Updated Happening
+        "404":
+          description: Happening not found
+          content:
+            application/json: 
+              schema:
+               $ref: "#/components/schemas/Error"
+    delete:
+      tags:
+        - Happenings
+      summary: Delete happening by ID
+      parameters:
+        - name: location_id
+          in: path
+          description: ID of the specific location to retrieve its happening
+          required: true
+          schema:
+            type: integer
+        - name: happening_id
+          in: path
+          description: ID of the specific happening to retrieve
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Happening deleted!
+        "404":
+          description: Happening not found
+          content:
+            application/json: 
+              schema:
+               $ref: "#/components/schemas/Error"
+        "500":
+          description: Internal Server Error
+          content:
+            application/json: 
+              schema:
                $ref: "#/components/schemas/Error"              
+
 components:
   schemas:
     Person:
