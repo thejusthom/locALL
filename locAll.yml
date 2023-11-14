@@ -30,7 +30,7 @@ paths:
                 content:
                   application/json: 
                     schema:
-                      $ref: "#/components/schemas/Error"
+                      $ref: "#/components/schemas/Error401"
     get:
         tags:
           - Users
@@ -49,7 +49,7 @@ paths:
                 content:
                   application/json: 
                     schema:
-                      $ref: "#/components/schemas/Error"
+                      $ref: "#/components/schemas/Error500"
   /users/{user_id}:
     get:
       tags:
@@ -74,7 +74,7 @@ paths:
           content:
             application/json: 
               schema:
-               $ref: "#/components/schemas/Error"
+               $ref: "#/components/schemas/Error404"
     put:
       tags:
        - Users
@@ -101,7 +101,7 @@ paths:
           content:
             application/json: 
               schema:
-               $ref: "#/components/schemas/Error"
+               $ref: "#/components/schemas/Error404"
     delete:
       tags:
         - Users
@@ -121,13 +121,13 @@ paths:
           content:
             application/json: 
               schema:
-               $ref: "#/components/schemas/Error"
+               $ref: "#/components/schemas/Error404"
         "500":
           description: Internal Server Error
           content:
             application/json: 
               schema:
-               $ref: "#/components/schemas/Error"  
+               $ref: "#/components/schemas/Error500"  
   /{location_id}/happenings:
     post:
         tags:
@@ -154,7 +154,7 @@ paths:
                 content:
                   application/json: 
                     schema:
-                      $ref: "#/components/schemas/Error"
+                      $ref: "#/components/schemas/Error401"
     get:
         tags:
           - Happenings
@@ -180,7 +180,7 @@ paths:
                 content:
                   application/json: 
                     schema:
-                      $ref: "#/components/schemas/Error"
+                      $ref: "#/components/schemas/Error500"
   /{location_id}/happenings/{happening_id}:
     get:
       tags:
@@ -211,7 +211,7 @@ paths:
           content:
             application/json: 
               schema:
-               $ref: "#/components/schemas/Error"
+               $ref: "#/components/schemas/Error404"
     put:
       tags:
        - Happenings
@@ -244,7 +244,7 @@ paths:
           content:
             application/json: 
               schema:
-               $ref: "#/components/schemas/Error"
+               $ref: "#/components/schemas/Error404"
     delete:
       tags:
         - Happenings
@@ -270,13 +270,13 @@ paths:
           content:
             application/json: 
               schema:
-               $ref: "#/components/schemas/Error"
+               $ref: "#/components/schemas/Error404"
         "500":
           description: Internal Server Error
           content:
             application/json: 
               schema:
-               $ref: "#/components/schemas/Error"
+               $ref: "#/components/schemas/Error500"
 
   /{location_id}/marketplace:
     get:
@@ -431,7 +431,156 @@ paths:
               schema:
                $ref: '#/components/schemas/Error500'      
 
-
+  /{location_id}/events:
+    post:
+        tags:
+          - Events
+        summary: Create a new event for a particular location
+        parameters:  
+          - name: location_id
+            in: path
+            description: ID of the specific location to post happening
+            required: true
+            schema:
+              type: integer
+        requestBody:
+            required: true
+            content:
+                application/json:
+                    schema:
+                        $ref: "#/components/schemas/Event"
+        responses:
+            "201":
+                description: Event created successfully
+            "401":
+                description: Unauthenticated request
+                content:
+                  application/json: 
+                    schema:
+                      $ref: "#/components/schemas/Error401"
+    get:
+        tags:
+          - Events
+        summary: Get all Events
+        parameters:  
+          - name: location_id
+            in: path
+            description: ID of the specific location to retrieve happenings
+            required: true
+            schema:
+              type: integer
+        responses:
+            "200":
+                description: All of the events details
+                content:
+                    application/json:
+                        schema:
+                            type: array
+                            items:
+                                $ref: "#/components/schemas/Happening"
+            "500":
+                description: Internal Server Error
+                content:
+                  application/json: 
+                    schema:
+                      $ref: "#/components/schemas/Error500"
+                      
+  /{location_id}/events/{event_id}:
+    get:
+      tags:
+       - Events
+      summary: Retrieve a specific event by ID
+      parameters:
+        - name: location_id
+          in: path
+          description: ID of the specific location to retrieve its happening
+          required: true
+          schema:
+            type: integer
+        - name: event_id
+          in: path
+          description: ID of the specific event to retrieve
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Event Details
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Event"
+        "404":
+          description: Happening not found
+          content:
+            application/json: 
+              schema:
+               $ref: "#/components/schemas/Error404"
+    put:
+      tags:
+       - Events
+      summary: Update an existing event by ID
+      parameters:
+        - name: location_id
+          in: path
+          description: ID of the specific location to retrieve its happening
+          required: true
+          schema:
+            type: integer
+        - name: event_id
+          in: path
+          description: ID of the specific event to update
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        description: Details of the event to update
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Event'
+        required: true
+      responses:
+        "200":
+          description: Updated Event
+        "404":
+          description: Event not found
+          content:
+            application/json: 
+              schema:
+               $ref: "#/components/schemas/Error404"
+    delete:
+      tags:
+        - Events
+      summary: Delete event by ID
+      parameters:
+        - name: location_id
+          in: path
+          description: ID of the specific location to retrieve its happening
+          required: true
+          schema:
+            type: integer
+        - name: event_id
+          in: path
+          description: ID of the specific event to delete
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Event deleted!
+        "404":
+          description: Event not found!
+          content:
+            application/json: 
+              schema:
+               $ref: "#/components/schemas/Error404"
+        "500":
+          description: Internal Server Error
+          content:
+            application/json: 
+              schema:
+               $ref: "#/components/schemas/Error500"
 
 components:
   schemas:
@@ -474,11 +623,11 @@ components:
         title:
           type: string
           description: Title of the happening
-          example: Deer charges through crowded Roxbury restaurant
+          example: "Deer charges through crowded Roxbury restaurant"
         content:
           type: string
           description: Content of the happening
-          example: People go to Sambhar & Chutney to save a buck, not to have one interrupt their meal. But that’s what happened in Walnut Park, Roxbury, on Sunday when a deer came crashing through a restaurant window.
+          example: "People go to Sambhar & Chutney to save a buck, not to have one interrupt their meal. But that’s what happened in Walnut Park, Roxbury, on Sunday when a deer came crashing through a restaurant window."
         author:
           type: string
           description: Details of the author
@@ -524,7 +673,7 @@ components:
           example: Patio table with 6 chairs
         price:
           type: string
-          descritpion: Price of the listing
+          description: Price of the listing
           example: $40
         listingDate:
           type: string
@@ -533,15 +682,58 @@ components:
           example: '2017-07-21T17:32:28Z'
         description:
           type: string
-          descritpion: Description of the listing
+          description: Description of the listing
           example: Grab this steal of a deal! $50 for a patio table with 6 chairs. Ideal for outdoor dining or lounging. Sturdy construction, weather-resistant, and versatile style. Transform your patio into a cozy retreat for gatherings. Don't miss out on this affordable and stylish addition to your outdoor space!
         organizer:
           type: string
           description: Posted by
           example: Joe Doe
 
+    Event:
+      type: object
+      properties:
+        eventId:
+          type: string
+          description: id of the Event
+          example: "EV001"
+        eventName:
+          type: string
+          description: Name of the Event
+          example: "GoFundMe Fundraiser event for the charity."
+        startDate:
+          type: string
+          format: date-time
+          description: Start date & time of the event
+          example: '2017-07-21T17:32:28Z'
+        endDate:
+          type: string
+          format: date-time
+          description: End date & time of the event
+          example: '2017-10-21T17:32:28Z'
+        descriptionInfo:
+          type: string
+          description: description of the event
+          example: "Join us in making a difference! Support our charity fundraiser on GoFundMe and contribute to impactful initiatives that bring positive change to communities in need. Your generous donations empower us to continue our mission of creating a brighter and more inclusive future for all."
+        address:
+          type: string
+          description: Address of the Event
+          example: "123 Generosity Lane Hopeville, Charityville 54321, United Givingdom"
+        catergory:
+          type: string
+          description: Type/Catergory of the Event
+          example: "Fundraiser for charity"
+        organizer:
+          type: string
+          description: Organizer Company Name of the Event
+          example: "HopeHarbor Philanthropy Solutions, LLC"
+      required:
+        - eventName
+        - startDate
+        - endDate
+        - address
+        - organizer
 
-    Error:
+    Error400:
       type: object
       properties: 
         code:
