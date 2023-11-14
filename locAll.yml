@@ -370,7 +370,7 @@ paths:
         - Marketplace
       summary: Update an existing marketplace listing based on ID
       parameters: 
-      - name: location_Id
+      - name: location_id
         in: path
         description: ID of the specific location to retrieve its listings
         required: true
@@ -403,7 +403,7 @@ paths:
         - Marketplace
       summary: Delete an existing marketplace listing based on ID
       parameters: 
-      - name: location_Id
+      - name: location_id
         in: path
         description: ID of the specific location to retrieve its listings
         required: true
