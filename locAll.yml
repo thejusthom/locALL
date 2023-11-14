@@ -1,0 +1,188 @@
+openapi: 3.0.0
+info:
+  title: INFO6150 - Web Design and User Experience Engineering Final Project || LocAll
+  version: 1.0.0
+  description: An API for providing a centralized space for events, marketplace listings, weather updates, and community initiatives—all tailored to your specific location
+tags:
+  - name: Users
+    description: User endpoints
+paths:
+  /users:
+    post:
+        tags:
+          - Users
+        summary: Create a new user
+        requestBody:
+            required: true
+            content:
+                application/json:
+                    schema:
+                        $ref: "#/components/schemas/User"
+        responses:
+            "201":
+                description: User created successfully
+            "401":
+                description: Unauthenticated request
+                content:
+                  application/json: 
+                    schema:
+                      $ref: "#/components/schemas/Error"
+    get:
+        tags:
+          - Users
+        summary: Get all user
+        responses:
+            "200":
+                description: All the user details
+                content:
+                    application/json:
+                        schema:
+                            type: array
+                            items:
+                                $ref: "#/components/schemas/User"
+            "500":
+                description: Internal Server Error
+                content:
+                  application/json: 
+                    schema:
+                      $ref: "#/components/schemas/Error"
+  /users/{user_id}:
+    get:
+      tags:
+       - Users
+      summary: Retrieve a specific user by ID
+      parameters:
+        - name: user_id
+          in: path
+          description: ID of the specific user to retrieve
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: User Details
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/User"
+        "404":
+          description: User not found
+          content:
+            application/json: 
+              schema:
+               $ref: "#/components/schemas/Error"
+    put:
+      tags:
+       - Users
+      summary: Update an existing user by ID
+      parameters:
+        - name: user_id
+          in: path
+          description: ID of the specific user to update
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        description: Details of the user to update
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/User'
+        required: true
+      responses:
+        "200":
+          description: Updated User
+        "404":
+          description: User not found
+          content:
+            application/json: 
+              schema:
+               $ref: "#/components/schemas/Error"
+    delete:
+      tags:
+        - Users
+      summary: Delete user details by ID
+      parameters:
+        - name: id
+          in: path
+          description: Delete user by ID
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: User details deleted!
+        "404":
+          description: User not found
+          content:
+            application/json: 
+              schema:
+               $ref: "#/components/schemas/Error"
+        "500":
+          description: Internal Server Error
+          content:
+            application/json: 
+              schema:
+               $ref: "#/components/schemas/Error"              
+components:
+  schemas:
+    Person:
+      type: object
+      properties:
+        firstName:
+          type: string
+          description: First name of the person
+          example: Pranav
+        lastName:
+          type: string
+          description: Last name of the person
+          example: Prakash
+        address:
+          type: string
+          description: Address of the person
+          example: 14 Crossing Street
+        zipcode:
+          type: integer
+          description: Zipcode of the address
+          example: 02001
+        phoneNumber:
+          type: integer
+          description: Phone number of the person
+          example: 8570023353
+        isActive:
+          type: boolean
+          description: Status of the person
+          example: Y
+      required:
+        - firstName
+        - lastName
+        - zipcode
+        - phoneNumber
+
+    User:
+      allOf:
+        - $ref: "#/components/schemas/Person"
+        - type: object
+          properties:
+            username:
+              type: string
+              description: Username of the person
+              example: name@gmail.com
+            password:
+              type: string
+              description: Password of the person
+              example: Password
+          required:
+           - username
+           - password       
+    Error:
+      type: object
+      properties: 
+        code:
+          type: integer
+          description : Error code
+          example: 400
+        message:
+          type: string
+          description: Error message
+          example: User is not authenticated
