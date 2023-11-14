@@ -10,6 +10,8 @@ tags:
     description: List of all endpoints related to Happenings
   - name: Marketplace
     description: List of all endpoints related to Marketplace
+  - name: Events
+    description: List of all endpoints related to Events
 paths:
   /users:
     post:
