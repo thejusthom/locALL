@@ -1,5 +1,7 @@
+import User from './user.js';
 import Marketplace from './marketplace.js'
 
-export default {
+export {
+    User,
     Marketplace
 }
