@@ -2,10 +2,6 @@ import mongoose from "mongoose";
 
 const Schema = mongoose.Schema;
 const MarketplaceSchema = new Schema ({
-    listingId: {
-        type: Number,
-        required: true
-    },
     productName: {
         type: String,
         required: true

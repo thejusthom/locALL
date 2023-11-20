@@ -2,15 +2,15 @@ import express from "express";
 
 import * as marketplaceController from '../controllers/marketplace-controller.js';
 
-const router = express.Router();
+const marketplaceRouter = express.Router();
 
-router.route('/marketplace/')
+marketplaceRouter.route('/')
     .get(marketplaceController.find)
     .post(marketplaceController.post);
 
-router.route('/marketplace/:id')
+marketplaceRouter.route('/:id')
     .get(marketplaceController.get)
     .put(marketplaceController.put)
     .delete(marketplaceController.remove);    
 
-export default router;
+export default marketplaceRouter;
