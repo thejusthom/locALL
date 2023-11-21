@@ -8,5 +8,5 @@ export const setErrorResponse = (err, response) => {
             .json({
                 code: "ServiceError",
                 message: "Error occured while processing your request."
-            })
+            });
 }
