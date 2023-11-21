@@ -8,7 +8,7 @@ const initialize = (app) => {
     app.use(express.json());
     app.use(express.urlencoded());
 
-    mongoose.connect('mongodb+srv://thomsonth:ffs2sjXiAQIvnqmP@info6150-test.twitsfc.mongodb.net/coursedb?retryWrites=true&w=majority');
+    mongoose.connect('mongodb+srv://anthonirajs:IyLAYTfE57djZm0j@info6150fall2023.ajzgwia.mongodb.net/coursedb?retryWrites=true&w=majority');
     registerRouter(app);
 }
 
