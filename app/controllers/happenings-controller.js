@@ -1,18 +1,20 @@
 import * as happeningService from '../services/happenings-service.js';
 import { setResponse, setErrorResponse } from './response-handler.js';
 
+//method to get all happenings for a location
 export const get = async(request, response) => {
     try{
+        //getting the locationId from request
         const locationId = request.locationId;
-        // const locationId = request.params.locationId;
         const happenings = await happeningService.getAll(locationId);
-        console.log(locationId);
         setResponse(happenings, response, 200);
     } catch(err){
         console.log(err);
         setErrorResponse(err, response)
     }
 }
+
+// method to post a happening in a location
 export const post = async(request, response) => {
     try{
         const newHappening = {...request.body, locationId: request.locationId, postedDate: Date.now()};
@@ -25,7 +27,7 @@ export const post = async(request, response) => {
     }
 }
 
-
+// method to get a happening
 export const getById = async(request, response) => {
     try{
         const id = request.params.happeningId;
@@ -37,7 +39,7 @@ export const getById = async(request, response) => {
     }
 }
 
-
+// method to update a happening
 export const update = async(request, response) => {
     try{
         const id = request.params.happeningId;
@@ -50,7 +52,7 @@ export const update = async(request, response) => {
     }
 }
 
-
+// method to delete a happening
 export const remove = async(request, response) => {
     try{
         const id = request.params.happeningId;
