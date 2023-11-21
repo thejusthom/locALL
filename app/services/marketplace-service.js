@@ -5,13 +5,21 @@ export const search = async (params = {}) => {
     return marketplace;
 }
 
+export const getAll = async (locationId) => {
+    const location = {
+        locationId
+    }
+    return Marketplace.find(location).populate('createdUser');
+}
+
 export const save = async (newMarketplace) => {
     const marketplace = new Marketplace(newMarketplace);
+    // console.log(marketplace);
     return marketplace.save();
 }
 
 export const find = async (id) => {
-    const marketplace = await Marketplace.findById(id).exec();
+    const marketplace = await Marketplace.findById(id).populate('createdUser');
     return marketplace;
 }
 
