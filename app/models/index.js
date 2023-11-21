@@ -1,7 +1,9 @@
 import User from './user.js';
-import Marketplace from './marketplace.js'
+import Event from './event.js';
+import Marketplace from './marketplace.js';
 
 export {
-    User,
+    User, 
+    Event,
     Marketplace
 }
