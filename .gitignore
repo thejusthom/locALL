@@ -130,3 +130,4 @@ dist
 .pnp.*
 .vscode/launch.json
 .vscode/settings.json
+app/app.js
