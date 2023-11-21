@@ -726,8 +726,8 @@ components:
           example: "Fundraiser for charity"
         organizer:
           type: string
-          description: Organizer Company Name of the Event
-          example: "HopeHarbor Philanthropy Solutions, LLC"
+          description: Posted by
+          example: "Shashikar Anthoniraj"
       required:
         - eventName
         - startDate

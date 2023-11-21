@@ -10,6 +10,6 @@ export default (app) => {
     app.use('/users', userRouter);
     app.use('/location', locationRouter);
     app.use(`${LocationEndpoint}/happenings`, happeningRouter);
-    app.use('/events', eventRouter);
+    app.use(`${LocationEndpoint}/events`, eventRouter);
     app.use('/marketplace', marketplaceRouter);
 }
