@@ -4,9 +4,7 @@ import { setResponse, setErrorResponse } from './response-handler.js';
 export const get = async(request, response) => {
     try{
         const locationId = request.locationId;
-        // const locationId = request.params.locationId;
         const happenings = await happeningService.getAll(locationId);
-        console.log(locationId);
         setResponse(happenings, response, 200);
     } catch(err){
         console.log(err);
