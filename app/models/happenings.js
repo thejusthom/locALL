@@ -15,7 +15,8 @@ const HappeningSchema = new Schema({
         type: Date,
         required: true
     },
-    userId: {
+    //to get the user object from User Schema
+    createdUser: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User'
     },
