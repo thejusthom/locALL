@@ -3,21 +3,25 @@ import * as marketplaceService from '../services/marketplace-service.js';
 import {setResponse,setErrorResponse} from './response-handler.js';
 
 export const find = async (request, response) => {
+
     try {
-        const params = {...request.query};
-        console.log(params);
-        const marketplaces =  await (marketplaceService.search(params));
-        console.log(marketplaces);
+        const locationId = request.locationId;
+        console.log(locationId);
+        const marketplaces =  await (marketplaceService.getAll(locationId));
+        // console.log(marketplaces);
         setResponse(marketplaces, response, 200);
     }
     catch (err) {
+        console.log(err);
         setErrorResponse(err, response);
     }
 }
 
 export const post = async (request, response) => {
     try {
-        const newMarketplace = {...request.body};
+        console.log(request.locationId);
+        const newMarketplace = {...request.body, locationId: request.locationId, listingDate: Date.now()};
+        // console.log(newMarketplace);
         const marketplace = await marketplaceService.save(newMarketplace);
         setResponse(marketplace, response, 200);
     }
@@ -34,6 +38,7 @@ export const get = async (request, response) => {
         setResponse(marketplace, response, 200);
     }
     catch (err) {
+        console.log(err);
         setErrorResponse(err,response);   
     }
 }
@@ -46,6 +51,7 @@ export const put = async (request, response) => {
         setResponse(marketplace, response, 200);
     }
     catch (err) {
+        console.log(err);
         setErrorResponse(err,response);   
     }
 }
@@ -54,9 +60,10 @@ export const remove = async (request, response) => {
     try {
         const id = request.params.id;
         const marketplace = await marketplaceService.remove(id);
-        setResponse({}, response, 200);
+        setResponse(marketplace, response, 200);
     }
     catch (err) {
+        console.log(err);
         setErrorResponse(err,response);   
     }
 }

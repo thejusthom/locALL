@@ -21,6 +21,14 @@ const MarketplaceSchema = new Schema ({
     organizer: {
         type: String,
         required: true
+    },
+    createdUser: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User'
+    },
+    locationId: {
+        type: String,
+        required: true
     }
 })
 
