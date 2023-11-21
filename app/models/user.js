@@ -1,7 +1,9 @@
 import mongoose from 'mongoose';
 
+// Getting the schema from mongoose
 const Schema = mongoose.Schema;
 
+// Creating UserSchema
 const UserSchema = new Schema({
     person: {
         firstName: {
@@ -24,6 +26,7 @@ const UserSchema = new Schema({
             type: String,
             required: true
         },
+        // To show whether user is online
         isActive: {
             type: Boolean
         }
@@ -38,6 +41,7 @@ const UserSchema = new Schema({
     }
 },
     {
+        // To disable the versioning
         versionKey: false
     });
 
