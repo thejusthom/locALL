@@ -2,9 +2,9 @@
     "person": {
         "firstName": "Pranav3",
         "lastName": "Prakash",
-         "address": "149 centre st",
+        "address": "149 centre st",
         "zipcode": "02119",
-         "phoneNumber": "8888888",
+        "phoneNumber": "8888888",
         "isActive": true
     },
     

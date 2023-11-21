@@ -10,7 +10,7 @@ export const get = async(request, response) => {
         setResponse(happenings, response, 200);
     } catch(err){
         console.log(err);
-        setErrorResponse(err, response)
+        setErrorResponse(err, response);
     }
 }
 
@@ -60,7 +60,7 @@ export const remove = async(request, response) => {
         setResponse(removedHappening, response,200);
     } catch(err){
         console.log(err);
-        setErrorResponse(err, response)
+        setErrorResponse(err, response);
     }
 }
 

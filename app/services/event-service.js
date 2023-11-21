@@ -1,25 +1,35 @@
 import eventModel from "../models/event.js";
 
-export const getAllEvents = async (params = {}) => {
-const event = await eventModel.find(params).exec();
+//GET all events
+export const getAllEvents = async (locationId) => {
+  const location = {
+    locationId
+  }
+//to populate other user details in user object
+const event = await eventModel.find(location).populate('createdUser');
 return event;
 };
 
+//GET event by id
 export const getEventById = async (id) => {
-const event = await eventModel.findById(id).exec();
+//to populate other user details in user object
+const event = await eventModel.findById(id).populate('createdUser');
 return event;
 };
 
+//POST Create a event
 export const createEvent = async (newEvent) => {
   const event = new eventModel(newEvent);
   return event.save();
 };
 
+//PUT Update a event
 export const updateEventById = async (id, updatedEvent) => {
   const event = await eventModel.findByIdAndUpdate(id, updatedEvent, {new:true}).exec();
   return event;
 };
 
+//DELETE a event
 export const deleteEventById = async (id) => {
  const event = await eventModel.findByIdAndDelete(id).exec();
  return event;
