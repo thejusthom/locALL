@@ -7,7 +7,7 @@ export const get = async(request, response) => {
         setResponse(users, response, 200);
     } catch(err){
         console.log(err);
-        setErrorResponse(err, response)
+        setErrorResponse(err, response);
     }
 }
 export const post = async(request, response) => {
@@ -29,7 +29,7 @@ export const getById = async(request, response) => {
         setResponse(user, response, 200);
     } catch(err){
         console.log(err);
-        setErrorResponse(err, response)
+        setErrorResponse(err, response);
     }
 }
 
