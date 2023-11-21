@@ -13,6 +13,7 @@ export const getAll = async (request, response) => {
   }
   catch(Err)
   {
+    console.log(Err);
     setErrorResponse(Err, response);
   }
 };
@@ -21,6 +22,7 @@ export const getAll = async (request, response) => {
 export const getById = async (request, response) => {
   try
   {
+    //Getting event id from request
     const id = request.params.eventId;
     const event = await eventService.getEventById(id);
     console.log(event);
@@ -28,6 +30,7 @@ export const getById = async (request, response) => {
   }
   catch(Err)
   {
+    console.log(Err);
     setErrorResponse(Err, response);
   }
 };
@@ -36,6 +39,7 @@ export const getById = async (request, response) => {
 export const create = async (request, response) => {
   try
   {
+    //Creating a new event with location id and request body
     const newEvent = {...request.body, locationId: request.locationId};
     const event = await eventService.createEvent(newEvent);
     console.log(event);
@@ -43,6 +47,7 @@ export const create = async (request, response) => {
   }
   catch(Err)
   {
+    console.log(Err);
     setErrorResponse(Err, response);
   }
 };
@@ -51,6 +56,7 @@ export const create = async (request, response) => {
 export const updateById = async (request, response) => {
   try
   {
+    //Getting event id from request
     const id = request.params.eventId;
     const newEvent = {...request.body};
     const event = await eventService.updateEventById(id, newEvent);
@@ -59,6 +65,7 @@ export const updateById = async (request, response) => {
   }
   catch(Err)
   {
+    console.log(Err);
     setErrorResponse(Err, response);
   }
 };
@@ -68,12 +75,15 @@ export const updateById = async (request, response) => {
 export const deleteById = async (request, response) => {
   try
   {
+    //Getting event id from request
     const id = request.params.eventId;
     const event = await eventService.deleteEventById(id);
+    console.log(event);
     setResponse({}, response, 200);
   }
   catch(Err)
   {
+    console.log(Err);
     setErrorResponse(Err, response);
   }
 };

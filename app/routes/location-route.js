@@ -16,6 +16,7 @@ router.use('/:locationId/marketplace', function(req, res, next) {
         next()
       }, marketplaceRouter); 
 
+//To save locationId in request obj of event router
 router.use('/:locationId/events', (request, response, next) => {
   request.locationId = request.params.locationId;
   next();

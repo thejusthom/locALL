@@ -27,6 +27,7 @@ const eventSchema = new Schema({
     type: String,
     required: true
   },
+  //To get user from user schema using the id of that user
   createdUser: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User'

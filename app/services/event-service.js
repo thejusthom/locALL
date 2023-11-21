@@ -20,12 +20,13 @@ return event;
 //POST Create a event
 export const createEvent = async (newEvent) => {
   const event = new eventModel(newEvent);
-  return event.save();
+  event.populate('createdUser');
+  return await event.save();
 };
 
 //PUT Update a event
 export const updateEventById = async (id, updatedEvent) => {
-  const event = await eventModel.findByIdAndUpdate(id, updatedEvent, {new:true}).exec();
+  const event = await eventModel.findByIdAndUpdate(id, updatedEvent, {new:true}).populate('createdUser').exec();
   return event;
 };
 
