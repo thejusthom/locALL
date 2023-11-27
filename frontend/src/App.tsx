@@ -8,13 +8,7 @@ function App() {
     <div className="App">
       <div>kldj</div>
       <EventsView />
-      <FeedShare
-      image="./images/food.jpg"
-      foodType="food_type_here"
-      address="address_here"
-      servings={4}
-      submitterDetails="Thejus"
-      timePosted="2023/21/10"/>
+      <FeedShare/>
           </div>
   );
 }

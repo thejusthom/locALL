@@ -9,14 +9,13 @@ interface FeedShareProps {
   timePosted: string;
 }
 
-const FeedShare: React.FC<FeedShareProps> = ({
-  image,
-  foodType,
-  address,
-  servings,
-  submitterDetails,
-  timePosted,
-}) => {
+const FeedShare = () => {
+  const image = '';
+  const foodType = '';
+  const address = '';
+  const servings = 5;
+  const submitterDetails = '';
+  const timePosted = '';  
   return (
     <div className="card">
       <img src={image} alt="Food" className="card-image" />
