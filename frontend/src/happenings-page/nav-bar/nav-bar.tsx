@@ -1,5 +1,5 @@
 
-import './nav-bar.css';
+import './nav-bar.scss';
 
 import React from 'react';
 
