@@ -1,14 +1,14 @@
 import React from 'react';
 import logo from './logo.svg';
 import './App.css';
-import Navbar from './happenings-page/nav-bar/nav-bar';
+import HappeningsView from './views/HappeningsView';
 import EventsView from './views/EventsView';
 import FeedShare from './views/FeedShareView';
 
 function App() {
   return (
     <div>
-     <Navbar/>
+     <HappeningsView/>
 
       {/* <div className="App">
         <div>kldj</div>
