@@ -58,7 +58,7 @@ const [add,setAdd] = React.useState('')
                     container: mapContainer.current,
                     style: 'mapbox://styles/mapbox/streets-v12',
                     center: [location?.longitude, location?.latitude],
-                    zoom: 17
+                    zoom: 15
                     });
                 }
     React.useEffect(() => {
@@ -68,7 +68,7 @@ const [add,setAdd] = React.useState('')
         container: mapContainer.current,
         style: 'mapbox://styles/mapbox/streets-v12',
         center: [location?.longitude, location?.latitude],
-        zoom: 17
+        zoom: 15
         });
     }
     const url = `https://nominatim.openstreetmap.org/reverse?format=json&lat=${location.latitude}&lon=${location.longitude}`;
