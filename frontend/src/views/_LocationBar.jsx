@@ -3,9 +3,9 @@ import { AddressAutofill, SearchBox } from '@mapbox/search-js-react';
 import LoactionIcon from ".././assets/images/location.svg"
 
 const LocationBar = () => {
-    const [selectedLocation, setSelectedLocation] = React.useState("02119");
+    const [selectedLocation, setSelectedLocation] = React.useState("");
     const [showSearchBox, setShowSearchBox] = React.useState(false);
-    const [add,setAdd] = React.useState('');
+    const [add,setAdd] = React.useState("");
     const wrapperRef = React.useRef(null);
 
     function useOutsideAlerter(ref) {
@@ -45,6 +45,29 @@ const LocationBar = () => {
     setSelectedLocation(res.address.postcode)
 })   
     };
+    React.useEffect(() => {
+        // function handleLocationClick() {
+        if (navigator.geolocation) {
+          navigator.geolocation.getCurrentPosition(success, error);
+        } else {
+          console.log("Geolocation not supported");
+        }    
+      function success(position) {
+        const latitude = position.coords.latitude;
+        const longitude = position.coords.longitude;
+        fetch(`https://nominatim.openstreetmap.org/reverse?lat=${latitude}&lon=${longitude}&format=json`, {
+            headers: {
+              'User-Agent': 'ID of your APP/service/website/etc. v0.1'
+            }
+          }).then(res => res.json())
+            .then(res => {
+              setAdd(res.address?.postcode)
+              setSelectedLocation(res.address?.postcode)
+            })   
+        };
+      function error() {
+        console.log("Unable to retrieve your location");
+      }}, []);
 return(
     <>
           <form ref={wrapperRef} style={{display: "flex"}} onClick={onFormClick}>
