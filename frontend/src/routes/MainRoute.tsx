@@ -6,6 +6,7 @@ import Events from '../views/EventsView';
 import FeedShare from '../views/FeedShareView';
 import Home from '../views/Home';
 import Happenings from '../views/HappeningsView';
+import SinglePost from '../happenings-page/single-post/single-post';
 
 // ==============================|| MAIN ROUTING ||============================== //
 
@@ -32,6 +33,10 @@ const MainRoutes = {
         {
             path: '/happenings',
             element: <Happenings />
+        },
+        {
+            path: '/happenings/happeningId',
+            element: <SinglePost />
         }
     ]
 };
