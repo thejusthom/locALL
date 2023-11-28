@@ -1,16 +1,22 @@
 import React from 'react';
-import './App.css'
+import logo from './logo.svg';
+import './App.css';
+import HappeningsView from './views/HappeningsView';
 import EventsView from './views/EventsView';
 import FeedShare from './views/FeedShareView';
 
 function App() {
   return (
-    <div className="App">
-      <div>kldj</div>
-      <EventsView />
-      <FeedShare/>
-          </div>
-  );
+    <div>
+     <HappeningsView/>
+
+      {/* <div className="App">
+        <div>kldj</div>
+        <EventsView />
+        <FeedShare/>
+      </div> */}
+    </div>
+  )
 }
 
 export default App;
