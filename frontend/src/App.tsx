@@ -4,19 +4,12 @@ import './App.css';
 import HappeningsView from './views/HappeningsView';
 import EventsView from './views/EventsView';
 import FeedShare from './views/FeedShareView';
+import Routes from './routes';
 
 function App() {
   return (
-    <div>
-     <HappeningsView/>
-
-      {/* <div className="App">
-        <div>kldj</div>
-        <EventsView />
-        <FeedShare/>
-      </div> */}
-    </div>
-  )
+    <Routes />
+  );
 }
 
 export default App;
