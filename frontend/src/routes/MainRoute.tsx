@@ -5,6 +5,7 @@ import Marketplace from '../views/Marketplace';
 import Events from '../views/EventsView';
 import FeedShare from '../views/FeedShareView';
 import Home from '../views/Home';
+import Happenings from '../views/HappeningsView';
 
 // ==============================|| MAIN ROUTING ||============================== //
 
@@ -28,6 +29,10 @@ const MainRoutes = {
             path: '/feedshare',
             element: <FeedShare />
         },
+        {
+            path: '/happenings',
+            element: <Happenings />
+        }
     ]
 };
 
