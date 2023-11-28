@@ -1,21 +1,14 @@
 import React from 'react';
 import logo from './logo.svg';
 import './App.css';
-import Navbar from './happenings-page/nav-bar/nav-bar';
+import HappeningsView from './views/HappeningsView';
 import EventsView from './views/EventsView';
 import FeedShare from './views/FeedShareView';
-import { StyledEngineProvider } from '@mui/material';
+import Routes from './routes';
 
 function App() {
   return (
-    <StyledEngineProvider injectFirst>
-      <div className="App">
-        <div>kldj</div>
-        <Navbar/>
-        <EventsView />
-        <FeedShare/>
-      </div>
-    </StyledEngineProvider>
+    <Routes />
   );
 }
 
