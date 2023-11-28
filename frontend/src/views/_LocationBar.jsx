@@ -49,7 +49,8 @@ return(
     <>
           <form ref={wrapperRef} style={{display: "flex"}} onClick={onFormClick}>
           <img src={LoactionIcon} width={30} height={30} />
-{showSearchBox ? <SearchBox accessToken={'pk.eyJ1IjoiYXNobWl5YS12aWpheWFjaGFuZHJhbiIsImEiOiJjbHBnMXRxc3oxaXd3MmlwcG5zZjBpdXNqIn0.GqCCjkCcmFsgrpMnl7ntzw'}
+{showSearchBox ? 
+<SearchBox accessToken={'pk.eyJ1IjoiYXNobWl5YS12aWpheWFjaGFuZHJhbiIsImEiOiJjbHBnMXRxc3oxaXd3MmlwcG5zZjBpdXNqIn0.GqCCjkCcmFsgrpMnl7ntzw'}
 value={selectedLocation}
 theme={{icons: {search: ""}}}
 onRetrieve={onLocationChange}
