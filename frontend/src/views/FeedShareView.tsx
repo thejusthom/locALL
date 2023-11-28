@@ -39,7 +39,7 @@ export default function FeedShare() {
   };
 
   return (
-      <Card sx={{ maxWidth: 350 }} className='outline-card'>
+      <Card sx={{ maxWidth: 1000 }} className='outline-card'>
       <CardHeader
         avatar={
           <Avatar sx={{ bgcolor: red[500] }} aria-label="recipe">
@@ -56,7 +56,7 @@ export default function FeedShare() {
       />
       <CardMedia
         component="img"
-        height="194"
+        height="600"
         image={require('../assests/images/food1.jpg')}
         alt="Paella dish"
       />
@@ -78,8 +78,7 @@ export default function FeedShare() {
           expand={expanded}
           onClick={handleExpandClick}
           aria-expanded={expanded}
-          aria-label="show more"
-        >
+          aria-label="show more">          
           <ExpandMoreIcon />
         </ExpandMore>
       </CardActions>
