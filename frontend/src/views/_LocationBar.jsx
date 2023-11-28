@@ -4,7 +4,34 @@ import LoactionIcon from ".././assets/images/location.svg"
 
 const LocationBar = () => {
     const [selectedLocation, setSelectedLocation] = React.useState("02119");
-    const [add,setAdd] = React.useState('')
+    const [showSearchBox, setShowSearchBox] = React.useState(false);
+    const [add,setAdd] = React.useState('');
+    const wrapperRef = React.useRef(null);
+
+    function useOutsideAlerter(ref) {
+  React.useEffect(() => {
+    /**
+     * Alert if clicked on outside of element
+     */
+    function handleClickOutside(event) {
+        console.log(showSearchBox);
+      if (ref.current && !ref.current.contains(event.target)) {
+        // alert("You clicked outside of me!");
+        setShowSearchBox(false);
+      }
+    }
+    // Bind the event listener
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      // Unbind the event listener on clean up
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [ref]);
+}
+    useOutsideAlerter(wrapperRef);
+    const onFormClick = () => {
+        setShowSearchBox(true);
+    };
     const onLocationInputChange = (event) => {
         // console.log(event);
     // setSelectedLocation(event.target.value);
@@ -19,6 +46,7 @@ const LocationBar = () => {
   }
 }).then(res => res.json())
   .then(res => {
+    setAdd(res.address.postcode)
     setSelectedLocation(res.address.postcode)
 })   
 console.log(`https://nominatim.openstreetmap.org/reverse?lat=${location[0]}&lon=${location[1]}&format=json`)
@@ -27,7 +55,15 @@ console.log(`https://nominatim.openstreetmap.org/reverse?lat=${location[0]}&lon=
     };
 return(
     <>
-     <img src={LoactionIcon} width={30} height={30} />
+          <form ref={wrapperRef} style={{display: "flex"}} onClick={onFormClick}>
+          <img src={LoactionIcon} width={30} height={30} />
+{showSearchBox ? <SearchBox accessToken={'pk.eyJ1IjoiYXNobWl5YS12aWpheWFjaGFuZHJhbiIsImEiOiJjbHBnMXRxc3oxaXd3MmlwcG5zZjBpdXNqIn0.GqCCjkCcmFsgrpMnl7ntzw'}
+value={selectedLocation}
+theme={{icons: {search: ""}}}
+onRetrieve={onLocationChange}
+// onChange={onLocationChange}
+/> : <span>{add}</span>}
+        </form>
             <span>{selectedLocation}</span>
             <form>
         <AddressAutofill accessToken={"pk.eyJ1IjoiYXNobWl5YS12aWpheWFjaGFuZHJhbiIsImEiOiJjbHBnMXRxc3oxaXd3MmlwcG5zZjBpdXNqIn0.GqCCjkCcmFsgrpMnl7ntzw"}
@@ -45,13 +81,6 @@ return(
             onChange={onLocationInputChange}
           />
         </AddressAutofill>
-        </form>
-        <form>
-<SearchBox accessToken={'pk.eyJ1IjoiYXNobWl5YS12aWpheWFjaGFuZHJhbiIsImEiOiJjbHBnMXRxc3oxaXd3MmlwcG5zZjBpdXNqIn0.GqCCjkCcmFsgrpMnl7ntzw'}
-value={selectedLocation}
-onRetrieve={onLocationChange}
-// onChange={onLocationChange}
-/>
         </form>
     </>
 );
