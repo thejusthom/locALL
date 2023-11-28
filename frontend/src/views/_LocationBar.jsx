@@ -1,6 +1,6 @@
 import * as React from "react";
 import { AddressAutofill, SearchBox } from '@mapbox/search-js-react';
-import LoactionIcon from ".././assets/images/location.svg"
+import LocationIcon from ".././assets/images/location.svg"
 
 const LocationBar = () => {
     const [selectedLocation, setSelectedLocation] = React.useState("");
@@ -46,7 +46,6 @@ const LocationBar = () => {
 })   
     };
     React.useEffect(() => {
-        // function handleLocationClick() {
         if (navigator.geolocation) {
           navigator.geolocation.getCurrentPosition(success, error);
         } else {
@@ -71,7 +70,7 @@ const LocationBar = () => {
 return(
     <>
           <form ref={wrapperRef} style={{display: "flex"}} onClick={onFormClick}>
-          <img src={LoactionIcon} width={30} height={30} />
+          <img src={LocationIcon} width={30} height={30} />
 {showSearchBox ? 
 <SearchBox accessToken={'pk.eyJ1IjoiYXNobWl5YS12aWpheWFjaGFuZHJhbiIsImEiOiJjbHBnMXRxc3oxaXd3MmlwcG5zZjBpdXNqIn0.GqCCjkCcmFsgrpMnl7ntzw'}
 value={selectedLocation}
