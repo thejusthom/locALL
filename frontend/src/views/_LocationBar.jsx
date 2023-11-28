@@ -14,9 +14,7 @@ const LocationBar = () => {
      * Alert if clicked on outside of element
      */
     function handleClickOutside(event) {
-        console.log(showSearchBox);
       if (ref.current && !ref.current.contains(event.target)) {
-        // alert("You clicked outside of me!");
         setShowSearchBox(false);
       }
     }
@@ -33,13 +31,10 @@ const LocationBar = () => {
         setShowSearchBox(true);
     };
     const onLocationInputChange = (event) => {
-        // console.log(event);
-    // setSelectedLocation(event.target.value);
     setSelectedLocation(event.target.value)
     };
     const onLocationChange = (event) => {
         const location = event?.features[0]?.geometry?.coordinates;
-        console.log(location)
         fetch(`https://nominatim.openstreetmap.org/reverse?lat=${location[1]}&lon=${location[0]}&format=json`, {
   headers: {
     'User-Agent': 'ID of your APP/service/website/etc. v0.1'
@@ -49,9 +44,6 @@ const LocationBar = () => {
     setAdd(res.address.postcode)
     setSelectedLocation(res.address.postcode)
 })   
-console.log(`https://nominatim.openstreetmap.org/reverse?lat=${location[0]}&lon=${location[1]}&format=json`)
-        console.log(event);
-        console.log("here");
     };
 return(
     <>
@@ -61,10 +53,9 @@ return(
 value={selectedLocation}
 theme={{icons: {search: ""}}}
 onRetrieve={onLocationChange}
-// onChange={onLocationChange}
 /> : <span>{add}</span>}
         </form>
-            <span>{selectedLocation}</span>
+            {/* <span>{selectedLocation}</span>
             <form>
         <AddressAutofill accessToken={"pk.eyJ1IjoiYXNobWl5YS12aWpheWFjaGFuZHJhbiIsImEiOiJjbHBnMXRxc3oxaXd3MmlwcG5zZjBpdXNqIn0.GqCCjkCcmFsgrpMnl7ntzw"}
         onRetrieve={onLocationChange}
@@ -81,7 +72,7 @@ onRetrieve={onLocationChange}
             onChange={onLocationInputChange}
           />
         </AddressAutofill>
-        </form>
+        </form> */}
     </>
 );
 };
