@@ -1,13 +1,15 @@
 .nav{
   height: 50px;
   width: 100%;
-  /* background-color: aqua; */
+  background-color: #ffffff;
   position: sticky;
   top: 0;
   display: flex;
   flex-direction: row;
   align-items: center;
   font-family: 'Josefin Sans', sans-serif;
+  color: #ffffff;
+  z-index: 999;
 }
 
 .nav-left, .nav-right{
@@ -51,6 +53,7 @@
   font-size: 18px;
   font-weight: 250;
   cursor: pointer;
+  color: #444;
 }
 
 .navSearchIcon{
