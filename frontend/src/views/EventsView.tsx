@@ -8,12 +8,9 @@ const EventsView = () => {
 	// ADD YOUR ACCESS TOKEN FROM
 	// https://account.mapbox.com
 
-//     const mapContainer = React.useRef();
-// const map = React.useRef<Map>();
 const [location, setLocation] = React.useState<{ latitude: number;
 longitude: number;}>({latitude: 38.876516, longitude: -77.007481});
 const [add,setAdd] = React.useState('')
-// const [weather, setWeather] = React.useState(null);
   const mapContainer = React.useRef<HTMLDivElement | null>(null);
   const map = React.useRef<mapboxgl.Map | null>(null);
   function handleLocationClick() {
@@ -28,21 +25,9 @@ const [add,setAdd] = React.useState('')
     const latitude = position.coords.latitude;
     const longitude = position.coords.longitude;
     setLocation({ latitude, longitude });
-    // map.current = null;
     mapContainer.current = null;
     map.current?.setCenter([longitude, latitude]);
-    console.log(add);
-
-    // Make API call to OpenWeatherMap
-    // fetch(`https://api.openweathermap.org/data/2.5/weather?lat=${latitude}&lon=${longitude}&appid=<YOUR_API_KEY>&units=metric`)
-    //   .then(response => response.json())
-    //   .then(data => {
-    //     setWeather(data);
-    //     console.log(data);
-    //   })
-    //   .catch(error => console.log(error));
   }
-//   handleLocationClick();
   function error() {
     console.log("Unable to retrieve your location");
   }
@@ -232,19 +217,6 @@ const [add,setAdd] = React.useState('')
                 });
             });
         }
-        // let urll;
-        // function encodeImageFileAsURL(element: any) {
-        //     var file = element;
-        //     var reader = new FileReader();
-        //     reader.onloadend = function() {
-        //       console.log('RESULT', reader.result)
-        //       urll = reader.result;
-        //     }
-        //     reader.readAsDataURL(file);
-        //   }
-        //   encodeImageFileAsURL(".././assets/images/file.png");
-        // //   toDataURL('https://www.gravatar.com/avatar/d50c83cc0c6523b4d3f6085295c953e0');
-        // !!map.current && addImageToMap(map.current, 'another-custom-marker', urll);
         map.current?.addLayer({
             'id': 'places',
             'type': 'symbol',
@@ -260,21 +232,11 @@ const [add,setAdd] = React.useState('')
         // When a click event occurs on a feature in the places layer, open a popup at the
         // location of the feature, with description HTML from its properties.
         map.current?.on('click', 'places', (e) => {
-            // Copy coordinates array.
-            // const coordinates = !!e.features && e?.features[0]?.geometry?.coordinates.slice();
             const coordinates = e.features?.[0]?.geometry?.type === 'Point' ?
             ((e.features[0].geometry as unknown as mapboxgl.Point) as mapboxgl.Point & { coordinates: [number, number] })?.coordinates?.slice() :
             undefined;
           
             const description = !!e.features && e?.features[0]?.properties?.description;
-
-            // Ensure that if the map is zoomed out such that multiple
-            // copies of the feature are visible, the popup appears
-            // over the copy being pointed to.
-            // if(!!map.current && coordinates){
-            // while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
-            //     coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
-            // }}
             if(!!map.current && coordinates){
                  const lngLat = new mapboxgl.LngLat(coordinates[0], coordinates[1]);
             new mapboxgl.Popup()
@@ -309,48 +271,3 @@ const [add,setAdd] = React.useState('')
 }
 
 export default EventsView;
-
-// import React, { useRef, useEffect, useState } from 'react';
-// import mapboxgl from 'mapbox-gl'; // eslint-disable-line import/no-webpack-loader-syntax
-
-// mapboxgl.accessToken = 'pk.eyJ1IjoiYXNobWl5YS12aWpheWFjaGFuZHJhbiIsImEiOiJjbHBnMXFjOXEwcjV5MmlwYXAyczExdjJuIn0.swIBmGiiRyTivw7fHcb9aA';
-
-// export default function EventsView() {
-//   const mapContainer = useRef<HTMLDivElement | null>(null);
-//   const map = useRef<mapboxgl.Map | null>(null);
-//   const [lng, setLng] = useState(-70.9);
-//   const [lat, setLat] = useState(42.35);
-//   const [zoom, setZoom] = useState(9);
-
-//   useEffect(() => {
-//     if (!map.current && mapContainer.current) {
-//       map.current = new mapboxgl.Map({
-//         container: mapContainer.current,
-//         style: 'mapbox://styles/mapbox/streets-v12',
-//         center: [lng, lat],
-//         zoom: zoom
-//       });
-
-//       map.current.on('move', () => {
-//         setLng(parseInt(map.current!.getCenter().lng.toFixed(4)));
-//         setLat(parseInt(map.current!.getCenter().lat.toFixed(4)));
-//         setZoom(parseInt(map.current!.getZoom().toFixed(2)));
-//       });
-
-    //   return () => {
-    //     if (map.current) {
-    //       map.current.remove();
-    //     }
-    //   };
-//     }
-//   }, [lng, lat, zoom]);
-// console.log(mapContainer)
-//   return (
-//     <div>
-//       <div className="sidebar">
-//         Longitude: {lng} | Latitude: {lat} | Zoom: {zoom}
-//       </div>
-//       <div ref={mapContainer} className="map-container" />
-//     </div>
-//   );
-// }
