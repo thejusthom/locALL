@@ -1,5 +1,6 @@
 import * as React from "react";
 import mapboxgl from 'mapbox-gl';
+import styled from "styled-components";
 import file from ".././assets/images/file.png"
 
 const EventsView = () => {
@@ -265,9 +266,15 @@ const [add,setAdd] = React.useState('')
     return(
         <>
          <button onClick={handleLocationClick}>Get Location</button>
-    <div ref={mapContainer} className="map-container"></div>
+    <MapContainer>
+        <div ref={mapContainer} className="map-container"></div>
+    </MapContainer>
     </>
     );
 }
+
+const MapContainer = styled.section`
+    text-align: -webkit-center;
+`;
 
 export default EventsView;

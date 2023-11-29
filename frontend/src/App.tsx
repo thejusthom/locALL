@@ -1,11 +1,12 @@
 import React from 'react';
 import './App.css'
 import EventsView from './views/EventsView';
+import NavBar from './views/NavBar';
 
 function App() {
   return (
     <div className="App">
-      <div>kldj</div>
+      <NavBar />
       <EventsView />
           </div>
   );

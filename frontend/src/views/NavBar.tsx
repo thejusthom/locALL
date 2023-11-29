@@ -1,10 +1,11 @@
 import * as React from "react";
 import styled from "styled-components";
-import { AddressAutofill, SearchBox } from '@mapbox/search-js-react';
-import LoactionIcon from ".././assets/images/location.svg"
+// import { AddressAutofill, SearchBox } from '@mapbox/search-js-react';
+// import LoactionIcon from ".././assets/images/location.svg"
+import LocationBar from "./_LocationBar";
 
 const NavBar = () => {
-    const [selectedLocation, setSelectedLocation] = React.useState<String>("02119");
+    // const [selectedLocation, setSelectedLocation] = React.useState("02119");
     const tabs = [
         {
             id: "home",
@@ -35,7 +36,7 @@ const NavBar = () => {
         })}
         </Left>
         <Right>
-            <img src={LoactionIcon} width={30} height={30} />
+            {/* <img src={LoactionIcon} width={30} height={30} />
             <span>02119</span>
             <form>
         <AddressAutofill accessToken={"pk.eyJ1IjoiYXNobWl5YS12aWpheWFjaGFuZHJhbiIsImEiOiJjbHBnMXRxc3oxaXd3MmlwcG5zZjBpdXNqIn0.GqCCjkCcmFsgrpMnl7ntzw"}>
@@ -53,7 +54,8 @@ const NavBar = () => {
         </form>
         <form>
 <SearchBox accessToken={'pk.eyJ1IjoiYXNobWl5YS12aWpheWFjaGFuZHJhbiIsImEiOiJjbHBnMXRxc3oxaXd3MmlwcG5zZjBpdXNqIn0.GqCCjkCcmFsgrpMnl7ntzw'} />
-        </form>
+        </form> */}
+        <LocationBar />
         </Right>
         </section>
     );
