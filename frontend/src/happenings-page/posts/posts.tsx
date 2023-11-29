@@ -1,6 +1,7 @@
 import {ReactElement} from 'react';
 import './posts.scss';
 import Happenings from '../../models/happenings';
+import { Link } from "react-router-dom";
 
 type Props = {
   posts: Happenings[]
@@ -18,12 +19,16 @@ const posts: React.FC<Props> = (props: Props): ReactElement =>{
             <span className="postCat">Everyday incidents</span>
           </div>
 
-          <div className="postTitle">{happening.title}</div>
+          <div className="postTitle">
+            <Link to="/happenings/happeningId" className="link">
+              {happening.title}
+            </Link>
+          </div>
           <hr />
           <div className="postDate">{happening.postedDate}</div>
         </div>
         <p className="postDesc">
-            {happening.content}
+          {happening.content}
         </p>
       </div>
     )
