@@ -5,6 +5,7 @@ import LocationIcon from ".././assets/images/location.svg"
 const LocationBar = () => {
     const [selectedLocation, setSelectedLocation] = React.useState("");
     const [showSearchBox, setShowSearchBox] = React.useState(false);
+    const [coordinates, setCoordinates] = React.useState({latitude: 0, longitude: 0});
     const [add,setAdd] = React.useState("");
     const wrapperRef = React.useRef(null);
 
@@ -30,11 +31,12 @@ const LocationBar = () => {
     const onFormClick = () => {
         setShowSearchBox(true);
     };
-    const onLocationInputChange = (event) => {
-    setSelectedLocation(event.target.value)
-    };
+    // const onLocationInputChange = (event) => {
+    // setSelectedLocation(event.target.value)
+    // };
     const onLocationChange = (event) => {
         const location = event?.features[0]?.geometry?.coordinates;
+        setCoordinates({longitude: location[1], latitude: location[0]});
         fetch(`https://nominatim.openstreetmap.org/reverse?lat=${location[1]}&lon=${location[0]}&format=json`, {
   headers: {
     'User-Agent': 'ID of your APP/service/website/etc. v0.1'
@@ -54,6 +56,7 @@ const LocationBar = () => {
       function success(position) {
         const latitude = position.coords.latitude;
         const longitude = position.coords.longitude;
+        setCoordinates({longitude, latitude});
         fetch(`https://nominatim.openstreetmap.org/reverse?lat=${latitude}&lon=${longitude}&format=json`, {
             headers: {
               'User-Agent': 'ID of your APP/service/website/etc. v0.1'
