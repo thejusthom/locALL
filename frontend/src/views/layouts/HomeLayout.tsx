@@ -10,6 +10,7 @@ import MenuIcon from "@mui/icons-material/Menu";
 import Container from "@mui/material/Container";
 import Button from "@mui/material/Button";
 import MenuItem from "@mui/material/MenuItem";
+import LocationBar from "../_LocationBar";
 const pages = [
   { name: "Home", path: "/" },
   { name: "Events", path: "/events" },
@@ -127,7 +128,7 @@ function HomeLayout() {
                 </Button>
               ))}
             </Box>
-
+            <LocationBar />
             <Box sx={{ flexGrow: 0 }}>
               <Button
                 key="login"
