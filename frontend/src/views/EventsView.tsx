@@ -2,6 +2,7 @@ import * as React from "react";
 import mapboxgl from 'mapbox-gl';
 import styled from "styled-components";
 import file from ".././assets/images/file.png"
+import { useSelector } from 'react-redux'
 
 const EventsView = () => {
     
@@ -11,7 +12,14 @@ const EventsView = () => {
 
 const [location, setLocation] = React.useState<{ latitude: number;
 longitude: number;}>({latitude: 38.876516, longitude: -77.007481});
-const [add,setAdd] = React.useState('')
+const [add,setAdd] = React.useState('');
+const selectLocation = (state: any) => state.location;
+  const loc = useSelector(selectLocation);
+React.useEffect(() => {
+setLocation({latitude: loc.latitude, longitude: loc.longitude});
+map.current?.setCenter([loc.longitude, loc.latitude]);
+setAdd(loc.pincode);
+}, [loc]);
   const mapContainer = React.useRef<HTMLDivElement | null>(null);
   const map = React.useRef<mapboxgl.Map | null>(null);
   function handleLocationClick() {
