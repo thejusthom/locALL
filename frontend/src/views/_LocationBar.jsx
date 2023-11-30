@@ -1,6 +1,8 @@
 import * as React from "react";
 import { AddressAutofill, SearchBox } from '@mapbox/search-js-react';
 import LocationIcon from ".././assets/images/location.svg"
+import { saveLocation } from "../store/slices/location-slice";
+import { useDispatch } from 'react-redux';
 
 const LocationBar = () => {
     const [selectedLocation, setSelectedLocation] = React.useState("");
@@ -8,7 +10,7 @@ const LocationBar = () => {
     const [coordinates, setCoordinates] = React.useState({latitude: 0, longitude: 0});
     const [add,setAdd] = React.useState("");
     const wrapperRef = React.useRef(null);
-
+    const dispatch = useDispatch();
     function useOutsideAlerter(ref) {
   React.useEffect(() => {
     /**
@@ -26,6 +28,9 @@ const LocationBar = () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, [ref]);
+  React.useEffect(()=>{
+    dispatch(saveLocation({...coordinates, pincode: add}));
+  }, [add]);
 }
     useOutsideAlerter(wrapperRef);
     const onFormClick = () => {
