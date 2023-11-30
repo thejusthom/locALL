@@ -3,6 +3,8 @@ import mapboxgl from 'mapbox-gl';
 import styled from "styled-components";
 import file from ".././assets/images/file.png"
 import { useSelector } from 'react-redux'
+// import ReactDomServer from 'react-dom/server';
+import reactElementToJSXString from 'react-element-to-jsx-string';
 
 const EventsView = () => {
 const selectLocation = (state: any) => state.location;
@@ -10,7 +12,40 @@ const loc = useSelector(selectLocation);
 const [location, setLocation] = React.useState<{ latitude: number;
 longitude: number;}>({latitude: loc.latitude, longitude: loc.longitude});
 const [add,setAdd] = React.useState('');
-
+const showInMapClicked = (latitude: number, longitude: number) => {
+    console.log("here");
+    window.open("https://maps.google.com?q="+latitude+","+longitude);
+  };
+  const handleButtonClick = () => {
+    window.open('https://maps.google.com?q=' + 30 + ',' + 30);
+  };
+  const eventDetails = (
+      <>
+        <strong>Make it Mount Pleasant</strong>
+        <p>
+          <a href="http://www.mtpleasantdc.com/makeitmtpleasant" target="_blank" title="Opens in a new window">
+            Make it Mount Pleasant
+          </a>{' '}
+          is a handmade and vintage market and afternoon of live entertainment and kids activities. 12:00-6:00 p.m.
+        </p>
+        <p>Contact: Ashmiya V(1234567643)</p>
+        <p>Date: {"sfsf"} - {"sdsdfs"}</p>
+        <button onClick={handleButtonClick}>Open in Google Maps</button>
+      </>);
+const popUpComponent = () => 
+{return(
+<>
+    <strong>"Make it Mount Pleasant"</strong>
+    <p>
+    <a href="http://www.mtpleasantdc.com/makeitmtpleasant" target="_blank" title="Opens in a new window">Make it Mount Pleasant</a>
+     is a handmade and vintage market and afternoon of live entertainment and kids activities. 12:00-6:00 p.m.
+     </p>
+     <p>Contact: Ashmiya V(1234567643)</p>
+     <p>Date: startDate - endDate</p>
+     <button onClick={() => window.open("https://maps.google.com?q="+location.latitude+","+location.longitude)}>Open in Google Maps</button>
+     </>
+     )};
+    const description = reactElementToJSXString(popUpComponent());
 React.useEffect(() => {
 setLocation({latitude: loc.latitude, longitude: loc.longitude});
 map.current?.setCenter([loc.longitude, loc.latitude]);
@@ -88,13 +123,13 @@ setAdd(loc.pincode);
                     {
                         'type': 'Feature',
                         'properties': {
-                            'description':
-                                '<strong>Make it Mount Pleasant</strong><p><a href="http://www.mtpleasantdc.com/makeitmtpleasant" target="_blank" title="Opens in a new window">Make it Mount Pleasant</a> is a handmade and vintage market and afternoon of live entertainment and kids activities. 12:00-6:00 p.m.</p>',
+                            // 'description': eventDetails,
+                            'description': '<strong>Make it Mount Pleasant</strong><p><a href="http://www.mtpleasantdc.com/makeitmtpleasant" target="_blank" title="Opens in a new window">Make it Mount Pleasant</a> is a handmade and vintage market and afternoon of live entertainment and kids activities. 12:00-6:00 p.m.</p><p>Contact: Ashmiya V(1234567643)</p><p>Date: startDate - endDate</p><button onclick="(function(){window.open(\'https://maps.google.com?q=30,30\');})();">Open in Google Maps</button>',
                             'icon': 'theatre'
                         },
                         'geometry': {
                             'type': 'Point',
-                            'coordinates': [-77.007481, 38.876516]
+                            'coordinates': [location.longitude, location.latitude]
                         }
                     },
                     {
@@ -262,6 +297,7 @@ setAdd(loc.pincode);
 
 const MapContainer = styled.section`
     text-align: -webkit-center;
+    margin-top: 40px;
 `;
 
 export default EventsView;
