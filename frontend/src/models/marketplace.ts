@@ -5,7 +5,7 @@ export interface Marketplace {
   productName: string;
   price: string;
   image: string;
-  listingDate: Date;
+  listingDate: string;
   description: string;
   orgnizer: string;
   createdUser: IUser;
