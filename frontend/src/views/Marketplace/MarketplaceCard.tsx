@@ -6,36 +6,33 @@ import IconButton from '@mui/joy/IconButton';
 import Typography from '@mui/joy/Typography';
 import BookmarkAdd from '@mui/icons-material/BookmarkAddOutlined';
 import React from 'react'
+import { Marketplace } from '../../models/marketplace';
 
-const MarketplaceCard = () => {
+
+type Props = {
+  marketplace: Marketplace;
+}
+
+const MarketplaceCard = (props: Props) => {
     return (
         <Card sx={{ width: 320 }}>
           <div>
-            <Typography level="title-lg">Yosemite National Park</Typography>
-            <Typography level="body-sm">April 24 to May 02, 2021</Typography>
-            <IconButton
-              aria-label="bookmark Bahamas Islands"
-              variant="plain"
-              color="neutral"
-              size="sm"
-              sx={{ position: 'absolute', top: '0.875rem', right: '0.5rem' }}
-            >
-              <BookmarkAdd />
-            </IconButton>
+            <Typography level="title-lg">{props.marketplace.productName}</Typography>
+            <Typography level="body-sm">{props.marketplace.listingDate}</Typography>
           </div>
           <AspectRatio minHeight="120px" maxHeight="200px">
             <img
-              src="https://images.unsplash.com/photo-1527549993586-dff825b37782?auto=format&fit=crop&w=286"
-              srcSet="https://images.unsplash.com/photo-1527549993586-dff825b37782?auto=format&fit=crop&w=286&dpr=2 2x"
+              src={`data:image/png;base64,${props.marketplace.image}`}
+              srcSet={`data:image/png;base64,${props.marketplace.image}`}
               loading="lazy"
-              alt=""
+              alt={props.marketplace.productName}
             />
           </AspectRatio>
           <CardContent orientation="horizontal">
             <div>
               <Typography level="body-xs">Total price:</Typography>
               <Typography fontSize="lg" fontWeight="lg">
-                $2,900
+                {props.marketplace.price}
               </Typography>
             </div>
             <Button
