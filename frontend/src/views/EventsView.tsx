@@ -45,7 +45,7 @@ const popUpComponent = () =>
      <button onClick={() => window.open("https://maps.google.com?q="+location.latitude+","+location.longitude)}>Open in Google Maps</button>
      </>
      )};
-    const description = reactElementToJSXString(popUpComponent());
+    // const description = reactElementToJSXString(popUpComponent());
 React.useEffect(() => {
 setLocation({latitude: loc.latitude, longitude: loc.longitude});
 map.current?.setCenter([loc.longitude, loc.latitude]);
@@ -63,14 +63,14 @@ setAdd(loc.pincode);
     //     center: [-77.04, 38.907],
     //     zoom: 11.15
     // });
-            // if (!map.current && mapContainer.current) {
-            //     map.current = new mapboxgl.Map({
-            //         container: mapContainer.current,
-            //         style: 'mapbox://styles/mapbox/streets-v12',
-            //         center: [location?.longitude, location?.latitude],
-            //         zoom: 15
-            //         });
-            //     }
+            if (!map.current && mapContainer.current && !!location?.latitude) {
+                map.current = new mapboxgl.Map({
+                    container: mapContainer.current,
+                    style: 'mapbox://styles/mapbox/streets-v12',
+                    center: [location?.longitude, location?.latitude],
+                    zoom: 15
+                    });
+                }
     React.useEffect(() => {
         // if (map.current) return; // initialize map only once
     //     if (mapContainer.current) {
@@ -81,7 +81,7 @@ setAdd(loc.pincode);
     //     zoom: 15
     //     });
     // }
-    if (!map.current && mapContainer.current && !!location?.latitude) {
+    if (mapContainer.current && !!location?.latitude) {
         map.current = new mapboxgl.Map({
             container: mapContainer.current,
             style: 'mapbox://styles/mapbox/streets-v12',
@@ -95,15 +95,15 @@ setAdd(loc.pincode);
 // !!location && map.current?.setCenter([location?.latitude, location?.longitude]);
 
     map.current?.on('load', () => {
-        // const existingSource = map.current?.getSource('places');
-        // const existingLayer = map.current?.getLayer('places');
-        // // If the source already exists, remove it
-        //   if (existingLayer) {
-        //     map.current?.removeLayer('places');
-        // }
-        // if (existingSource) {
-        //     map.current?.removeSource('places');
-        // }
+        const existingSource = map.current?.getSource('places');
+        const existingLayer = map.current?.getLayer('places');
+        // If the source already exists, remove it
+          if (existingLayer) {
+            map.current?.removeLayer('places');
+        }
+        if (existingSource) {
+            map.current?.removeSource('places');
+        }
         map.current?.loadImage(
             file,
             (error, image) => {
@@ -111,7 +111,7 @@ setAdd(loc.pincode);
              
             // Add the image to the map style.
             !!image && map.current?.addImage('cat', image);
-
+console.log(location);
         map.current?.addSource('places', {
             // This GeoJSON contains features that include an "icon"
             // property. The value of the "icon" property corresponds
@@ -124,7 +124,7 @@ setAdd(loc.pincode);
                         'type': 'Feature',
                         'properties': {
                             // 'description': eventDetails,
-                            'description': '<strong>Make it Mount Pleasant</strong><p><a href="http://www.mtpleasantdc.com/makeitmtpleasant" target="_blank" title="Opens in a new window">Make it Mount Pleasant</a> is a handmade and vintage market and afternoon of live entertainment and kids activities. 12:00-6:00 p.m.</p><p>Contact: Ashmiya V(1234567643)</p><p>Date: startDate - endDate</p><button onclick="(function(){window.open(\'https://maps.google.com?q=30,30\');})();">Open in Google Maps</button>',
+                            'description': '<strong>Make it Mount Pleasant</strong><p><a href="http://www.mtpleasantdc.com/makeitmtpleasant" target="_blank" title="Opens in a new window">Make it Mount Pleasant</a> is a handmade and vintage market and afternoon of live entertainment and kids activities. 12:00-6:00 p.m.</p><p>Contact: Ashmiya V(1234567643)</p><p>Date: startDate - endDate</p><button onclick="(function(){window.open(\'https://maps.google.com?q='+location.latitude+','+location.longitude+'\');})();">Open in Google Maps</button>',
                             'icon': 'theatre'
                         },
                         'geometry': {
