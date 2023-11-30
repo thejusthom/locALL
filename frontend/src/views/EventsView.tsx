@@ -9,12 +9,13 @@ const EventsView = () => {
 	// TO MAKE THE MAP APPEAR YOU MUST
 	// ADD YOUR ACCESS TOKEN FROM
 	// https://account.mapbox.com
-
+    const selectLocation = (state: any) => state.location;
+    const loc = useSelector(selectLocation);
 const [location, setLocation] = React.useState<{ latitude: number;
-longitude: number;}>({latitude: 38.876516, longitude: -77.007481});
+longitude: number;}>({latitude: loc.latitude, longitude: loc.longitude});
 const [add,setAdd] = React.useState('');
-const selectLocation = (state: any) => state.location;
-  const loc = useSelector(selectLocation);
+// const selectLocation = (state: any) => state.location;
+//   const loc = useSelector(selectLocation);
 React.useEffect(() => {
 setLocation({latitude: loc.latitude, longitude: loc.longitude});
 map.current?.setCenter([loc.longitude, loc.latitude]);
@@ -22,24 +23,24 @@ setAdd(loc.pincode);
 }, [loc]);
   const mapContainer = React.useRef<HTMLDivElement | null>(null);
   const map = React.useRef<mapboxgl.Map | null>(null);
-  function handleLocationClick() {
-    if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(success, error);
-    } else {
-      console.log("Geolocation not supported");
-    }
-  }
+//   function handleLocationClick() {
+//     if (navigator.geolocation) {
+//       navigator.geolocation.getCurrentPosition(success, error);
+//     } else {
+//       console.log("Geolocation not supported");
+//     }
+//   }
 
-  function success(position: GeolocationPosition) {
-    const latitude = position.coords.latitude;
-    const longitude = position.coords.longitude;
-    setLocation({ latitude, longitude });
-    mapContainer.current = null;
-    map.current?.setCenter([longitude, latitude]);
-  }
-  function error() {
-    console.log("Unable to retrieve your location");
-  }
+//   function success(position: GeolocationPosition) {
+//     const latitude = position.coords.latitude;
+//     const longitude = position.coords.longitude;
+//     setLocation({ latitude, longitude });
+//     mapContainer.current = null;
+//     map.current?.setCenter([longitude, latitude]);
+//   }
+//   function error() {
+//     console.log("Unable to retrieve your location");
+//   }
 	mapboxgl.accessToken = 'pk.eyJ1IjoiYXNobWl5YS12aWpheWFjaGFuZHJhbiIsImEiOiJjbHBnMXRxc3oxaXd3MmlwcG5zZjBpdXNqIn0.GqCCjkCcmFsgrpMnl7ntzw';
     //  map.current = new mapboxgl.Map({
     //     container: 'map',
@@ -66,12 +67,12 @@ setAdd(loc.pincode);
     //     zoom: 15
     //     });
     // }
-    if (!map.current && mapContainer.current) {
+    if (!map.current && mapContainer.current && !!location?.latitude) {
         map.current = new mapboxgl.Map({
             container: mapContainer.current,
             style: 'mapbox://styles/mapbox/streets-v12',
             center: [location?.longitude, location?.latitude],
-            zoom: 15
+            zoom: 15.25
             });
         
     const url = `https://nominatim.openstreetmap.org/reverse?format=json&lat=${location.latitude}&lon=${location.longitude}`;
@@ -273,7 +274,7 @@ setAdd(loc.pincode);
 
     return(
         <>
-         <button onClick={handleLocationClick}>Get Location</button>
+         {/* <button onClick={handleLocationClick}>Get Location</button> */}
     <MapContainer>
         <div ref={mapContainer} className="map-container"></div>
     </MapContainer>
