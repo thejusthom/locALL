@@ -7,7 +7,7 @@ export type LocationState = ILocation[];
 const initialState: LocationState = [];
 
 const locationSlice = createSlice({
-    name: 'events',
+    name: 'location',
     initialState: initialState,
     reducers: {
         saveLocation: (state, action: PayloadAction<LocationState>) => {
