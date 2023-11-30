@@ -3,7 +3,7 @@ import { lazy } from 'react';
 import HomeLayout from '../views/layouts/HomeLayout';
 import Marketplace from '../views/Marketplace';
 import Events from '../views/EventsView';
-import FeedShare from '../views/FeedShareView';
+import FeedShare from '../views/FeedShareViewTest';
 import Home from '../views/Home';
 import Happenings from '../views/HappeningsView';
 import SinglePost from '../happenings-page/single-post/single-post';
@@ -28,7 +28,7 @@ const MainRoutes = {
         },
         {
             path: '/feedshare',
-            element: <FeedShare />
+            element: <FeedShare/>
         },
         {
             path: '/happenings',
