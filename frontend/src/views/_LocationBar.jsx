@@ -28,10 +28,13 @@ const LocationBar = () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, [ref]);
-  React.useEffect(()=>{
-    dispatch(saveLocation({...coordinates, pincode: add}));
-  }, [add]);
 }
+React.useEffect(()=>{
+  if(!!add){
+    console.log("here")
+    console.log(add);
+  dispatch(saveLocation({...coordinates, pincode: add}));}
+}, [add, coordinates, dispatch]);
     useOutsideAlerter(wrapperRef);
     const onFormClick = () => {
         setShowSearchBox(true);
@@ -41,7 +44,7 @@ const LocationBar = () => {
     // };
     const onLocationChange = (event) => {
         const location = event?.features[0]?.geometry?.coordinates;
-        setCoordinates({longitude: location[1], latitude: location[0]});
+        setCoordinates({longitude: location[0], latitude: location[1]});
         fetch(`https://nominatim.openstreetmap.org/reverse?lat=${location[1]}&lon=${location[0]}&format=json`, {
   headers: {
     'User-Agent': 'ID of your APP/service/website/etc. v0.1'
