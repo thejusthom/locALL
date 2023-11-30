@@ -10,13 +10,13 @@ const eventsSlice = createSlice({
     name: 'events',
     initialState: initialState,
     reducers: {
-        loadCourses: (state, action: PayloadAction<EventsState>) => {
+        loadEvents: (state, action: PayloadAction<EventsState>) => {
             return action.payload;
         }
     }
 
 });
 
-export const { loadCourses } = eventsSlice.actions;
+export const { loadEvents } = eventsSlice.actions;
 
 export default eventsSlice.reducer;
