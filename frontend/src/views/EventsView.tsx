@@ -124,7 +124,7 @@ console.log(location);
                         'type': 'Feature',
                         'properties': {
                             // 'description': eventDetails,
-                            'description': '<strong>Make it Mount Pleasant</strong><p><a href="http://www.mtpleasantdc.com/makeitmtpleasant" target="_blank" title="Opens in a new window">Make it Mount Pleasant</a> is a handmade and vintage market and afternoon of live entertainment and kids activities. 12:00-6:00 p.m.</p><p>Contact: Ashmiya V(1234567643)</p><p>Date: startDate - endDate</p><button onclick="(function(){window.open(\'https://maps.google.com?q='+location.latitude+','+location.longitude+'\');})();">Open in Google Maps</button>',
+                            'description': '<strong class="title">Make it Mount Pleasant</strong><p><a href="http://www.mtpleasantdc.com/makeitmtpleasant" target="_blank" title="Opens in a new window">Make it Mount Pleasant</a> is a handmade and vintage market and afternoon of live entertainment and kids activities. 12:00-6:00 p.m.</p><p>Contact: Ashmiya V(1234567643)</p><p>Date: startDate - endDate</p><button onclick="(function(){window.open(\'https://maps.google.com?q='+location.latitude+','+location.longitude+'\');})();">Open in Google Maps</button>',
                             'icon': 'theatre'
                         },
                         'geometry': {
@@ -298,6 +298,10 @@ console.log(location);
 const MapContainer = styled.section`
     text-align: -webkit-center;
     margin-top: 40px;
+    .title{
+        font-size: 16px;
+        color: red;
+    }
 `;
 
 export default EventsView;
