@@ -2,6 +2,8 @@ import * as React from "react";
 import mapboxgl from 'mapbox-gl';
 import styled from "styled-components";
 import file from ".././assets/images/file.png"
+import { useStore } from 'react-redux'
+import { ILocation } from "../models/location";
 
 const EventsView = () => {
     
@@ -11,7 +13,11 @@ const EventsView = () => {
 
 const [location, setLocation] = React.useState<{ latitude: number;
 longitude: number;}>({latitude: 38.876516, longitude: -77.007481});
-const [add,setAdd] = React.useState('')
+const [add,setAdd] = React.useState('');
+const store = useStore();
+const state: any  = store.getState();
+const locations = state.location;
+console.log(locations);
   const mapContainer = React.useRef<HTMLDivElement | null>(null);
   const map = React.useRef<mapboxgl.Map | null>(null);
   function handleLocationClick() {
