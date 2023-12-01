@@ -1,5 +1,5 @@
 import React from 'react';
-import '../assests/styles/happenings.scss';
+import '../assets/styles/happenings.scss';
 import NavBar from '../happenings-page/nav-bar/nav-bar';
 import Header from '../happenings-page/header/header';
 import Posts from '../happenings-page/posts/posts';

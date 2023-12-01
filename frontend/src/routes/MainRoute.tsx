@@ -3,7 +3,7 @@ import { lazy } from 'react';
 import HomeLayout from '../views/layouts/HomeLayout';
 import Marketplace from '../views/Marketplace/MarketplaceView';
 import Events from '../views/EventsView';
-import FeedShare from '../views/FeedShareViewTest';
+import FeedShare from '../views/FeedShare/FeedShareView';
 import Home from '../views/Home';
 import Happenings from '../views/HappeningsView';
 import SinglePost from '../happenings-page/single-post/single-post';
