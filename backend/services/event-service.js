@@ -26,7 +26,7 @@ export const createEvent = async (newEvent) => {
 
 //PUT Update a event
 export const updateEventById = async (id, updatedEvent) => {
-  const event = await eventModel.findByIdAndUpdate(id, updatedEvent, {new:true}).populate('createdUser').exec();
+  const event = await eventModel.findByIdAndUpdate(id, updatedEvent).exec();
   return event;
 };
 

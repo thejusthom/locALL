@@ -29,6 +29,13 @@ const MarketplaceSchema = new Schema ({
     locationId: {
         type: String,
         required: true
+    },
+    image: {
+        type: String,
+        required: true
+    },
+    comments: {
+        type: Array
     }
 })
 

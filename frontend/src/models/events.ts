@@ -1,3 +1,4 @@
+import { ICoordinates } from "./location";
 import { IUser } from "./user";
 
 export interface IEvent {
@@ -6,7 +7,7 @@ export interface IEvent {
     startDate: string;
     endDate: string;
     descriptionInfo: string;
-    address: string;
+    address: ICoordinates;
     catergory: string;
     createdUser: IUser;
     locationId: string;
