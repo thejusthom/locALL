@@ -13,7 +13,8 @@ export const getAll = async (locationId) => {
 export const save = async (newHappening) => {
     const happening = new Happening(newHappening);
     console.log(newHappening);
-    return happening.save();
+    happening.populate('createdUser');
+    return await happening.save();
 }
 
 //get a happening by id
@@ -25,7 +26,7 @@ export const getById = async (id) => {
 
 //update a happening
 export const update = async (updatedHappening, id) => {
-    const updated = await Happening.findByIdAndUpdate(id, updatedHappening).exec();
+    const updated = await Happening.findByIdAndUpdate(id, updatedHappening, { new: true }).exec();
     return updated;
 }
 
