@@ -3,7 +3,7 @@ import axios from "axios";
 const API_URL = "http://localhost:3001/location/";
 
 const getFeedshare = async (locationId:string) => {
-    const response = await axios.get(API_URL + "02115" +"/feedshare");
+    const response = await axios.get(API_URL + locationId +"/feedshare");
     return response.data;
 };
 
