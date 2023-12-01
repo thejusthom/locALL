@@ -8,7 +8,7 @@ export interface IEvent {
     endDate: string;
     descriptionInfo: string;
     address: ICoordinates;
-    catergory: string;
+    category: string;
     createdUser: IUser;
     locationId: string;
   }
