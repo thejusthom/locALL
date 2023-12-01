@@ -1,7 +1,13 @@
 import * as React from "react";
 import mapboxgl from 'mapbox-gl';
 import styled from "styled-components";
-import Dance from ".././assets/images/dance.png"
+import Dance from ".././assets/images/dance.png";
+import Book from ".././assets/images/book.png";
+import Drink from ".././assets/images/drink.png";
+import Food from ".././assets/images/food.png";
+import Music from ".././assets/images/music.png";
+import Pet from ".././assets/images/pet.png";
+import Plant from ".././assets/images/plant.png";
 import { useSelector } from 'react-redux';
 // import ReactDomServer from 'react-dom/server';
 import reactElementToJSXString from 'react-element-to-jsx-string';
@@ -71,6 +77,35 @@ eventsService.getEvents(loc.pincode).then((event)=> {
 // }
 }, [loc]);
 console.log(events);
+const iconList = [{
+    label: "Book",
+    url: Book
+},
+{
+    label: "Dance",
+    url: Dance
+},
+{
+    label: "Drink",
+    url: Drink
+},
+{
+    label: "Food",
+    url: Food
+},
+{
+    label: "Music",
+    url: Music
+},
+{
+    label: "Pet",
+    url: Pet
+},
+{
+    label: "Plant",
+    url: Plant
+}
+]
 // const eventsData = [
 //     {
 //         'type': "Feature",
@@ -136,15 +171,23 @@ console.log(events);
         if (existingSource) {
             map.current?.removeSource('places');
         }
-        map.current?.loadImage(
-            Dance,
-            (error, image) => {
-            if (error) throw error;
+        // map.current?.loadImage(
+        //     Dance,
+        //     (error, image) => {
+        //     if (error) throw error;
              
-            // Add the image to the map style.
-            !!image && map.current?.addImage('Dance', image);
-console.log(location);
-        map.current?.addSource('places', {
+        //     // Add the image to the map style.
+        //     !!image && map.current?.addImage('Dance', image);});
+            iconList.forEach((icon) => {
+               map.current?.loadImage(
+                icon.url,
+                (error, image) => {
+                if (error) throw error;
+                 
+                // Add the image to the map style.
+                !!image && map.current?.addImage(icon.label, image);}); 
+            }); 
+            map.current?.addSource('places', {
             // This GeoJSON contains features that include an "icon"
             // property. The value of the "icon" property corresponds
             // to an image in the Mapbox Streets style's sprite.
@@ -158,7 +201,7 @@ console.log(location);
                     'type': 'Feature',
                     'properties': {
                         'description': '<strong class="title">'+event.eventName+'</strong><p>'+event.descriptionInfo+'</p><p>Contact: Ashmiya V(1234567643)</p><p>Date: startDate - endDate</p><button onclick="(function(){window.open(\'https://maps.google.com?q='+location.latitude+','+location.longitude+'\');})();">Open in Google Maps</button>',
-                        'icon': 'Dance',
+                        'icon': event.category,
                     },
                     'geometry': {
                         'type': 'Point',
@@ -312,8 +355,6 @@ console.log(location);
                 'icon-size': 0.1
             }
         });
-    }
-    );
         // When a click event occurs on a feature in the places layer, open a popup at the
         // location of the feature, with description HTML from its properties.
         map.current?.on('click', 'places', (e) => {
