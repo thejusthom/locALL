@@ -8,5 +8,10 @@ const getAllHappenings = async (locationId: string) => {
   return response.data;
 }
 
-const happeningsService = { getAllHappenings };
+const getHappeningById = async (locationId: string, happeningId: string) => {
+  const response = await axios.get(baseURL + locationId + '/happenings/' + happeningId);
+  return response.data;
+}
+
+const happeningsService = { getAllHappenings, getHappeningById };
 export default happeningsService;

@@ -35,7 +35,7 @@ const MainRoutes = {
             element: <Happenings />
         },
         {
-            path: '/happenings/happeningId',
+            path: `/happenings/:happeningId`,
             element: <SinglePost />
         }
     ]
