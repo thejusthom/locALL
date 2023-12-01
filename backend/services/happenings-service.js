@@ -11,9 +11,9 @@ export const getAll = async (locationId) => {
 
 //save a happening
 export const save = async (newHappening) => {
-        const happening = new Happening(newHappening);
-        console.log(newHappening);
-        return happening.save();
+    const happening = new Happening(newHappening);
+    console.log(newHappening);
+    return happening.save();
 }
 
 //get a happening by id
