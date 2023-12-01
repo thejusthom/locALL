@@ -1,7 +1,7 @@
 import * as React from "react";
 import mapboxgl from 'mapbox-gl';
 import styled from "styled-components";
-import file from ".././assets/images/file.png"
+import Dance from ".././assets/images/dance.png"
 import { useSelector } from 'react-redux';
 // import ReactDomServer from 'react-dom/server';
 import reactElementToJSXString from 'react-element-to-jsx-string';
@@ -137,12 +137,12 @@ console.log(events);
             map.current?.removeSource('places');
         }
         map.current?.loadImage(
-            file,
+            Dance,
             (error, image) => {
             if (error) throw error;
              
             // Add the image to the map style.
-            !!image && map.current?.addImage('cat', image);
+            !!image && map.current?.addImage('Dance', image);
 console.log(location);
         map.current?.addSource('places', {
             // This GeoJSON contains features that include an "icon"
@@ -158,7 +158,7 @@ console.log(location);
                     'type': 'Feature',
                     'properties': {
                         'description': '<strong class="title">'+event.eventName+'</strong><p>'+event.descriptionInfo+'</p><p>Contact: Ashmiya V(1234567643)</p><p>Date: startDate - endDate</p><button onclick="(function(){window.open(\'https://maps.google.com?q='+location.latitude+','+location.longitude+'\');})();">Open in Google Maps</button>',
-                        'icon': 'theatre',
+                        'icon': 'Dance',
                     },
                     'geometry': {
                         'type': 'Point',
@@ -307,7 +307,7 @@ console.log(location);
             'type': 'symbol',
             'source': 'places',
             'layout': {
-                'icon-image': 'cat',
+                'icon-image': ['get', 'icon'],
                 'icon-allow-overlap': true,
                 'icon-size': 0.1
             }
