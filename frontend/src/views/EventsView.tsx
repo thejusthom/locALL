@@ -162,7 +162,7 @@ console.log(location);
                     },
                     'geometry': {
                         'type': 'Point',
-                        'coordinates': [location.longitude, location.latitude]
+                        'coordinates': [event.address.longitude, event.address.latitude]
                     }})
                   ),
                 // 'features': [
@@ -345,7 +345,7 @@ console.log(location);
         });
     // }
     });
-}}, [location]);
+}}, [events]);
 
     return(
         <>
