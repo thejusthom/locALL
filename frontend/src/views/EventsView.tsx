@@ -23,6 +23,7 @@ import Select from "@mui/material/Select";
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
+import { SearchBox } from '@mapbox/search-js-react';
 
 const style = {
     position: 'absolute' as 'absolute',
@@ -44,6 +45,8 @@ const [add,setAdd] = React.useState('');
 const [events, setEvents] = React.useState<IEvent[]>();
 const [showModal, setShowModal] = React.useState<boolean>(false);
 const [newEvent, setNewEvent] = React.useState<IEvent>();
+const [selectedLocation, setSelectedLocation] = React.useState("");
+const [coordinates, setCoordinates] = React.useState({latitude: 0, longitude: 0});
 
 React.useEffect(() => {
     setLocation({latitude: loc.latitude, longitude: loc.longitude});
@@ -209,6 +212,21 @@ const iconList = [{
     // }
     });
 }}, [events]);
+const onLocationChange = (event: any) => {
+    const location = event?.features[0]?.geometry?.coordinates;
+    setCoordinates({longitude: location[0], latitude: location[1]});
+    fetch(`https://nominatim.openstreetmap.org/reverse?lat=${location[1]}&lon=${location[0]}&format=json`, {
+headers: {
+'User-Agent': 'ID of your APP/service/website/etc. v0.1'
+}
+}).then(res => res.json())
+.then(res => {
+setAdd(res.address.postcode)
+const address = event?.features[0]?.properties?.full_address;
+console.log(event?.features[0]?.properties?.full_address)
+setSelectedLocation(!!address ? address : res.address.postcode);
+})   
+};
     return(
         <>
         <Button 
@@ -264,6 +282,12 @@ const iconList = [{
   <LocalizationProvider dateAdapter={AdapterDayjs}>
   <DatePicker />
   </LocalizationProvider>
+  <InputLabel id="category-label">Location</InputLabel>
+  <SearchBox accessToken={'pk.eyJ1IjoiYXNobWl5YS12aWpheWFjaGFuZHJhbiIsImEiOiJjbHBnMXRxc3oxaXd3MmlwcG5zZjBpdXNqIn0.GqCCjkCcmFsgrpMnl7ntzw'}
+value={selectedLocation}
+theme={{icons: {search: ""}}}
+onRetrieve={onLocationChange}
+/>
                         </FormControl>
 
   </Box>
