@@ -14,7 +14,7 @@ import FavoriteIcon from '@mui/icons-material/Favorite';
 import ShareIcon from '@mui/icons-material/Share';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
-import '../assests/styles/feedshare.scss';
+import '../assets/styles/feedshare.scss';
 
 interface ExpandMoreProps extends IconButtonProps {
   expand: boolean;
@@ -57,7 +57,7 @@ export default function FeedShare() {
       <CardMedia
         component="img"
         height="600"
-        image={require('../assests/images/food1.jpg')}
+        image={require('../assets/images/food1.jpg')}
         alt="Paella dish"
       />
       <CardContent>

@@ -1,7 +1,9 @@
+export interface ICoordinates{
+    latitude: number;
+    longitude: number;
+}
+
 export interface ILocation{
-coordinates: {
-    latitude: number,
-    longitude: number,
-};
+coordinates: ICoordinates;
 pincode: number;
 }
