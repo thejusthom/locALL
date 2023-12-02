@@ -28,6 +28,15 @@ import ReactModal from 'react-modal';
 import DatePicker from "react-datepicker";
 import 'react-datepicker/dist/react-datepicker.css';
 
+const initialNewEevnt = {
+    eventName: "",
+    startDate: "",
+    endDate: "",
+    descriptionInfo: "",
+    address: {longitude: 0, latitude: 0},
+    category: "",
+    locationId: ""
+}
 const EventsView = () => {
 const selectLocation = (state: any) => state.location;
 const loc = useSelector(selectLocation);
@@ -35,10 +44,11 @@ const [location, setLocation] = React.useState<{ latitude: number; longitude: nu
 const [add,setAdd] = React.useState('');
 const [events, setEvents] = React.useState<IEvent[]>();
 const [showModal, setShowModal] = React.useState<boolean>(false);
-const [newEvent, setNewEvent] = React.useState<IEvent>();
+const [newEvent, setNewEvent] = React.useState<IEvent>(initialNewEevnt);
 const [selectedLocation, setSelectedLocation] = React.useState("");
 const [coordinates, setCoordinates] = React.useState({latitude: 0, longitude: 0});
 const [startDate, setStartDate] = React.useState<Date>();
+const [endDate, setEndDate] = React.useState<Date>();
 
 React.useEffect(() => {
     setLocation({latitude: loc.latitude, longitude: loc.longitude});
@@ -204,26 +214,7 @@ const iconList = [{
     // }
     });
 }}, [events]);
-const onStartDateChange = (startDate: Date) => {
-    // console.log(startDate)
-    !!startDate && setStartDate(startDate);
-}
-console.log(startDate);
-const onLocationChange = (event: any) => {
-    const location = event?.features[0]?.geometry?.coordinates;
-    setCoordinates({longitude: location[0], latitude: location[1]});
-    fetch(`https://nominatim.openstreetmap.org/reverse?lat=${location[1]}&lon=${location[0]}&format=json`, {
-headers: {
-'User-Agent': 'ID of your APP/service/website/etc. v0.1'
-}
-}).then(res => res.json())
-.then(res => {
-setAdd(res.address.postcode)
-const address = event?.features[0]?.properties?.full_address;
-// console.log(event?.features[0]?.properties?.full_address)
-setSelectedLocation(!!address ? address : res.address.postcode);
-})   
-};
+
     return(
         <>
         <Button 
@@ -247,16 +238,16 @@ setSelectedLocation(!!address ? address : res.address.postcode);
     </Typography> */}
     <InputWrap>
     <label>Name:</label>
-    <input type="text" />
+    <input type="text" id="eventName" onChange={onNameChange} />
     </InputWrap>
     <InputWrap>
     <label>Description:</label>
-    <textarea />
+    <textarea id="descriptionInfo" onChange={onDescriptionChange} />
     </InputWrap>
     {/* <FormControl fullWidth> */}
     <InputWrap>
     <label>Category:</label>
-  <select>
+  <select onChange={onCategoryChange}>
   {iconList?.map((category) => { return<option value={category.label}>{category.label}</option>})}
   </select>
   </InputWrap>
@@ -275,16 +266,20 @@ setSelectedLocation(!!address ? address : res.address.postcode);
   <DatePicker />
   </LocalizationProvider> */}
    <DatePicker 
- selected={startDate} 
- onChange={onStartDateChange} />
+ selected={endDate} 
+ onChange={onEndDateChange} />
     </InputWrap>
     <InputWrap>
   <label>Location:</label>
-  <SearchBox accessToken={'pk.eyJ1IjoiYXNobWl5YS12aWpheWFjaGFuZHJhbiIsImEiOiJjbHBnMXRxc3oxaXd3MmlwcG5zZjBpdXNqIn0.GqCCjkCcmFsgrpMnl7ntzw'}
+  <SearchBox 
+accessToken={'pk.eyJ1IjoiYXNobWl5YS12aWpheWFjaGFuZHJhbiIsImEiOiJjbHBnMXRxc3oxaXd3MmlwcG5zZjBpdXNqIn0.GqCCjkCcmFsgrpMnl7ntzw'}
 value={selectedLocation}
 onRetrieve={onLocationChange}
 />
 </InputWrap>
+<button 
+onClick={onSubmit}
+>Submit</button>
   </Form>
   </FormWrap>
   </Modal>
