@@ -12,7 +12,7 @@ import { useSelector } from 'react-redux';
 import eventsService from "../services/eventsService";
 import { IEvent } from "../models/events";
 import Button from "@mui/material/Button";
-import Modal from "@mui/material/Modal";
+// import Modal from "@mui/material/Modal";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import FormControl from "@mui/material/FormControl";
@@ -20,22 +20,13 @@ import InputLabel from "@mui/material/InputLabel";
 import OutlinedInput from "@mui/material/OutlinedInput";
 import MenuItem from "@mui/material/MenuItem";
 import Select from "@mui/material/Select";
-import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+// import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { SearchBox } from '@mapbox/search-js-react';
-
-const style = {
-    position: 'absolute' as 'absolute',
-    top: '50%',
-    left: '50%',
-    transform: 'translate(-50%, -50%)',
-    width: 400,
-    bgcolor: 'background.paper',
-    border: '2px solid #000',
-    boxShadow: 24,
-    p: 4,
-  };
+import ReactModal from 'react-modal';
+import DatePicker from "react-datepicker";
+import 'react-datepicker/dist/react-datepicker.css';
 
 const EventsView = () => {
 const selectLocation = (state: any) => state.location;
@@ -47,6 +38,7 @@ const [showModal, setShowModal] = React.useState<boolean>(false);
 const [newEvent, setNewEvent] = React.useState<IEvent>();
 const [selectedLocation, setSelectedLocation] = React.useState("");
 const [coordinates, setCoordinates] = React.useState({latitude: 0, longitude: 0});
+const [startDate, setStartDate] = React.useState<Date>();
 
 React.useEffect(() => {
     setLocation({latitude: loc.latitude, longitude: loc.longitude});
@@ -212,6 +204,11 @@ const iconList = [{
     // }
     });
 }}, [events]);
+const onStartDateChange = (startDate: Date) => {
+    // console.log(startDate)
+    !!startDate && setStartDate(startDate);
+}
+console.log(startDate);
 const onLocationChange = (event: any) => {
     const location = event?.features[0]?.geometry?.coordinates;
     setCoordinates({longitude: location[0], latitude: location[1]});
@@ -223,7 +220,7 @@ headers: {
 .then(res => {
 setAdd(res.address.postcode)
 const address = event?.features[0]?.properties?.full_address;
-console.log(event?.features[0]?.properties?.full_address)
+// console.log(event?.features[0]?.properties?.full_address)
 setSelectedLocation(!!address ? address : res.address.postcode);
 })   
 };
@@ -232,69 +229,65 @@ setSelectedLocation(!!address ? address : res.address.postcode);
         <Button 
         onClick={() => setShowModal(true)}
         >Create an Event</Button>
-<Modal
+{/* <Modal
   open={showModal}
   onClose={() => setShowModal(false)}
   aria-labelledby="modal-modal-title"
   aria-describedby="modal-modal-description"
->
-  <Box sx={style}>
-    <Typography id="modal-modal-title" variant="h6" component="h2">
+> */}
+<Modal isOpen={showModal}>
+    <FormWrap>
+    <Form>
+  {/* <Box sx={style}> */}
+    {/* <Typography id="modal-modal-title" variant="h6" component="h2">
       Create an Event
     </Typography>
     <Typography id="modal-modal-description" sx={{ mt: 2 }}>
       Duis mollis, est non commodo luctus, nisi erat porttitor ligula.
-    </Typography>
-    <FormControl fullWidth>
-                            <InputLabel htmlFor="event-name">Name</InputLabel>
-                            <OutlinedInput
-                                id="event-name"
-                                name="name"
-                                label="Event Name"
-                                value={newEvent?.eventName}
-                            />
-                                <InputLabel htmlFor="event-description">Description</InputLabel>
-                            <OutlinedInput
-                                id="event-description"
-                                name="name"
-                                label="Description"
-                                value={newEvent?.descriptionInfo}
-                            />
-                                  <InputLabel htmlFor="event-description">Description</InputLabel>
-                            <OutlinedInput
-                                id="event-description"
-                                name="name"
-                                label="Description"
-                            />
-                            <InputLabel id="category-label">Category</InputLabel>
-                              {/* <Select
-    labelId="category-label"
-    id="category"
-    // value={newEvent?.category || {}}
-    label="Category"
-    // onChange={handleChange}
-    
-  > {iconList?.map((category) => { return<MenuItem value={category.label}>{category.label}</MenuItem>})}
-  </Select> */}
-  <LocalizationProvider dateAdapter={AdapterDayjs}>
+    </Typography> */}
+    <InputWrap>
+    <label>Name:</label>
+    <input type="text" />
+    </InputWrap>
+    <InputWrap>
+    <label>Description:</label>
+    <textarea />
+    </InputWrap>
+    {/* <FormControl fullWidth> */}
+    <InputWrap>
+    <label>Category:</label>
+  <select>
+  {iconList?.map((category) => { return<option value={category.label}>{category.label}</option>})}
+  </select>
+  </InputWrap>
+  <InputWrap>
+    <label>Start Date:</label>
+      {/* <LocalizationProvider dateAdapter={AdapterDayjs}>
+  <DatePicker onChange={onStartDateChange} value={startDate} />
+ </LocalizationProvider> */}
+ <DatePicker 
+ selected={startDate} 
+ onChange={onStartDateChange} />
+  </InputWrap>
+<InputWrap>
+    <label>End Date:</label>
+    {/* <LocalizationProvider dateAdapter={AdapterDayjs}>
   <DatePicker />
- </LocalizationProvider>
-  <LocalizationProvider dateAdapter={AdapterDayjs}>
-  <DatePicker />
-  </LocalizationProvider>
-  <InputLabel id="category-label">Location</InputLabel>
+  </LocalizationProvider> */}
+   <DatePicker 
+ selected={startDate} 
+ onChange={onStartDateChange} />
+    </InputWrap>
+    <InputWrap>
+  <label>Location:</label>
   <SearchBox accessToken={'pk.eyJ1IjoiYXNobWl5YS12aWpheWFjaGFuZHJhbiIsImEiOiJjbHBnMXRxc3oxaXd3MmlwcG5zZjBpdXNqIn0.GqCCjkCcmFsgrpMnl7ntzw'}
 value={selectedLocation}
-theme={{icons: {search: ""}}}
 onRetrieve={onLocationChange}
 />
-                        </FormControl>
-
-  </Box>
-</Modal>
-        {/* <button>
-            Create an Event
-        </button> */}
+</InputWrap>
+  </Form>
+  </FormWrap>
+  </Modal>
     <MapContainer>
         <div ref={mapContainer} className="map-container"></div>
     </MapContainer>
@@ -309,6 +302,60 @@ const MapContainer = styled.section`
         font-size: 16px;
         color: red;
     }
+    .geocoder {
+position: absolute;
+z-index: 20;
+right: 10%;
+top: 14%;
+text-decoration: none;
+list-style-type: none;
+}
+`;
+
+const Modal = styled(ReactModal)`
+inset: unset;
+width: 100%;
+height: 100%;
+text-align: -webkit-center;
+background-color: rgba(0,0,0,0.3);
+`;
+
+const Form = styled.form`
+background-color: #eceaea;
+width: 700px;
+height: 300px;
+align-self: center;
+/* text-align: -webkit-center; */
+border-radius: 5px;
+padding: 20px;
+margin: 40px 0;
+label{
+    font-size: 20px;
+    color: #171717;
+    width: 200px;
+    text-align: left;
+}
+input, textarea, select{
+    border: none;
+    width: 300px;
+    height: 35px;
+    border-radius: 5px;
+}
+input:focus, textarea:focus{
+    outline: 0;
+}
+textarea{
+    height: 100px;
+}
+`;
+const InputWrap = styled.div`
+    margin-bottom: 20px;
+    display: flex;
+`;
+const FormWrap = styled.section`
+height: 100%;
+justify-content: center;
+display: flex;
 `;
 
 export default EventsView;
