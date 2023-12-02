@@ -85,7 +85,6 @@ return(
 {showSearchBox ? 
 <SearchBox accessToken={'pk.eyJ1IjoiYXNobWl5YS12aWpheWFjaGFuZHJhbiIsImEiOiJjbHBnMXRxc3oxaXd3MmlwcG5zZjBpdXNqIn0.GqCCjkCcmFsgrpMnl7ntzw'}
 value={selectedLocation}
-theme={{icons: {search: ""}}}
 onRetrieve={onLocationChange}
 /> : <span>{add}</span>}
         </form>
