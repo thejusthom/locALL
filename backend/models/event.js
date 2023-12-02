@@ -35,6 +35,10 @@ const eventSchema = new Schema({
   locationId: {
     type: String,
     required: true
+  },
+  organiser: {
+    type: {name: String, contact: String},
+    required: true
   }
 },{
   versionKey: false
