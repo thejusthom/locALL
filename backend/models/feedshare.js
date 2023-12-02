@@ -1,20 +1,25 @@
 import mongoose from "mongoose";
 
 const Schema = mongoose.Schema;
-const MarketplaceSchema = new Schema ({
-    productName: {
+
+const FeedShareSchema = new Schema ({
+    foodType: {
         type: String,
         required: true
     },
-    price: {
+    servings: {
         type: Number,
         required: true
     },
-    listingDate: {
+    postedDate: {
         type: Date,
         required: true
     },
-    description: {
+    address: {
+        type: String,
+        required: true
+    },
+    image: {
         type: String,
         required: true
     },
@@ -29,16 +34,9 @@ const MarketplaceSchema = new Schema ({
     locationId: {
         type: String,
         required: true
-    },
-    image: {
-        type: String,
-        required: true
-    },
-    comments: {
-        type: Array
     }
-})
+});
 
-const MarketplaceModel = mongoose.model('marketplace', MarketplaceSchema);
+const FeedShare = mongoose.model('feedShare', FeedShareSchema);
 
-export default MarketplaceModel;
+export default FeedShare;

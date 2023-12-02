@@ -2,6 +2,7 @@ import express from 'express';
 import happeningRouter from './happenings-route.js'
 import marketplaceRouter from './marketplace-route.js';
 import eventRouter from './event-route.js';
+import feedshareRouter from './feedshare-route.js';
 
 const router = express.Router();
 
@@ -21,5 +22,10 @@ router.use('/:locationId/events', (request, response, next) => {
   request.locationId = request.params.locationId;
   next();
 }, eventRouter);
+
+router.use('/:locationId/feedshare', function(req, res, next) {
+  req.locationId = req.params.locationId;
+  next()
+}, feedshareRouter); 
 
 export default router;
