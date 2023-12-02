@@ -1,99 +1,103 @@
 import * as React from "react";
 import mapboxgl from 'mapbox-gl';
 import styled from "styled-components";
-import file from ".././assets/images/file.png"
+import Dance from ".././assets/images/dance.png";
+import Book from ".././assets/images/book.png";
+import Drink from ".././assets/images/drink.png";
+import Food from ".././assets/images/food.png";
+import Music from ".././assets/images/music.png";
+import Pet from ".././assets/images/pet.png";
+import Plant from ".././assets/images/plant.png";
 import { useSelector } from 'react-redux';
-// import ReactDomServer from 'react-dom/server';
-import reactElementToJSXString from 'react-element-to-jsx-string';
 import eventsService from "../services/eventsService";
 import { IEvent } from "../models/events";
+import Button from "@mui/material/Button";
+// import Modal from "@mui/material/Modal";
+import Box from "@mui/material/Box";
+import Typography from "@mui/material/Typography";
+import FormControl from "@mui/material/FormControl";
+import InputLabel from "@mui/material/InputLabel";
+import OutlinedInput from "@mui/material/OutlinedInput";
+import MenuItem from "@mui/material/MenuItem";
+import Select from "@mui/material/Select";
+// import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
+import { SearchBox } from '@mapbox/search-js-react';
+import ReactModal from 'react-modal';
+import DatePicker from "react-datepicker";
+import 'react-datepicker/dist/react-datepicker.css';
 
+const initialNewEevnt = {
+    eventName: "",
+    startDate: "",
+    endDate: "",
+    descriptionInfo: "",
+    address: {longitude: 0, latitude: 0},
+    category: "Book",
+    locationId: "",
+    organiser: {
+        name: "", 
+        contact: ""
+      }
+}
 const EventsView = () => {
 const selectLocation = (state: any) => state.location;
 const loc = useSelector(selectLocation);
 const [location, setLocation] = React.useState<{ latitude: number; longitude: number;}>({latitude: loc.latitude, longitude: loc.longitude});
 const [add,setAdd] = React.useState('');
 const [events, setEvents] = React.useState<IEvent[]>();
-const eventsClone = !!events ? [...events] : [];
-const data = eventsClone?.map((event) => ({
-  'type': 'Feature',
-  'properties': {
-      'description': '<strong class="title">'+event.eventName+'</strong><p>'+event.descriptionInfo+'</p><p>Contact: Ashmiya V(1234567643)</p><p>Date: startDate - endDate</p><button onclick="(function(){window.open(\'https://maps.google.com?q='+location.latitude+','+location.longitude+'\');})();">Open in Google Maps</button>',
-      'icon': 'theatre',
-  },
-  'geometry': {
-      'type': 'Point',
-      'coordinates': [location.longitude, location.latitude]
-  }})
-);
-const showInMapClicked = (latitude: number, longitude: number) => {
-    console.log("here");
-    window.open("https://maps.google.com?q="+latitude+","+longitude);
-  };
-  const handleButtonClick = () => {
-    window.open('https://maps.google.com?q=' + 30 + ',' + 30);
-  };
-//   const eventDetails = (
-//       <>
-//         <strong>Make it Mount Pleasant</strong>
-//         <p>
-//           <a href="http://www.mtpleasantdc.com/makeitmtpleasant" target="_blank" title="Opens in a new window">
-//             Make it Mount Pleasant
-//           </a>{' '}
-//           is a handmade and vintage market and afternoon of live entertainment and kids activities. 12:00-6:00 p.m.
-//         </p>
-//         <p>Contact: Ashmiya V(1234567643)</p>
-//         <p>Date: {"sfsf"} - {"sdsdfs"}</p>
-//         <button onClick={handleButtonClick}>Open in Google Maps</button>
-//       </>);
-// const popUpComponent = () => 
-// {return(
-// <>
-//     <strong>"Make it Mount Pleasant"</strong>
-//     <p>
-//     <a href="http://www.mtpleasantdc.com/makeitmtpleasant" target="_blank" title="Opens in a new window">Make it Mount Pleasant</a>
-//      is a handmade and vintage market and afternoon of live entertainment and kids activities. 12:00-6:00 p.m.
-//      </p>
-//      <p>Contact: Ashmiya V(1234567643)</p>
-//      <p>Date: startDate - endDate</p>
-//      <button onClick={() => window.open("https://maps.google.com?q="+location.latitude+","+location.longitude)}>Open in Google Maps</button>
-//      </>
-//      )};
-    // const description = reactElementToJSXString(popUpComponent());
+const [showModal, setShowModal] = React.useState<boolean>(false);
+const [newEvent, setNewEvent] = React.useState<IEvent>(initialNewEevnt);
+const [selectedLocation, setSelectedLocation] = React.useState("");
+const [coordinates, setCoordinates] = React.useState({latitude: 0, longitude: 0});
+const [startDate, setStartDate] = React.useState<Date>();
+const [endDate, setEndDate] = React.useState<Date>();
+const [organiser, setOrganiser] = React.useState({name: "", contact: ""});
+
 React.useEffect(() => {
-// if(!!loc){
     setLocation({latitude: loc.latitude, longitude: loc.longitude});
 map.current?.setCenter([loc.longitude, loc.latitude]);
 setAdd(loc.pincode);
 eventsService.getEvents(loc.pincode).then((event)=> {
     console.log(event);
     setEvents(event)});
-// }
 }, [loc]);
 console.log(events);
-// const eventsData = [
-//     {
-//         'type': "Feature",
-//         'properties': {
-//             'description': '<strong class="title">Make it Mount Pleasant</strong><p><a href="http://www.mtpleasantdc.com/makeitmtpleasant" target="_blank" title="Opens in a new window">Make it Mount Pleasant</a> is a handmade and vintage market and afternoon of live entertainment and kids activities. 12:00-6:00 p.m.</p><p>Contact: Ashmiya V(1234567643)</p><p>Date: startDate - endDate</p><button onclick="(function(){window.open(\'https://maps.google.com?q='+location.latitude+','+location.longitude+'\');})();">Open in Google Maps</button>',
-//             'icon': 'theatre',
-//         },
-//         'geometry': {
-//             'type': 'Point',
-//             'coordinates': [location.longitude, location.latitude]
-//         }
-//     }];
+const iconList = [{
+    label: "Book",
+    url: Book
+},
+{
+    label: "Dance",
+    url: Dance
+},
+{
+    label: "Drink",
+    url: Drink
+},
+{
+    label: "Food",
+    url: Food
+},
+{
+    label: "Music",
+    url: Music
+},
+{
+    label: "Pet",
+    url: Pet
+},
+{
+    label: "Plant",
+    url: Plant
+}
+]
+
   const mapContainer = React.useRef<HTMLDivElement | null>(null);
   const map = React.useRef<mapboxgl.Map | null>(null);
 
 	mapboxgl.accessToken = 'pk.eyJ1IjoiYXNobWl5YS12aWpheWFjaGFuZHJhbiIsImEiOiJjbHBnMXRxc3oxaXd3MmlwcG5zZjBpdXNqIn0.GqCCjkCcmFsgrpMnl7ntzw';
-    //  map.current = new mapboxgl.Map({
-    //     container: 'map',
-    //     // Choose from Mapbox's core styles, or make your own style with Mapbox Studio
-    //     style: 'mapbox://styles/mapbox/streets-v12',
-    //     center: [-77.04, 38.907],
-    //     zoom: 11.15
-    // });
             if (!map.current && mapContainer.current && !!location?.latitude) {
                 map.current = new mapboxgl.Map({
                     container: mapContainer.current,
@@ -122,9 +126,6 @@ console.log(events);
         
     const url = `https://nominatim.openstreetmap.org/reverse?format=json&lat=${location.latitude}&lon=${location.longitude}`;
     fetch(url).then(res=>res.json()).then(data=>setAdd(data.address))
-    console.log(map.current?.getCenter());
-
-// !!location && map.current?.setCenter([location?.latitude, location?.longitude]);
 
     !!events && map.current?.on('load', () => {
         const existingSource = map.current?.getSource('places');
@@ -136,160 +137,34 @@ console.log(events);
         if (existingSource) {
             map.current?.removeSource('places');
         }
-        map.current?.loadImage(
-            file,
-            (error, image) => {
-            if (error) throw error;
-             
-            // Add the image to the map style.
-            !!image && map.current?.addImage('cat', image);
-console.log(location);
-        map.current?.addSource('places', {
+            iconList.forEach((icon) => {
+               map.current?.loadImage(
+                icon.url,
+                (error, image) => {
+                if (error) throw error;
+                 
+                // Add the image to the map style.
+                !!image && map.current?.addImage(icon.label, image);}); 
+            }); 
+            map.current?.addSource('places', {
             // This GeoJSON contains features that include an "icon"
             // property. The value of the "icon" property corresponds
             // to an image in the Mapbox Streets style's sprite.
             'type': 'geojson',
             'data': {
                 'type': 'FeatureCollection',
-                // 'features': [...eventsData],
-                // 'features': data,
                'features': events?.map((event) => 
                   ({
                     'type': 'Feature',
                     'properties': {
-                        'description': '<strong class="title">'+event.eventName+'</strong><p>'+event.descriptionInfo+'</p><p>Contact: Ashmiya V(1234567643)</p><p>Date: startDate - endDate</p><button onclick="(function(){window.open(\'https://maps.google.com?q='+location.latitude+','+location.longitude+'\');})();">Open in Google Maps</button>',
-                        'icon': 'theatre',
+                        'description': '<strong class="title">'+event.eventName+'</strong><p>'+event.descriptionInfo+'</p><p>Contact: '+event.organiser?.name+' ('+event.organiser?.contact+')</p><p>Date: '+event.startDate+' - '+event.endDate+'</p><button onclick="(function(){window.open(\'https://maps.google.com?q='+location.latitude+','+location.longitude+'\');})();">Open in Google Maps</button>',
+                        'icon': event.category,
                     },
                     'geometry': {
                         'type': 'Point',
                         'coordinates': [event.address.longitude, event.address.latitude]
                     }})
                   ),
-                // 'features': [
-                //  {
-                //                 'type': 'Feature',
-                //                 'properties': {
-                //                     // 'description': eventDetails,
-                //                     'description': '<strong class="title">Make it Mount Pleasant</strong><p><a href="http://www.mtpleasantdc.com/makeitmtpleasant" target="_blank" title="Opens in a new window">Make it Mount Pleasant</a> is a handmade and vintage market and afternoon of live entertainment and kids activities. 12:00-6:00 p.m.</p><p>Contact: Ashmiya V(1234567643)</p><p>Date: startDate - endDate</p><button onclick="(function(){window.open(\'https://maps.google.com?q='+location.latitude+','+location.longitude+'\');})();">Open in Google Maps</button>',
-                //                     'icon': 'theatre'
-                //                 },
-                //                 'geometry': {
-                //                     'type': 'Point',
-                //                     'coordinates': [location.longitude, location.latitude]
-                //                 }
-                //             },
-                // ]
-
-                // 'features': [
-                //     {
-                //         'type': 'Feature',
-                //         'properties': {
-                //             // 'description': eventDetails,
-                //             'description': '<strong class="title">Make it Mount Pleasant</strong><p><a href="http://www.mtpleasantdc.com/makeitmtpleasant" target="_blank" title="Opens in a new window">Make it Mount Pleasant</a> is a handmade and vintage market and afternoon of live entertainment and kids activities. 12:00-6:00 p.m.</p><p>Contact: Ashmiya V(1234567643)</p><p>Date: startDate - endDate</p><button onclick="(function(){window.open(\'https://maps.google.com?q='+location.latitude+','+location.longitude+'\');})();">Open in Google Maps</button>',
-                //             'icon': 'theatre'
-                //         },
-                //         'geometry': {
-                //             'type': 'Point',
-                //             'coordinates': [location.longitude, location.latitude]
-                //         }
-                //     },
-                //     {
-                //         'type': 'Feature',
-                //         'properties': {
-                //             'description':
-                //                 '<strong>Mad Men Season Five Finale Watch Party</strong><p>Head to Lounge 201 (201 Massachusetts Avenue NE) Sunday for a <a href="http://madmens5finale.eventbrite.com/" target="_blank" title="Opens in a new window">Mad Men Season Five Finale Watch Party</a>, complete with 60s costume contest, Mad Men trivia, and retro food and drink. 8:00-11:00 p.m. $10 general admission, $20 admission and two hour open bar.</p>',
-                //             'icon': 'theatre'
-                //         },
-                //         'geometry': {
-                //             'type': 'Point',
-                //             'coordinates': [-77.003168, 38.894651]
-                //         }
-                //     },
-                //     {
-                //         'type': 'Feature',
-                //         'properties': {
-                //             'description':
-                //                 '<strong>Big Backyard Beach Bash and Wine Fest</strong><p>EatBar (2761 Washington Boulevard Arlington VA) is throwing a <a href="http://tallulaeatbar.ticketleap.com/2012beachblanket/" target="_blank" title="Opens in a new window">Big Backyard Beach Bash and Wine Fest</a> on Saturday, serving up conch fritters, fish tacos and crab sliders, and Red Apron hot dogs. 12:00-3:00 p.m. $25.grill hot dogs.</p>',
-                //             'icon': 'bar'
-                //         },
-                //         'geometry': {
-                //             'type': 'Point',
-                //             'coordinates': [-77.090372, 38.881189]
-                //         }
-                //     },
-                //     {
-                //         'type': 'Feature',
-                //         'properties': {
-                //             'description':
-                //                 '<strong>Ballston Arts & Crafts Market</strong><p>The <a href="http://ballstonarts-craftsmarket.blogspot.com/" target="_blank" title="Opens in a new window">Ballston Arts & Crafts Market</a> sets up shop next to the Ballston metro this Saturday for the first of five dates this summer. Nearly 35 artists and crafters will be on hand selling their wares. 10:00-4:00 p.m.</p>',
-                //             'icon': 'art-gallery'
-                //         },
-                //         'geometry': {
-                //             'type': 'Point',
-                //             'coordinates': [-77.111561, 38.882342]
-                //         }
-                //     },
-                //     {
-                //         'type': 'Feature',
-                //         'properties': {
-                //             'description':
-                //                 '<strong>Seersucker Bike Ride and Social</strong><p>Feeling dandy? Get fancy, grab your bike, and take part in this year\'s <a href="http://dandiesandquaintrelles.com/2012/04/the-seersucker-social-is-set-for-june-9th-save-the-date-and-start-planning-your-look/" target="_blank" title="Opens in a new window">Seersucker Social</a> bike ride from Dandies and Quaintrelles. After the ride enjoy a lawn party at Hillwood with jazz, cocktails, paper hat-making, and more. 11:00-7:00 p.m.</p>',
-                //             'icon': 'bicycle'
-                //         },
-                //         'geometry': {
-                //             'type': 'Point',
-                //             'coordinates': [-77.052477, 38.943951]
-                //         }
-                //     },
-                //     {
-                //         'type': 'Feature',
-                //         'properties': {
-                //             'description':
-                //                 '<strong>Capital Pride Parade</strong><p>The annual <a href="http://www.capitalpride.org/parade" target="_blank" title="Opens in a new window">Capital Pride Parade</a> makes its way through Dupont this Saturday. 4:30 p.m. Free.</p>',
-                //             'icon': 'rocket'
-                //         },
-                //         'geometry': {
-                //             'type': 'Point',
-                //             'coordinates': [-77.043444, 38.909664]
-                //         }
-                //     },
-                //     {
-                //         'type': 'Feature',
-                //         'properties': {
-                //             'description':
-                //                 '<strong>Muhsinah</strong><p>Jazz-influenced hip hop artist <a href="http://www.muhsinah.com" target="_blank" title="Opens in a new window">Muhsinah</a> plays the <a href="http://www.blackcatdc.com">Black Cat</a> (1811 14th Street NW) tonight with <a href="http://www.exitclov.com" target="_blank" title="Opens in a new window">Exit Clov</a> and <a href="http://godsilla.bandcamp.com" target="_blank" title="Opens in a new window">Gods’illa</a>. 9:00 p.m. $12.</p>',
-                //             'icon': 'music'
-                //         },
-                //         'geometry': {
-                //             'type': 'Point',
-                //             'coordinates': [-77.031706, 38.914581]
-                //         }
-                //     },
-                //     {
-                //         'type': 'Feature',
-                //         'properties': {
-                //             'description':
-                //                 '<strong>A Little Night Music</strong><p>The Arlington Players\' production of Stephen Sondheim\'s  <a href="http://www.thearlingtonplayers.org/drupal-6.20/node/4661/show" target="_blank" title="Opens in a new window"><em>A Little Night Music</em></a> comes to the Kogod Cradle at The Mead Center for American Theater (1101 6th Street SW) this weekend and next. 8:00 p.m.</p>',
-                //             'icon': 'music'
-                //         },
-                //         'geometry': {
-                //             'type': 'Point',
-                //             'coordinates': [-77.020945, 38.878241]
-                //         }
-                //     },
-                //     {
-                //         'type': 'Feature',
-                //         'properties': {
-                //             'description':
-                //                 '<strong>Truckeroo</strong><p><a href="http://www.truckeroodc.com/www/" target="_blank">Truckeroo</a> brings dozens of food trucks, live music, and games to half and M Street SE (across from Navy Yard Metro Station) today from 11:00 a.m. to 11:00 p.m.</p>',
-                //             'icon': 'music'
-                //         },
-                //         'geometry': {
-                //             'type': 'Point',
-                //             'coordinates': [-77.007481, 38.876516]
-                //         }
-                //     }
-                // ]
             }
         });
         // Add a layer showing the places.
@@ -307,13 +182,11 @@ console.log(location);
             'type': 'symbol',
             'source': 'places',
             'layout': {
-                'icon-image': 'cat',
+                'icon-image': ['get', 'icon'],
                 'icon-allow-overlap': true,
                 'icon-size': 0.1
             }
         });
-    }
-    );
         // When a click event occurs on a feature in the places layer, open a popup at the
         // location of the feature, with description HTML from its properties.
         map.current?.on('click', 'places', (e) => {
@@ -347,8 +220,129 @@ console.log(location);
     });
 }}, [events]);
 
+const onNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setNewEvent({...newEvent, eventName: e.target.value});
+}
+const onDescriptionChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    setNewEvent({...newEvent, descriptionInfo: e.target.value});
+}
+const onCategoryChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    setNewEvent({...newEvent, category: e.target.value});
+}
+const onStartDateChange = (date: Date) => {
+    // console.log(startDate)
+    setStartDate(date);
+}
+const onEndDateChange = (date: Date) => {
+    // console.log(startDate)
+    setEndDate(date);
+}
+
+console.log(startDate);
+const onLocationChange = (event: any) => {
+    const location = event?.features[0]?.geometry?.coordinates;
+    setCoordinates({longitude: location[0], latitude: location[1]});
+    fetch(`https://nominatim.openstreetmap.org/reverse?lat=${location[1]}&lon=${location[0]}&format=json`, {
+headers: {
+'User-Agent': 'ID of your APP/service/website/etc. v0.1'
+}
+}).then(res => res.json())
+.then(res => {
+setAdd(res.address.postcode)
+const address = event?.features[0]?.properties?.full_address;
+// console.log(event?.features[0]?.properties?.full_address)
+setSelectedLocation(!!address ? address : res.address.postcode);
+})   
+};
+const onOrganiserChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setOrganiser({...organiser, [e.target.id]: e.target.value});
+}
+const onSubmit = () => {
+    const start = startDate?.toLocaleDateString() || "";
+    const end = endDate?.toLocaleDateString() || "";
+    eventsService.createEvent(add, {...newEvent, address: {...coordinates}, startDate: start, endDate: end, createdUser: "656bbf4a3b7690ac27e2bcfb", organiser}).then((event)=> {
+        console.log(event);
+        !!events ? setEvents([...events, event]) : setEvents([event]);
+    });
+    // dispatch(createEvent({...newEvent, address: {...coordinates}}));
+};
+
     return(
         <>
+        <Button 
+        onClick={() => setShowModal(true)}
+        >Create an Event</Button>
+{/* <Modal
+  open={showModal}
+  onClose={() => setShowModal(false)}
+  aria-labelledby="modal-modal-title"
+  aria-describedby="modal-modal-description"
+> */}
+<Modal isOpen={showModal}>
+    <FormWrap>
+    <Form>
+  {/* <Box sx={style}> */}
+    {/* <Typography id="modal-modal-title" variant="h6" component="h2">
+      Create an Event
+    </Typography>
+    <Typography id="modal-modal-description" sx={{ mt: 2 }}>
+      Duis mollis, est non commodo luctus, nisi erat porttitor ligula.
+    </Typography> */}
+    <InputWrap>
+    <label>Name:</label>
+    <input type="text" id="eventName" onChange={onNameChange} />
+    </InputWrap>
+    <InputWrap>
+    <label>Description:</label>
+    <textarea id="descriptionInfo" onChange={onDescriptionChange} />
+    </InputWrap>
+    {/* <FormControl fullWidth> */}
+    <InputWrap>
+    <label>Category:</label>
+  <select onChange={onCategoryChange}>
+  {iconList?.map((category) => { return<option value={category.label}>{category.label}</option>})}
+  </select>
+  </InputWrap>
+  <InputWrap>
+    <label>Start Date:</label>
+      {/* <LocalizationProvider dateAdapter={AdapterDayjs}>
+  <DatePicker onChange={onStartDateChange} value={startDate} />
+ </LocalizationProvider> */}
+ <DatePicker 
+ selected={startDate} 
+ onChange={onStartDateChange} />
+  </InputWrap>
+<InputWrap>
+    <label>End Date:</label>
+    {/* <LocalizationProvider dateAdapter={AdapterDayjs}>
+  <DatePicker />
+  </LocalizationProvider> */}
+   <DatePicker 
+ selected={endDate} 
+ onChange={onEndDateChange} />
+    </InputWrap>
+    <InputWrap>
+  <label>Location:</label>
+  <SearchBox 
+accessToken={'pk.eyJ1IjoiYXNobWl5YS12aWpheWFjaGFuZHJhbiIsImEiOiJjbHBnMXRxc3oxaXd3MmlwcG5zZjBpdXNqIn0.GqCCjkCcmFsgrpMnl7ntzw'}
+value={selectedLocation}
+onRetrieve={onLocationChange}
+/>
+</InputWrap>
+<InputWrap>
+    <label>Organiser Name:</label>
+    <input type="text" id="name" onChange={onOrganiserChange} />
+    </InputWrap>
+    <InputWrap>
+    <label>Organiser Contact:</label>
+    <input type="text" id="contact" onChange={onOrganiserChange} />
+    </InputWrap>
+<button 
+onClick={onSubmit}
+>Submit</button>
+  </Form>
+  </FormWrap>
+  </Modal>
     <MapContainer>
         <div ref={mapContainer} className="map-container"></div>
     </MapContainer>
@@ -363,6 +357,62 @@ const MapContainer = styled.section`
         font-size: 16px;
         color: red;
     }
+    .geocoder {
+position: absolute;
+z-index: 20;
+right: 10%;
+top: 14%;
+text-decoration: none;
+list-style-type: none;
+}
+`;
+
+const Modal = styled(ReactModal)`
+inset: unset;
+width: 100%;
+height: 100%;
+text-align: -webkit-center;
+background-color: rgba(0,0,0,0.3);
+`;
+
+const Form = styled.form`
+background-color: #eceaea;
+width: 700px;
+height: 75%;
+align-self: center;
+margin-top: 70px;
+/* text-align: -webkit-center; */
+border-radius: 5px;
+padding: 20px;
+margin: 40px 0;
+overflow-y: auto;
+label{
+    font-size: 20px;
+    color: #171717;
+    width: 200px;
+    text-align: left;
+}
+input, textarea, select{
+    border: none;
+    width: 300px;
+    height: 35px;
+    border-radius: 5px;
+}
+input:focus, textarea:focus{
+    outline: 0;
+}
+textarea{
+    height: 100px;
+}
+`;
+const InputWrap = styled.div`
+    margin-bottom: 20px;
+    display: flex;
+`;
+const FormWrap = styled.section`
+height: 100%;
+justify-content: center;
+display: flex;
 `;
 
 export default EventsView;
