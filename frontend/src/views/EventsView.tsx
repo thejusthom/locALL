@@ -34,8 +34,12 @@ const initialNewEevnt = {
     endDate: "",
     descriptionInfo: "",
     address: {longitude: 0, latitude: 0},
-    category: "",
-    locationId: ""
+    category: "Book",
+    locationId: "",
+    organiser: {
+        name: "", 
+        contact: ""
+      }
 }
 const EventsView = () => {
 const selectLocation = (state: any) => state.location;
@@ -49,6 +53,7 @@ const [selectedLocation, setSelectedLocation] = React.useState("");
 const [coordinates, setCoordinates] = React.useState({latitude: 0, longitude: 0});
 const [startDate, setStartDate] = React.useState<Date>();
 const [endDate, setEndDate] = React.useState<Date>();
+const [organiser, setOrganiser] = React.useState({name: "", contact: ""});
 
 React.useEffect(() => {
     setLocation({latitude: loc.latitude, longitude: loc.longitude});
@@ -152,7 +157,7 @@ const iconList = [{
                   ({
                     'type': 'Feature',
                     'properties': {
-                        'description': '<strong class="title">'+event.eventName+'</strong><p>'+event.descriptionInfo+'</p><p>Contact: Ashmiya V(1234567643)</p><p>Date: startDate - endDate</p><button onclick="(function(){window.open(\'https://maps.google.com?q='+location.latitude+','+location.longitude+'\');})();">Open in Google Maps</button>',
+                        'description': '<strong class="title">'+event.eventName+'</strong><p>'+event.descriptionInfo+'</p><p>Contact: '+event.organiser?.name+' ('+event.organiser?.contact+')</p><p>Date: '+event.startDate+' - '+event.endDate+'</p><button onclick="(function(){window.open(\'https://maps.google.com?q='+location.latitude+','+location.longitude+'\');})();">Open in Google Maps</button>',
                         'icon': event.category,
                     },
                     'geometry': {
@@ -249,10 +254,13 @@ const address = event?.features[0]?.properties?.full_address;
 setSelectedLocation(!!address ? address : res.address.postcode);
 })   
 };
+const onOrganiserChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setOrganiser({...organiser, [e.target.id]: e.target.value});
+}
 const onSubmit = () => {
     const start = startDate?.toLocaleDateString() || "";
     const end = endDate?.toLocaleDateString() || "";
-    eventsService.createEvent(add, {...newEvent, address: {...coordinates}, startDate: start, endDate: end}).then((event)=> {
+    eventsService.createEvent(add, {...newEvent, address: {...coordinates}, startDate: start, endDate: end, createdUser: "656bbf4a3b7690ac27e2bcfb", organiser}).then((event)=> {
         console.log(event);
         !!events ? setEvents([...events, event]) : setEvents([event]);
     });
@@ -321,6 +329,14 @@ value={selectedLocation}
 onRetrieve={onLocationChange}
 />
 </InputWrap>
+<InputWrap>
+    <label>Organiser Name:</label>
+    <input type="text" id="name" onChange={onOrganiserChange} />
+    </InputWrap>
+    <InputWrap>
+    <label>Organiser Contact:</label>
+    <input type="text" id="contact" onChange={onOrganiserChange} />
+    </InputWrap>
 <button 
 onClick={onSubmit}
 >Submit</button>
@@ -362,12 +378,14 @@ background-color: rgba(0,0,0,0.3);
 const Form = styled.form`
 background-color: #eceaea;
 width: 700px;
-height: 300px;
+height: 75%;
 align-self: center;
+margin-top: 70px;
 /* text-align: -webkit-center; */
 border-radius: 5px;
 padding: 20px;
 margin: 40px 0;
+overflow-y: auto;
 label{
     font-size: 20px;
     color: #171717;
