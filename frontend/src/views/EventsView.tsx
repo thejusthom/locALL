@@ -215,6 +215,50 @@ const iconList = [{
     });
 }}, [events]);
 
+const onNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setNewEvent({...newEvent, eventName: e.target.value});
+}
+const onDescriptionChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    setNewEvent({...newEvent, descriptionInfo: e.target.value});
+}
+const onCategoryChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    setNewEvent({...newEvent, category: e.target.value});
+}
+const onStartDateChange = (date: Date) => {
+    // console.log(startDate)
+    setStartDate(date);
+}
+const onEndDateChange = (date: Date) => {
+    // console.log(startDate)
+    setEndDate(date);
+}
+
+console.log(startDate);
+const onLocationChange = (event: any) => {
+    const location = event?.features[0]?.geometry?.coordinates;
+    setCoordinates({longitude: location[0], latitude: location[1]});
+    fetch(`https://nominatim.openstreetmap.org/reverse?lat=${location[1]}&lon=${location[0]}&format=json`, {
+headers: {
+'User-Agent': 'ID of your APP/service/website/etc. v0.1'
+}
+}).then(res => res.json())
+.then(res => {
+setAdd(res.address.postcode)
+const address = event?.features[0]?.properties?.full_address;
+// console.log(event?.features[0]?.properties?.full_address)
+setSelectedLocation(!!address ? address : res.address.postcode);
+})   
+};
+const onSubmit = () => {
+    const start = startDate?.toLocaleDateString() || "";
+    const end = endDate?.toLocaleDateString() || "";
+    eventsService.createEvent(add, {...newEvent, address: {...coordinates}, startDate: start, endDate: end}).then((event)=> {
+        console.log(event);
+        !!events ? setEvents([...events, event]) : setEvents([event]);
+    });
+    // dispatch(createEvent({...newEvent, address: {...coordinates}}));
+};
+
     return(
         <>
         <Button 
