@@ -25,7 +25,6 @@ const HappeningsView: React.FC = () =>{
         <Header/>
         <Posts posts={happenings}/>
       </div>
-      {/* <CreatePost/> */}
    </>
   )
 };

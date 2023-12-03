@@ -18,5 +18,10 @@ const createHappening = async (locationId: string, newHappening: Happenings) => 
   return response.data;
 };
 
-const happeningsService = { getAllHappenings, getHappeningById, createHappening };
+const updateHappening = async (locationId: string, happeningId: string, newHappening: Happenings) => {
+  const response = await axios.put(baseURL + locationId + '/happenings/' + happeningId, newHappening);
+  return response.data;
+}
+
+const happeningsService = { getAllHappenings, getHappeningById, createHappening, updateHappening };
 export default happeningsService;
