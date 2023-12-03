@@ -2,13 +2,17 @@ import { ICoordinates } from "./location";
 import { IUser } from "./user";
 
 export interface IEvent {
-    _id: number;
+    _id?: string;
     eventName: string;
-    startDate: string;
-    endDate: string;
+    startDate?: string;
+    endDate?: string;
     descriptionInfo: string;
     address: ICoordinates;
-    catergory: string;
-    createdUser: IUser;
+    category: string;
+    createdUser?: IUser | string;
     locationId: string;
+    organiser: {
+      name: string,
+      contact: string
+    }
   }
