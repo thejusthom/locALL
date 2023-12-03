@@ -14,6 +14,7 @@ import { iconList } from "./Constants";
 import MyEvents from "./_MyEvents";
 import EventsMap from "./_EventsMap";
 import FormFieldsComponent from "./_FormFields";
+import { ToastContainer, toast } from "react-toastify";
 
 const initialNewEvent = {
     eventName: "",
@@ -211,6 +212,7 @@ const onSubmit = (event: any) => {
     const end = endDate?.toLocaleDateString() || "";
     eventsService.createEvent(add, {...newEvent, address: {...coordinates}, startDate: start, endDate: end, createdUser: "656bbf4a3b7690ac27e2bcfb", organiser}).then((event)=> {
         !!events ? setEvents([...events, event]) : setEvents([event]);
+        toast.success("Event Created Successfully!");
     });
     setShowModal(false);
     setNewEvent(initialNewEvent);
@@ -235,7 +237,9 @@ const onDelete = (eventId: string) => {
     eventsService.deleteEvent(loc.pincode, eventId).then((event)=> {
         eventsService.getEvents(loc.pincode).then((event)=> {
             const availableEvents = event.filter((e: IEvent) => !!e.endDate && moment(e.endDate) >= moment());
-            setEvents(availableEvents)});
+            setEvents(availableEvents)
+        });
+            toast.success(`Event Deleted Successfully!`);
     });
 };
 const onUpdate = () => {
@@ -246,7 +250,9 @@ const onUpdate = () => {
         eventsService.getEvents(loc.pincode).then((event)=> {
             const availableEvents = event.filter((e: IEvent) => !!e.endDate && moment(e.endDate) >= moment());
             setEvents(availableEvents)}
-    );});
+    );
+    toast.success(`${event.eventName} Updated Successfully!`);
+});
         setNewEvent(initialNewEvent);
         setCoordinates({longitude: 0, latitude:0});
         setStartDate(undefined);
@@ -281,7 +287,8 @@ function a11yProps(index: number) {
     setTab(newValue);
   };
     return(
-        <EventsContainer>
+        
+        <EventsContainer><ToastContainer position="top-center" closeOnClick />
         <Button 
         onClick={() => setShowModal(true)}
         >Create an Event</Button>
@@ -324,6 +331,7 @@ mapContainer={mapContainer} />)
     )
      }
     </EventsContainer>
+    // </ToastContainer>
     );
 }
 
