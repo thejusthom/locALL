@@ -72,8 +72,11 @@ const FeedShareCard: React.FC<Props> = (props: Props): React.ReactElement => {
                     <Box sx={{ display: "flex", position: "relative" }}>
                     <Box sx={{ width: "300px", float: "left" }}>
                         <p style={{ margin: 0 }}>
-                        Posted by {props.feedShare.createdUser.person.firstName}{" "}
-                        {props.feedShare.createdUser.person.lastName}
+                        Posted by{" "}
+                        {typeof props.feedShare.createdUser === "string"
+                        ? "" :props.feedShare.createdUser.person.firstName}{" "}
+                        {typeof props.feedShare.createdUser === "string"
+                        ? "" :props.feedShare.createdUser.person.lastName}
                         </p>
                         <Typography level="body-sm">
                         &nbsp; &nbsp; on {props.feedShare.postedDate}

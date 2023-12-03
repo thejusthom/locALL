@@ -13,11 +13,11 @@ const updateFeedshare = async (locationId:string,body:FeedShare,_id:number) => {
     return response.data;
 }
 
-const addFeedshare = async (locationId:string,body:FeedShare) => {
+const createFeedshare = async (locationId:string,body:FeedShare) => {
     const response = await axios.post(API_URL + locationId +"/feedshare",body);
     return response.data;
 }
 
-const feedshareService = { getFeedshare, updateFeedshare, addFeedshare };
+const feedshareService = { getFeedshare, updateFeedshare, createFeedshare };
 
 export default feedshareService;

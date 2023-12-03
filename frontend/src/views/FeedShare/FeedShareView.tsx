@@ -9,6 +9,7 @@ import '../../assets/styles/feedshare.scss';
 import { SearchBox } from '@mapbox/search-js-react';
 import { render } from "@testing-library/react";
 import Button from "@mui/joy/Button";
+import moment from "moment";
 
 const FeedShareView: React.FC = () => {
     // get data from json
@@ -43,36 +44,40 @@ const FeedShareView: React.FC = () => {
     const [inputData, setInputData] = React.useState({
         image: '',
         foodType: '',
-        servings: 0,
+        servings: '',
         organizer: '',
         address: '',
         postedDate: '',
-        comments: [],
         locationId: ''
     });
 
     const handleOnChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        const {name, value} = event.target;
-        setInputData({
-            ...inputData,
-            [name]: value
-        });
+        // event.preventDefault();
+        const id = event.target.id;
+        const updateData = { ...inputData };
+        setInputData({...inputData});
+        updateData[id as keyof typeof updateData] = event.target.value;
+        setInputData(updateData);
+        // console.log(inputData);
     };
 
-    const addFeedShare = () => {
+    const addFeedShare = async () => {
+        console.log(add);
         const feedShare: FeedShare = {
             image: inputData.image,
             foodType: inputData.foodType,
             servings: inputData.servings,
             organizer: inputData.organizer,
             address: selectedLocation,
-            postedDate: new Date().toLocaleDateString(),
+            postedDate: moment().format("MMMM Do YYYY, h:mm:ss a"),
             comments: [],
-            locationId: locationId,
-            _id: 0,
+            locationId: add,
+            _id: null,
             createdUser: '656c0c6e058e16521ca0e166'
         }
-        feedShareService.addFeedshare(locationId, feedShare).then((feedShareCards)=> setFeedShareCards(feedShareCards));
+        console.log(feedShare);
+        await feedShareService.createFeedshare(feedShare.locationId, feedShare).then((feedShareCards)=> setFeedShareCards(feedShareCards));
+        console.log(feedShareCards);
     }
 
     return(
@@ -91,15 +96,21 @@ const FeedShareView: React.FC = () => {
                 <Form>            
                     <Form.Group grouped>
                     <Form.Field required label='Food Type' control='input' width={8}
-                        value = {inputData.foodType}/>
+                        value = {inputData.foodType}
+                        onChange = {handleOnChange}
+                        id="foodType"/>
                     {/* <Form.Field label='An HTML <select>' control='select'>
                         <option value='male'>Male</option>
                         <option value='female'>Female</option>
                     </Form.Field> */}
                     <Form.Field required label='Servings' control='input' width={6}
-                        value = {inputData.servings}/>
+                        value = {inputData.servings}
+                        onChange = {handleOnChange}
+                        id="servings"/>
                     <Form.Field required label='Organizer' control='input' width={8}
-                        value = {inputData.organizer}/>
+                        value = {inputData.organizer}
+                        onChange = {handleOnChange}
+                        id="organizer"/>
                     <Form.Field required label='Location'/>
                     <SearchBox 
                     accessToken={'pk.eyJ1IjoiYXNobWl5YS12aWpheWFjaGFuZHJhbiIsImEiOiJjbHBnMXRxc3oxaXd3MmlwcG5zZjBpdXNqIn0.GqCCjkCcmFsgrpMnl7ntzw'}

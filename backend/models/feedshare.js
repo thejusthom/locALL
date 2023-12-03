@@ -8,11 +8,11 @@ const FeedShareSchema = new Schema ({
         required: true
     },
     servings: {
-        type: Number,
+        type: String,
         required: true
     },
     postedDate: {
-        type: Date,
+        type: String,
         required: true
     },
     address: {
@@ -21,7 +21,7 @@ const FeedShareSchema = new Schema ({
     },
     image: {
         type: String,
-        required: true
+        // required: true
     },
     organizer: {
         type: String,
