@@ -23,7 +23,7 @@ const eventSchema = new Schema({
     type: { longitude: String, latitude: String },
     required: true
   },
-  catergory: {
+  category: {
     type: String,
     required: true
   },
@@ -34,6 +34,10 @@ const eventSchema = new Schema({
   },
   locationId: {
     type: String,
+    required: true
+  },
+  organiser: {
+    type: {name: String, contact: String},
     required: true
   }
 },{

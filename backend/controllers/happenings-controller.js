@@ -43,12 +43,12 @@ export const getById = async(request, response) => {
 export const update = async(request, response) => {
     try{
         const id = request.params.happeningId;
-        const updatedHappening = {...request.body};
+        const updatedHappening = {...request.body, postedDate: Date.now()};
         const happening = await happeningService.update(updatedHappening, id);
-        setResponse(happening, response,200);
+        setResponse(happening, response, 200);
     } catch(err){
         console.log(err);
-        setErrorResponse(err, response)
+        setErrorResponse(err, response);
     }
 }
 
