@@ -258,13 +258,15 @@ setSelectedLocation(!!address ? address : res.address.postcode);
 const onOrganiserChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setOrganiser({...organiser, [e.target.id]: e.target.value});
 }
-const onSubmit = () => {
+const onSubmit = (event: any) => {
+    event.preventDefault();
     const start = startDate?.toLocaleDateString() || "";
     const end = endDate?.toLocaleDateString() || "";
     eventsService.createEvent(add, {...newEvent, address: {...coordinates}, startDate: start, endDate: end, createdUser: "656bbf4a3b7690ac27e2bcfb", organiser}).then((event)=> {
         console.log(event);
         !!events ? setEvents([...events, event]) : setEvents([event]);
     });
+    setShowModal(false);
     // dispatch(createEvent({...newEvent, address: {...coordinates}}));
 };
 
