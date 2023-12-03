@@ -46,6 +46,7 @@ function HomeLayout() {
                 mr: 2,
                 display: { xs: "none", md: "flex" },
                 fontFamily: "monospace",
+                // fontSize: "18px",
                 fontWeight: 700,
                 letterSpacing: ".3rem",
                 color: "inherit",
@@ -122,7 +123,7 @@ function HomeLayout() {
                   to={page.path}
                   key={page.name}
                   onClick={handleCloseNavMenu}
-                  sx={{ my: 2, color: "white", display: "block" }}
+                  sx={{ my: 2, mx: 1.1, color: "white", display: "block", fontSize: "17px" }}
                 >
                   {page.name}
                 </Button>
@@ -133,7 +134,7 @@ function HomeLayout() {
               <Button
                 key="login"
                 onClick={handleCloseNavMenu}
-                sx={{ my: 2, color: "white", display: "block" }}
+                sx={{ my: 2, mx: 1.1, color: "white", display: "block", fontSize: "17px" }}
               >
                 LOGIN
               </Button>

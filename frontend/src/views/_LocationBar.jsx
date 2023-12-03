@@ -113,14 +113,13 @@ onRetrieve={onLocationChange}
 
 const LocationWrap = styled.form`
 align-items: center;
-    width: 75px;
-    justify-content: space-between;
     margin-top: 3px;
-    margin-right: 20px;
+    margin-right: 25px;
     img{
       margin-right: 7px;
     }
     span{
+      font-size: 17px;
       font-weight: bold;
     }
     `;
