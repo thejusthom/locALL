@@ -15,6 +15,7 @@ import 'react-datepicker/dist/react-datepicker.css';
 import moment from "moment";
 import EvenstForm from "./_EventsForm";
 import { iconList } from "./Constants";
+import MyEvents from "./_MyEvents";
 
 const initialNewEvent = {
     eventName: "",
@@ -358,36 +359,40 @@ onRetrieve={onLocationChange}
    children={FormFieldsComponent()}
     />
   </Modal>
-   {tab === 0 ? <MapContainer>
+   {tab === 0 && !!events ? <MapContainer>
         <div ref={mapContainer} className="map-container"></div>
     </MapContainer> 
     : (
-        <table>
-            <thead>
-                <th>Name</th>
-                <th>Category</th>
-                <th>Start Date</th>
-                <th>End Date</th>
-                <th>Actions</th>
-            </thead>
-            <tbody>
-                {events?.map((event) => 
-               <tr key={event._id}>
-                    <td>{event.eventName}</td>
-                    <td>{event.category}</td>
-                    <td>{moment(event.startDate).format("MM/DD/YYYY")}</td>
-                    <td>{moment(event.endDate).format("MM/DD/YYYY")}</td>
-                    {!!event._id &&
-                    <td>
-                        <img src={EditIcon} width={25} height={25} onClick={() => onEdit(event._id || "")} />
-                        <img src={DeleteIcon} width={25} height={25} onClick={() => onDelete(event._id || "")} />
-                    </td>
-                    }
-                </tr>
-            )
-        }
-            </tbody>
-        </table>
+        <MyEvents
+        events={events}
+        onEdit={onEdit}
+        onDelete={onDelete} />
+        // <table>
+        //     <thead>
+        //         <th>Name</th>
+        //         <th>Category</th>
+        //         <th>Start Date</th>
+        //         <th>End Date</th>
+        //         <th>Actions</th>
+        //     </thead>
+        //     <tbody>
+        //         {events?.map((event) => 
+        //        <tr key={event._id}>
+        //             <td>{event.eventName}</td>
+        //             <td>{event.category}</td>
+        //             <td>{moment(event.startDate).format("MM/DD/YYYY")}</td>
+        //             <td>{moment(event.endDate).format("MM/DD/YYYY")}</td>
+        //             {!!event._id &&
+        //             <td>
+        //                 <img src={EditIcon} width={25} height={25} onClick={() => onEdit(event._id || "")} />
+        //                 <img src={DeleteIcon} width={25} height={25} onClick={() => onDelete(event._id || "")} />
+        //             </td>
+        //             }
+        //         </tr>
+        //     )
+        // }
+        //     </tbody>
+        // </table>
     )
      }
     </EventsContainer>
