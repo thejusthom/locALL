@@ -13,5 +13,10 @@ const getHappeningById = async (locationId: string, happeningId: string) => {
   return response.data;
 }
 
-const happeningsService = { getAllHappenings, getHappeningById };
+const createHappening = async (locationId: string, newHappening: Happenings) => {
+  const response = await axios.post(baseURL + locationId + '/happenings', newHappening);
+  return response.data;
+};
+
+const happeningsService = { getAllHappenings, getHappeningById, createHappening };
 export default happeningsService;

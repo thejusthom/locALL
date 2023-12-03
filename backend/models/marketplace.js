@@ -11,14 +11,10 @@ const MarketplaceSchema = new Schema ({
         required: true
     },
     listingDate: {
-        type: Date,
-        required: true
-    },
-    description: {
         type: String,
         required: true
     },
-    organizer: {
+    description: {
         type: String,
         required: true
     },

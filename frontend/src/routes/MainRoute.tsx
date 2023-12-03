@@ -1,12 +1,13 @@
 import { lazy } from 'react';
 // project imports
 import HomeLayout from '../views/layouts/HomeLayout';
-import Marketplace from '../views/Marketplace/MarketplaceView';
+import Marketplace from '../views/Marketplace/MarketplaceNav';
 import Events from '../views/EventsView';
 import FeedShare from '../views/FeedShare/FeedShareView';
 import Home from '../views/Home';
 import Happenings from '../views/HappeningsView';
 import SinglePost from '../happenings-page/single-post/single-post';
+import CreatePost from '../happenings-page/create-post/create-post';
 
 // ==============================|| MAIN ROUTING ||============================== //
 
@@ -37,6 +38,10 @@ const MainRoutes = {
         {
             path: `/happenings/:happeningId`,
             element: <SinglePost />
+        },
+        {
+            path: '/happenings/createPost',
+            element: <CreatePost />
         }
     ]
 };

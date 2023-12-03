@@ -1,8 +1,10 @@
 import * as React from "react";
-import { AddressAutofill, SearchBox } from '@mapbox/search-js-react';
+import styled from "styled-components";
+import { SearchBox } from '@mapbox/search-js-react';
 import LocationIcon from ".././assets/images/location.svg"
 import { saveLocation } from "../store/slices/location-slice";
 import { useDispatch } from 'react-redux';
+import { toast } from "react-toastify";
 
 const LocationBar = () => {
     const [selectedLocation, setSelectedLocation] = React.useState("");
@@ -31,17 +33,12 @@ const LocationBar = () => {
 }
 React.useEffect(()=>{
   if(!!add){
-    console.log("here")
-    console.log(add);
   dispatch(saveLocation({...coordinates, pincode: add}));}
 }, [add, coordinates, dispatch]);
     useOutsideAlerter(wrapperRef);
     const onFormClick = () => {
         setShowSearchBox(true);
     };
-    // const onLocationInputChange = (event) => {
-    // setSelectedLocation(event.target.value)
-    // };
     const onLocationChange = (event) => {
         const location = event?.features[0]?.geometry?.coordinates;
         setCoordinates({longitude: location[0], latitude: location[1]});
@@ -59,7 +56,7 @@ React.useEffect(()=>{
         if (navigator.geolocation) {
           navigator.geolocation.getCurrentPosition(success, error);
         } else {
-          console.log("Geolocation not supported");
+          toast.error("Geolocation not supported");
         }    
       function success(position) {
         const latitude = position.coords.latitude;
@@ -76,38 +73,33 @@ React.useEffect(()=>{
             })   
         };
       function error() {
-        console.log("Unable to retrieve your location");
+        toast.error("Unable to retrieve your location");
       }}, []);
 return(
     <>
-          <form ref={wrapperRef} style={{display: "flex"}} onClick={onFormClick}>
+          <LocationWrap ref={wrapperRef} style={{display: "flex"}} onClick={onFormClick}>
           <img src={LocationIcon} width={30} height={30} />
 {showSearchBox ? 
 <SearchBox accessToken={'pk.eyJ1IjoiYXNobWl5YS12aWpheWFjaGFuZHJhbiIsImEiOiJjbHBnMXRxc3oxaXd3MmlwcG5zZjBpdXNqIn0.GqCCjkCcmFsgrpMnl7ntzw'}
 value={selectedLocation}
 onRetrieve={onLocationChange}
 /> : <span>{add}</span>}
-        </form>
-            {/* <span>{selectedLocation}</span>
-            <form>
-        <AddressAutofill accessToken={"pk.eyJ1IjoiYXNobWl5YS12aWpheWFjaGFuZHJhbiIsImEiOiJjbHBnMXRxc3oxaXd3MmlwcG5zZjBpdXNqIn0.GqCCjkCcmFsgrpMnl7ntzw"}
-        onRetrieve={onLocationChange}
-        >
-          <input
-            name="address"
-            value={selectedLocation}
-            title=" Your Address"
-            placeholder="Address"
-            type="text"
-            className="form-control"
-            style={{ marginLeft: "10px", marginTop: "10px" }}
-            autoComplete="address-line1"
-            onChange={onLocationInputChange}
-          />
-        </AddressAutofill>
-        </form> */}
+        </LocationWrap>
     </>
 );
 };
+
+const LocationWrap = styled.form`
+align-items: center;
+    margin-top: 3px;
+    margin-right: 20px;
+    img{
+      margin-right: 7px;
+    }
+    span{
+      font-size: 17px;
+      font-weight: bold;
+    }
+    `;
 
 export default LocationBar;

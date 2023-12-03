@@ -12,7 +12,7 @@ const eventsSlice = createSlice({
     reducers: {
         loadEvents: (state, action: PayloadAction<EventsState>) => {
             return action.payload;
-        } 
+        },
     }
 
 });

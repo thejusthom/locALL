@@ -11,6 +11,7 @@ import Container from "@mui/material/Container";
 import Button from "@mui/material/Button";
 import MenuItem from "@mui/material/MenuItem";
 import LocationBar from "../_LocationBar";
+
 const pages = [
   { name: "Home", path: "/" },
   { name: "Events", path: "/events" },
@@ -46,10 +47,14 @@ function HomeLayout() {
                 mr: 2,
                 display: { xs: "none", md: "flex" },
                 fontFamily: "monospace",
+                fontSize: "18px",
                 fontWeight: 700,
                 letterSpacing: ".3rem",
                 color: "inherit",
                 textDecoration: "none",
+                '&:hover': {
+                  color: "#101a45",
+                }
               }}
             >
               locALL
@@ -115,14 +120,20 @@ function HomeLayout() {
             >
               locALL
             </Typography>
-            <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
+            <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex",
+                  "& .MuiBox-root:primary.light": {
+                    color: "black"
+                  } } }}>
               {pages.map((page) => (
                 <Button
                   component={Link}
                   to={page.path}
                   key={page.name}
                   onClick={handleCloseNavMenu}
-                  sx={{ my: 2, color: "white", display: "block" }}
+                  sx={{ my: 2, mx: 1.1, color: "white", display: "block", fontSize: "16px", fontWeight: 600, '&:hover': {
+                    color: "#101a45",
+                  }
+                }}
                 >
                   {page.name}
                 </Button>
@@ -133,7 +144,10 @@ function HomeLayout() {
               <Button
                 key="login"
                 onClick={handleCloseNavMenu}
-                sx={{ my: 2, color: "white", display: "block" }}
+                sx={{ my: 2, mx: 1.1, color: "white", display: "block", fontSize: "16px", fontWeight: 600, '&:hover': {
+                  color: "#101a45",
+                }
+              }}
               >
                 LOGIN
               </Button>
@@ -145,4 +159,5 @@ function HomeLayout() {
     </>
   );
 }
+
 export default HomeLayout;

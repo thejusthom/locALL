@@ -2,30 +2,141 @@ import AspectRatio from "@mui/joy/AspectRatio";
 import Button from "@mui/joy/Button";
 import Card from "@mui/joy/Card";
 import CardContent from "@mui/joy/CardContent";
-import IconButton from "@mui/joy/IconButton";
 import Typography from "@mui/joy/Typography";
-import { Comment, Form, Image, Modal, Header,FormProps, TextAreaProps } from "semantic-ui-react";
-import React, { ChangeEvent, FormEvent } from "react";
+import {
+  Comment,
+  Form,
+  Image,
+  Modal,
+  Header,
+  TextAreaProps,
+} from "semantic-ui-react";
+import React, { ChangeEvent, useState, useEffect } from "react";
 import { Marketplace } from "../../models/marketplace";
 import { Box } from "@mui/system";
 import marketplaceService from "../../services/marketplaceService";
-import { TextareaProps } from "@mui/joy";
+import image from "../../assets/images/no-image.jpg";
+import moment from "moment";
+import IconButton from "@mui/joy/IconButton";
+import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
 
 type Props = {
   marketplace: Marketplace;
+  active: string;
+  afterUpdate: () => void;
 };
 
 const MarketplaceCard = (props: Props) => {
   const [open, setOpen] = React.useState(false);
-  const [text, setText] = React.useState('');
-  const handleChange = (e: ChangeEvent<HTMLTextAreaElement>,value: TextAreaProps) => {
+  const [text, setText] = React.useState("");
+  const [update, setUpdate] = React.useState(false);
+
+  const [formData, setFormData] = useState({
+    productName: props.marketplace.productName,
+    description: props.marketplace.description,
+    price: props.marketplace.price,
+    image: props.marketplace.image,
+  });
+  useEffect(() => {
+    const clData = {
+      productName: props.marketplace.productName,
+      description: props.marketplace.description,
+      price: props.marketplace.price,
+      image: props.marketplace.image,
+    };
+    setFormData(clData);
+  }, [props.marketplace]);
+  const clearFormData = () => {
+    const clData = {
+      productName: "",
+      description: "",
+      price: "",
+      image: "",
+    };
+    setFormData(clData);
+  };
+  const handleChange = (
+    e: ChangeEvent<HTMLTextAreaElement>,
+    value: TextAreaProps
+  ) => {
     setText(value.value as string);
-  }
-  const handleSubmit = () => {
-    //  console.log(text);
-     props.marketplace.comments.push({author: "You", metaData: "Today", text: text, avatar: "Profile Pic"});
-     marketplaceService.updateMarketplace(props.marketplace.locationId, props.marketplace, props.marketplace._id);
-     setText('');
+  };
+
+  const handleOnChange = (
+    event: ChangeEvent<HTMLInputElement> | ChangeEvent<HTMLTextAreaElement>
+  ) => {
+    event.preventDefault();
+    const id = event.target.id;
+    const updateData = { ...formData };
+    if (
+      event.target instanceof HTMLInputElement &&
+      event.target.type === "file"
+    ) {
+      const file = event.target.files?.[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onloadend = () => {
+          reader.result as string;
+          updateData[id as keyof typeof updateData] = reader.result as string;
+          console.log(updateData);
+          setFormData(updateData);
+        };
+        return;
+      }
+    }
+    updateData[id as keyof typeof updateData] = event.target.value;
+    console.log(updateData);
+    setFormData(updateData);
+  };
+
+  const handleSubmit = async () => {
+    const listingDate = moment().format("MMMM Do YYYY, h:mm:ss a");
+    props.marketplace.productName = formData.productName;
+    props.marketplace.description = formData.description;
+    props.marketplace.price = formData.price;
+    props.marketplace.image = formData.image;
+    marketplaceService
+      .updateMarketplace(
+        props.marketplace.locationId,
+        props.marketplace,
+        props.marketplace._id
+      )
+      .then(() => {
+        setUpdate(false);
+        clearFormData();
+        props.afterUpdate();
+      });
+  };
+  const fillFormData = () => {
+    props.afterUpdate();
+    const clData = {
+      productName: props.marketplace.productName,
+      description: props.marketplace.description,
+      price: props.marketplace.price,
+      image: props.marketplace.image,
+    };
+    setFormData(clData);
+  };
+
+  const handleCommentsSubmit = () => {
+    props.marketplace.comments.push({
+      author:
+        typeof props.marketplace.createdUser === "string"
+          ? ""
+          : props.marketplace.createdUser.person.firstName +
+            " " +
+            props.marketplace.createdUser.person.lastName,
+      metaData: moment().format("MMMM Do YYYY, h:mm:ss a"),
+      text: text,
+      avatar: "Profile Pic",
+    });
+    marketplaceService.updateMarketplace(
+      props.marketplace.locationId,
+      props.marketplace,
+      props.marketplace._id
+    );
+    setText("");
   };
   return (
     <Box>
@@ -37,11 +148,22 @@ const MarketplaceCard = (props: Props) => {
           <Typography level="body-sm">
             {props.marketplace.listingDate}
           </Typography>
+          {props.active === "my-items" && (
+            <IconButton
+              aria-label="bookmark Bahamas Islands"
+              variant="plain"
+              color="neutral"
+              size="sm"
+              sx={{ position: "absolute", top: "0.875rem", right: "0.5rem" }}
+              onClick={() => setUpdate(true)}
+            >
+              <EditOutlinedIcon />
+            </IconButton>
+          )}
         </div>
         <AspectRatio minHeight="120px" maxHeight="200px">
-          <img
-            src={`data:image/png;base64,${props.marketplace.image}`}
-            srcSet={`data:image/png;base64,${props.marketplace.image}`}
+          <Image
+            srcSet={props.marketplace.image}
             loading="lazy"
             alt={props.marketplace.productName}
           />
@@ -50,7 +172,7 @@ const MarketplaceCard = (props: Props) => {
           <div>
             <Typography level="body-xs">Total price:</Typography>
             <Typography fontSize="lg" fontWeight="lg">
-              {props.marketplace.price}
+              ${props.marketplace.price}
             </Typography>
           </div>
           <Button
@@ -66,16 +188,22 @@ const MarketplaceCard = (props: Props) => {
         </CardContent>
       </Card>
       <Modal
+        dimmer="inverted"
         open={open}
-        onClose={() => setOpen(false)}
-        onOpen={() => setOpen(true)}
+        onClose={() => {
+          setOpen(false);
+        }}
+        onOpen={() => {
+          setOpen(true);
+        }}
       >
         <Modal.Header>{props.marketplace.productName}</Modal.Header>
         <Modal.Content image scrolling>
           <Image
             size="medium"
             style={{ position: "sticky", top: 0 }}
-            src={`data:image/png;base64,${props.marketplace.image}`}
+            src={props.marketplace.image}
+            srcSet={props.marketplace.image}
             alt={props.marketplace.productName}
             wrapped
           />
@@ -85,8 +213,13 @@ const MarketplaceCard = (props: Props) => {
             <Box sx={{ display: "flex", position: "relative" }}>
               <Box sx={{ width: "300px", float: "left" }}>
                 <p style={{ margin: 0 }}>
-                  Posted by {props.marketplace.createdUser.person.firstName}{" "}
-                  {props.marketplace.createdUser.person.lastName}
+                  Posted by{" "}
+                  {typeof props.marketplace.createdUser === "string"
+                    ? ""
+                    : props.marketplace.createdUser.person.firstName}{" "}
+                  {typeof props.marketplace.createdUser === "string"
+                    ? ""
+                    : props.marketplace.createdUser.person.lastName}
                 </p>
                 <Typography level="body-sm">
                   &nbsp; &nbsp; on {props.marketplace.listingDate}
@@ -94,10 +227,10 @@ const MarketplaceCard = (props: Props) => {
               </Box>
               <Box sx={{ float: "right", position: "absolute", right: 0 }}>
                 <Typography level="body-xs" fontSize="xl">
-                  Total price:
+                  Price:
                 </Typography>
                 <Typography fontSize="lg" fontWeight="lg">
-                  {props.marketplace.price}
+                  ${props.marketplace.price}
                 </Typography>
               </Box>
             </Box>
@@ -107,22 +240,28 @@ const MarketplaceCard = (props: Props) => {
                 Comments
               </Header>
               {props.marketplace.comments.map((comment) => (
-              <Comment>
-                <Comment.Avatar src={`data:image/png;base64,${comment.avatar}`} />
-                <Comment.Content>
-                  <Comment.Author as='span'>{comment.author}</Comment.Author>
-                  <Comment.Metadata>
-                    <div>{comment.metaData}</div>
-                  </Comment.Metadata>
-                  <Comment.Text>{comment.text}</Comment.Text>
-                </Comment.Content>
-              </Comment> ))}
-   
-              <Form onSubmit={handleSubmit}>
-                <Form.TextArea placeholder='Write your comments here'
-              name='text' value={text}
-              onChange={handleChange}
-              />
+                <Comment>
+                  <Comment.Avatar
+                    src={comment.avatar}
+                    srcSet={[comment.avatar, image]}
+                  />
+                  <Comment.Content>
+                    <Comment.Author as="span">{comment.author}</Comment.Author>
+                    <Comment.Metadata>
+                      <div>{comment.metaData}</div>
+                    </Comment.Metadata>
+                    <Comment.Text>{comment.text}</Comment.Text>
+                  </Comment.Content>
+                </Comment>
+              ))}
+
+              <Form onSubmit={handleCommentsSubmit}>
+                <Form.TextArea
+                  placeholder="Write your comments here"
+                  name="text"
+                  value={text}
+                  onChange={handleChange}
+                />
                 <Button type="submit">Post</Button>
               </Form>
             </Comment.Group>
@@ -136,6 +275,96 @@ const MarketplaceCard = (props: Props) => {
             aria-label="Explore Bahamas Islands"
             sx={{ ml: "auto", alignSelf: "center", fontWeight: 600 }}
             onClick={() => setOpen(false)}
+          >
+            Close
+          </Button>
+        </Modal.Actions>
+      </Modal>
+
+      <Modal
+        dimmer="inverted"
+        open={update}
+        onClose={() => {
+          fillFormData();
+          setUpdate(false);
+          clearFormData();
+        }}
+        onOpen={() => {
+          fillFormData();
+          setUpdate(true);
+        }}
+      >
+        <Modal.Header>Edit Listing</Modal.Header>
+        <Modal.Content scrolling>
+          <Form>
+            <Form.Input
+              fluid
+              id="productName"
+              label="Product name"
+              placeholder="Product name"
+              value={formData.productName}
+              onChange={handleOnChange}
+              required
+            />
+            <Form.Input
+              fluid
+              id="price"
+              label="Product Price"
+              placeholder="Product Price"
+              type="number"
+              value={formData.price}
+              onChange={handleOnChange}
+              required
+            />
+            <Form.TextArea
+              label="Description"
+              id="description"
+              placeholder="Describe about the product..."
+              value={formData.description}
+              onChange={handleOnChange}
+              required
+            />
+            <Image
+              size="medium"
+              style={{ position: "sticky", top: 0 }}
+              src={formData.image}
+              srcSet={formData.image}
+              alt={"No images added"}
+              label="Image Preview"
+              wrapped
+            />
+            <Form.Input
+              fluid
+              label="Upload your images here"
+              type="file"
+              id="image"
+              required
+              onChange={handleOnChange}
+            />
+            <Button
+              variant="solid"
+              size="md"
+              color="primary"
+              aria-label="Explore Bahamas Islands"
+              sx={{ ml: "auto", alignSelf: "center", fontWeight: 600 }}
+              onClick={handleSubmit}
+              type="submit"
+            >
+              Update
+            </Button>
+          </Form>
+        </Modal.Content>
+        <Modal.Actions>
+          <Button
+            variant="solid"
+            size="md"
+            color="primary"
+            aria-label="Explore Bahamas Islands"
+            sx={{ ml: "auto", alignSelf: "center", fontWeight: 600 }}
+            onClick={() => {
+              setUpdate(false);
+              fillFormData();
+            }}
           >
             Close
           </Button>

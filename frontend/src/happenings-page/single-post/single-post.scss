@@ -17,6 +17,13 @@
   font-family: "Lora", sans-serif;
 }
 
+.singlePostIcon:first-child {
+  color: teal;
+}
+.singlePostIcon:last-child {
+  color: tomato;
+}
+
 .singlePostEdit {
   float: right;
   font-size: 16px;
