@@ -136,7 +136,7 @@ const MarketplaceView = (props: Props) => {
         ))}
       </Box>
       <Modal
-      dimmer='inverted'
+        dimmer="inverted"
         open={create}
         onClose={() => {
           setCreate(false);

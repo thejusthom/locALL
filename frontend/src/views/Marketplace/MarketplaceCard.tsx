@@ -29,7 +29,7 @@ type Props = {
 const MarketplaceCard = (props: Props) => {
   const [open, setOpen] = React.useState(false);
   const [text, setText] = React.useState("");
-  const [create, setCreate] = React.useState(false);
+  const [update, setUpdate] = React.useState(false);
 
   const [formData, setFormData] = useState({
     productName: props.marketplace.productName,
@@ -44,7 +44,7 @@ const MarketplaceCard = (props: Props) => {
       price: props.marketplace.price,
       image: props.marketplace.image,
     };
-    setFormData(clData); 
+    setFormData(clData);
   }, [props.marketplace]);
   const clearFormData = () => {
     const clData = {
@@ -96,13 +96,14 @@ const MarketplaceCard = (props: Props) => {
     props.marketplace.description = formData.description;
     props.marketplace.price = formData.price;
     props.marketplace.image = formData.image;
-    marketplaceService.updateMarketplace(
-      props.marketplace.locationId,
-      props.marketplace,
-      props.marketplace._id
-    )
+    marketplaceService
+      .updateMarketplace(
+        props.marketplace.locationId,
+        props.marketplace,
+        props.marketplace._id
+      )
       .then(() => {
-        setCreate(false);
+        setUpdate(false);
         clearFormData();
         props.afterUpdate();
       });
@@ -115,8 +116,8 @@ const MarketplaceCard = (props: Props) => {
       price: props.marketplace.price,
       image: props.marketplace.image,
     };
-    setFormData(clData); 
-  }
+    setFormData(clData);
+  };
 
   const handleCommentsSubmit = () => {
     props.marketplace.comments.push({
@@ -154,7 +155,7 @@ const MarketplaceCard = (props: Props) => {
               color="neutral"
               size="sm"
               sx={{ position: "absolute", top: "0.875rem", right: "0.5rem" }}
-              onClick={() => setCreate(true)}
+              onClick={() => setUpdate(true)}
             >
               <EditOutlinedIcon />
             </IconButton>
@@ -187,12 +188,12 @@ const MarketplaceCard = (props: Props) => {
         </CardContent>
       </Card>
       <Modal
-      dimmer='inverted'
+        dimmer="inverted"
         open={open}
         onClose={() => {
           setOpen(false);
         }}
-        onOpen={() =>{ 
+        onOpen={() => {
           setOpen(true);
         }}
       >
@@ -281,18 +282,19 @@ const MarketplaceCard = (props: Props) => {
       </Modal>
 
       <Modal
-      dimmer='inverted'
-        open={create}
+        dimmer="inverted"
+        open={update}
         onClose={() => {
           fillFormData();
-          setCreate(false);
+          setUpdate(false);
           clearFormData();
         }}
         onOpen={() => {
           fillFormData();
-          setCreate(true);}}
+          setUpdate(true);
+        }}
       >
-        <Modal.Header>Create Listing</Modal.Header>
+        <Modal.Header>Edit Listing</Modal.Header>
         <Modal.Content scrolling>
           <Form>
             <Form.Input
@@ -360,7 +362,7 @@ const MarketplaceCard = (props: Props) => {
             aria-label="Explore Bahamas Islands"
             sx={{ ml: "auto", alignSelf: "center", fontWeight: 600 }}
             onClick={() => {
-              setCreate(false);
+              setUpdate(false);
               fillFormData();
             }}
           >
