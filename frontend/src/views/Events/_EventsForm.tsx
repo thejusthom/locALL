@@ -8,6 +8,7 @@ onCloseModal: () => void;
 onUpdate: () => void;
 onSubmit: (event: any) => void;
 eventName?: string;
+isDisabled: boolean;
 children: string | JSX.Element | JSX.Element[];
 }
 
@@ -18,6 +19,7 @@ const EvenstForm = (props: IEventsForm) => {
         onUpdate,
         onSubmit,
         eventName,
+        isDisabled,
         children
     } = props;
     return(
@@ -33,6 +35,7 @@ const EvenstForm = (props: IEventsForm) => {
                 {children}
         <div style={{textAlign: "center"}}>
     <Button 
+    disabled={isDisabled}
     onClick={isEdit ? onUpdate : onSubmit}>{isEdit ? "Update" : "Submit"}</Button>
     </div>
     </Content>
@@ -96,10 +99,6 @@ height: 100%;
 padding: 20px;
 margin-top: 83px;
 `;
-const InputWrap = styled.div`
-    margin-bottom: 20px;
-    display: flex;
-`;
 const FormWrap = styled.section`
 height: 100%;
 justify-content: center;
@@ -114,6 +113,10 @@ border: none;
 border-radius: 25px;
 font-size: 16px;
 padding: 10px 25px;
+&:disabled{
+    background-color: #919090;
+    cursor: unset;
+}
 `;
 
 export default EvenstForm;
