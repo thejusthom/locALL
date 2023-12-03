@@ -161,18 +161,17 @@ eventsService.getEvents(loc.pincode).then((event)=> {
     });
 }}, [events]);
 React.useEffect(() => {
-const eventValues = Object.values(newEvent);
 const coordinatesValue = Object.values(coordinates);
 const organiserValues = Object.values(organiser);
-console.log(eventValues, coordinatesValue, organiserValues)
-console.log(newEvent)
-if(eventValues.includes("") || eventValues.includes(undefined) || coordinatesValue.includes(0) || organiserValues.includes("") || startDate === undefined || endDate === undefined){
+const {eventName, descriptionInfo, category} = newEvent;
+const eventValues = [eventName, descriptionInfo, category];
+if(eventValues.includes("") || coordinatesValue.includes(0) || !(organiserValues?.length >= 2) || organiserValues.includes("") || startDate === undefined || endDate === undefined){
     setIsValid(false);
 }
 else{
     setIsValid(true);
 }
-}, [newEvent, coordinates, organiser])
+}, [newEvent, coordinates, organiser]);
 
 const onNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setNewEvent({...newEvent, eventName: e.target.value});
