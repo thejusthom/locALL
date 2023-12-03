@@ -18,10 +18,6 @@ const MarketplaceSchema = new Schema ({
         type: String,
         required: true
     },
-    organizer: {
-        type: String,
-        required: true
-    },
     createdUser: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User'

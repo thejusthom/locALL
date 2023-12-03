@@ -17,6 +17,20 @@ export const find = async (request, response) => {
     }
 }
 
+// Method to get users by params
+export const getByParams = async (request, response) => {
+    try {
+        const locationId = request.locationId;
+        const params = { ...request.query, locationId };
+        console.log(params);
+        const marketplaces = await marketplaceService.getByParams(params);
+        setResponse(marketplaces, response, 200);
+    } catch (err) {
+        console.log(err);
+        setErrorResponse(err, response);
+    }
+}
+
 export const post = async (request, response) => {
     try {
         console.log(request.locationId);
