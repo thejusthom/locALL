@@ -5,6 +5,18 @@ import happeningsService from '../../services/happeningsService';
 import Happenings from '../../models/happenings';
 import { useSelector } from 'react-redux';
 import { Modal, Form, Button, TextArea, Image } from 'semantic-ui-react';
+import {
+  Button as Buttons,
+  Card,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
+  Grid,
+  Paper,
+  Typography,
+  TextField,
+} from '@mui/material';
 
 const SinglePost: React.FC = () => {
   const [happening, setHappening] = useState({} as Happenings);
@@ -95,7 +107,7 @@ const SinglePost: React.FC = () => {
 
   return (
     <div className="singlePost">
-      <div className="singlePostWrapper">
+      {/* <div className="singlePostWrapper">
         <img className="singlePostImg" src={happening.image} alt="" />
         <h1 className="singlePostTitle">
           {happening.title}
@@ -121,7 +133,47 @@ const SinglePost: React.FC = () => {
         </div>
 
         <p className="singlePostDesc">{happening.content}</p>
-      </div>
+      </div> */}
+
+      <Card sx={{ width: '100%', margin: '0 auto', padding: '20px' }}>
+        <img className="singlePostImg" src={happening.image} alt="" style={{ width: '100%', marginBottom: '20px' }} />
+        <div className="singlePostCardContent">
+          <Typography variant="h5" component="div" style={{ textAlign: 'center', marginBottom: '50px'}}>
+          <h1 className="singlePostTitle">
+            {happening.title}
+
+            <div className="singlePostEdit" style={{ marginTop: '10px', textAlign: 'center' }}>
+              <Button onClick={handleEditClick} variant="outlined" style={{ marginRight: '10px' }}>
+                Edit
+              </Button>
+              <Button onClick={handleDeleteClick} variant="outlined">
+                Delete
+              </Button>
+            </div>
+          </h1>
+            
+          </Typography>
+
+          <div className="singlePostInfo">
+            <span className="singlePostAuthor">
+              Author:
+              <b>
+                {typeof happening.createdUser === 'string'
+                  ? 'Shashikar'
+                  : happening.createdUser?.person?.firstName}
+                {typeof happening.createdUser === 'string'
+                  ? 'A'
+                  : happening.createdUser?.person?.lastName}
+              </b>{' '}
+            </span>
+            <span className="singlePostDate">{happening.postedDate}</span>
+          </div>
+
+          <p className="singlePostDesc" style={{ marginTop: '20px' }}>
+            {happening.content}
+          </p>
+        </div>
+      </Card>
 
       {/* Edit Form Modal */}
       <Modal dimmer="inverted" open={isEditing} onClose={() => setIsEditing(false)}>
