@@ -2,7 +2,7 @@ import { lazy } from 'react';
 // project imports
 import HomeLayout from '../views/layouts/HomeLayout';
 import Marketplace from '../views/Marketplace/MarketplaceView';
-import Events from '../views/EventsView';
+import Events from '../views/Events/EventsView';
 import FeedShare from '../views/FeedShare/FeedShareView';
 import Home from '../views/Home';
 import Happenings from '../views/HappeningsView';

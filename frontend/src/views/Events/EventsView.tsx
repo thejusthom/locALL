@@ -1,19 +1,11 @@
 import * as React from "react";
 import mapboxgl from 'mapbox-gl';
 import styled from "styled-components";
-import Dance from ".././assets/images/dance.png";
-import Book from ".././assets/images/book.png";
-import Drink from ".././assets/images/drink.png";
-import Food from ".././assets/images/food.png";
-import Music from ".././assets/images/music.png";
-import Pet from ".././assets/images/pet.png";
-import Plant from ".././assets/images/plant.png";
-import CloseIcon from ".././assets/images/close-white.svg";
-import EditIcon from ".././assets/images/edit-icon.svg";
-import DeleteIcon from ".././assets/images/delete-icon.svg";
+import EditIcon from "../../assets/images/edit-icon.svg";
+import DeleteIcon from "../../assets/images/delete-icon.svg";
 import { useSelector } from 'react-redux';
-import eventsService from "../services/eventsService";
-import { IEvent } from "../models/events";
+import eventsService from "../../services/eventsService";
+import { IEvent } from "../../models/events";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import FormControl from "@mui/material/FormControl";
@@ -30,6 +22,8 @@ import ReactModal from 'react-modal';
 import DatePicker from "react-datepicker";
 import 'react-datepicker/dist/react-datepicker.css';
 import moment from "moment";
+import EvenstForm from "./_EventsForm";
+import { iconList } from "./Constants";
 
 const initialNewEvent = {
     eventName: "",
@@ -69,36 +63,6 @@ eventsService.getEvents(loc.pincode).then((event)=> {
     console.log(event);
     setEvents(event)});
 }, [loc]);
-console.log(events);
-const iconList = [{
-    label: "Book",
-    url: Book
-},
-{
-    label: "Dance",
-    url: Dance
-},
-{
-    label: "Drink",
-    url: Drink
-},
-{
-    label: "Food",
-    url: Food
-},
-{
-    label: "Music",
-    url: Music
-},
-{
-    label: "Pet",
-    url: Pet
-},
-{
-    label: "Plant",
-    url: Plant
-}
-]
 
   const mapContainer = React.useRef<HTMLDivElement | null>(null);
   const map = React.useRef<mapboxgl.Map | null>(null);
@@ -327,27 +291,8 @@ function a11yProps(index: number) {
         setEvents(event)});
     setTab(newValue);
   };
-
-    return(
-        <EventsContainer>
-        <Button 
-        onClick={() => setShowModal(true)}
-        >Create an Event</Button>
-               <Tabs sx={{margin: "15px 0 0 0"}} value={tab} onChange={handleTabChange} aria-label="basic tabs example">
-          <Tab sx={{fontSize: "16px", fontWeight: "bold"}} label="All Events" {...a11yProps(0)} />
-          <Tab sx={{fontSize: "16px", fontWeight: "bold"}} label="My Events" {...a11yProps(1)} />
-        </Tabs>
-<Modal isOpen={showModal}>
-    <FormWrap>
-    <Form>
-        <Heading>
-        <h1>
-            {isEdit ? `Edit Event - ${newEvent.eventName}` : "Create Event"}
-        </h1>
-        <img src={CloseIcon} width={25} height={25} onClick={onCloseModal} />
-        {/* <span /> */}
-        </Heading>
-        <Content>
+  const FormFieldsComponent = () => {return(
+    <>
     <InputWrap>
     <label>Name:</label>
     <input type="text" id="eventName" value={newEvent.eventName} onChange={onNameChange} />
@@ -376,11 +321,11 @@ function a11yProps(index: number) {
     </InputWrap>
     <InputWrap>
   <label>Location:</label>
-  {/* <SearchBox 
+  <SearchBox 
 accessToken={'pk.eyJ1IjoiYXNobWl5YS12aWpheWFjaGFuZHJhbiIsImEiOiJjbHBnMXRxc3oxaXd3MmlwcG5zZjBpdXNqIn0.GqCCjkCcmFsgrpMnl7ntzw'}
 value={selectedLocation}
 onRetrieve={onLocationChange}
-/> */}
+/>
 </InputWrap>
 <InputWrap>
     <label>Organiser Name:</label>
@@ -390,12 +335,27 @@ onRetrieve={onLocationChange}
     <label>Organiser Contact:</label>
     <input type="text" id="contact" value={organiser?.contact} onChange={onOrganiserChange} />
     </InputWrap>
-    <div style={{textAlign: "center"}}>
-<Button 
-onClick={isEdit ? onUpdate : onSubmit}>{isEdit ? "Update" : "Submit"}</Button></div>
-</Content>
-  </Form>
-  </FormWrap>
+    </>
+)
+};
+
+    return(
+        <EventsContainer>
+        <Button 
+        onClick={() => setShowModal(true)}
+        >Create an Event</Button>
+               <Tabs sx={{margin: "15px 0 0 0"}} value={tab} onChange={handleTabChange} aria-label="basic tabs example">
+          <Tab sx={{fontSize: "16px", fontWeight: "bold"}} label="All Events" {...a11yProps(0)} />
+          <Tab sx={{fontSize: "16px", fontWeight: "bold"}} label="My Events" {...a11yProps(1)} />
+        </Tabs>
+<Modal isOpen={showModal}>
+  <EvenstForm isEdit={isEdit}
+   eventName={newEvent.eventName}
+   onCloseModal={onCloseModal} 
+   onUpdate={onUpdate} 
+   onSubmit={onSubmit}
+   children={FormFieldsComponent()}
+    />
   </Modal>
    {tab === 0 ? <MapContainer>
         <div ref={mapContainer} className="map-container"></div>
@@ -532,13 +492,6 @@ h1{
     font-weight: normal;
     font-size: 25px;
 }`;
-/* span{
-    width: 120px;
-    height: 3px;
-    background-color: #1976d2;
-     text-align: left;
-    display: block;
-} */
 const Content = styled.section`
 height: 100%;
 padding: 20px;
