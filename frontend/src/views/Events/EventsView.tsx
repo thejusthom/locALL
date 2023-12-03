@@ -6,9 +6,7 @@ import eventsService from "../../services/eventsService";
 import { IEvent } from "../../models/events";
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
-import { SearchBox } from '@mapbox/search-js-react';
 import ReactModal from 'react-modal';
-import DatePicker from "react-datepicker";
 import 'react-datepicker/dist/react-datepicker.css';
 import moment from "moment";
 import EvenstForm, { Button } from "./_EventsForm";
@@ -283,53 +281,6 @@ function a11yProps(index: number) {
         setEvents(newValue === 0 ? availableEvents : event)});
     setTab(newValue);
   };
-//   const FormFieldsComponent = () => {return(
-//     <>
-//     <InputWrap>
-//     <label>Name: <MandatoryStar>*</MandatoryStar></label>
-//     <input type="text" id="eventName" value={newEvent.eventName} onChange={onNameChange} />
-//     </InputWrap>
-//     <InputWrap>
-//     <label>Description: <MandatoryStar>*</MandatoryStar></label>
-//     <textarea id="descriptionInfo" value={newEvent.descriptionInfo} onChange={onDescriptionChange} />
-//     </InputWrap>
-//     <InputWrap>
-//     <label>Category: <MandatoryStar>*</MandatoryStar></label>
-//   <select onChange={onCategoryChange} value={newEvent.category}>
-//   {iconList?.map((category) => { return<option value={category.label}>{category.label}</option>})}
-//   </select>
-//   </InputWrap>
-//   <InputWrap>
-//     <label>Start Date: <MandatoryStar>*</MandatoryStar></label>
-//  <DatePicker 
-//  selected={startDate} 
-//  onChange={onStartDateChange} />
-//   </InputWrap>
-// <InputWrap>
-//     <label>End Date: <MandatoryStar>*</MandatoryStar></label>
-//    <DatePicker 
-//  selected={endDate} 
-//  onChange={onEndDateChange} />
-//     </InputWrap>
-//  {!isEdit && <InputWrap>
-//   <label>Location: <MandatoryStar>*</MandatoryStar></label>
-//   <SearchBox 
-// accessToken={'pk.eyJ1IjoiYXNobWl5YS12aWpheWFjaGFuZHJhbiIsImEiOiJjbHBnMXRxc3oxaXd3MmlwcG5zZjBpdXNqIn0.GqCCjkCcmFsgrpMnl7ntzw'}
-// value={selectedLocation}
-// onRetrieve={onLocationChange}
-// />
-// </InputWrap>}
-// <InputWrap>
-//     <label>Organiser Name: <MandatoryStar>*</MandatoryStar></label>
-//     <input type="text" id="name" value={organiser?.name} onChange={onOrganiserChange} />
-//     </InputWrap>
-//     <InputWrap>
-//     <label>Organiser Contact: <MandatoryStar>*</MandatoryStar></label>
-//     <input type="text" id="contact" value={organiser?.contact} onChange={onOrganiserChange} />
-//     </InputWrap>
-//     </>
-// )
-// };
     return(
         <EventsContainer>
         <Button 
