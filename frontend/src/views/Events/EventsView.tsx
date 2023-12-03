@@ -51,7 +51,8 @@ React.useEffect(() => {
 map.current?.setCenter([loc.longitude, loc.latitude]);
 setAdd(loc.pincode);
 eventsService.getEvents(loc.pincode).then((event)=> {
-    setEvents(event)});
+    const availableEvents = event.filter((e: IEvent) => !!e.endDate && moment(e.endDate) >= moment());
+    setEvents(availableEvents)});
 }, [loc]);
 
   const mapContainer = React.useRef<HTMLDivElement | null>(null);
@@ -230,7 +231,8 @@ const onEdit = (eventId: string) => {
 const onDelete = (eventId: string) => {
     eventsService.deleteEvent(loc.pincode, eventId).then((event)=> {
         eventsService.getEvents(loc.pincode).then((event)=> {
-            setEvents(event)});
+            const availableEvents = event.filter((e: IEvent) => !!e.endDate && moment(e.endDate) >= moment());
+            setEvents(availableEvents)});
     });
 };
 const onUpdate = () => {
@@ -239,8 +241,9 @@ const onUpdate = () => {
     const updatedEvent = {...newEvent, address: {...coordinates}, organiser, startDate: start, endDate: end};
     eventsService.updateEvent(loc.pincode, eventId, updatedEvent).then((event)=> {
         eventsService.getEvents(loc.pincode).then((event)=> {
-            setEvents(event)});
-    });
+            const availableEvents = event.filter((e: IEvent) => !!e.endDate && moment(e.endDate) >= moment());
+            setEvents(availableEvents)}
+    );});
         setNewEvent(initialNewEvent);
         setCoordinates({longitude: 0, latitude:0});
         setStartDate(undefined);
@@ -270,57 +273,58 @@ function a11yProps(index: number) {
 };
   const handleTabChange = (event: any, newValue: number) => {
     eventsService.getEvents(loc.pincode).then((event)=> {
-        setEvents(event)});
+        const availableEvents = event.filter((e: IEvent) => !!e.endDate && moment(e.endDate) >= moment());
+        // setEvents(availableEvents)}
+        setEvents(newValue === 0 ? availableEvents : event)});
     setTab(newValue);
   };
   const FormFieldsComponent = () => {return(
     <>
     <InputWrap>
-    <label><MandatoryStar>*</MandatoryStar>Name:</label>
+    <label>Name: <MandatoryStar>*</MandatoryStar></label>
     <input type="text" id="eventName" value={newEvent.eventName} onChange={onNameChange} />
     </InputWrap>
     <InputWrap>
-    <label>Description:</label>
+    <label>Description: <MandatoryStar>*</MandatoryStar></label>
     <textarea id="descriptionInfo" value={newEvent.descriptionInfo} onChange={onDescriptionChange} />
     </InputWrap>
     <InputWrap>
-    <label>Category:</label>
+    <label>Category: <MandatoryStar>*</MandatoryStar></label>
   <select onChange={onCategoryChange} value={newEvent.category}>
   {iconList?.map((category) => { return<option value={category.label}>{category.label}</option>})}
   </select>
   </InputWrap>
   <InputWrap>
-    <label>Start Date:</label>
+    <label>Start Date: <MandatoryStar>*</MandatoryStar></label>
  <DatePicker 
  selected={startDate} 
  onChange={onStartDateChange} />
   </InputWrap>
 <InputWrap>
-    <label>End Date:</label>
+    <label>End Date: <MandatoryStar>*</MandatoryStar></label>
    <DatePicker 
  selected={endDate} 
  onChange={onEndDateChange} />
     </InputWrap>
-    <InputWrap>
-  <label>Location:</label>
+ {!isEdit && <InputWrap>
+  <label>Location: <MandatoryStar>*</MandatoryStar></label>
   <SearchBox 
 accessToken={'pk.eyJ1IjoiYXNobWl5YS12aWpheWFjaGFuZHJhbiIsImEiOiJjbHBnMXRxc3oxaXd3MmlwcG5zZjBpdXNqIn0.GqCCjkCcmFsgrpMnl7ntzw'}
 value={selectedLocation}
 onRetrieve={onLocationChange}
 />
-</InputWrap>
+</InputWrap>}
 <InputWrap>
-    <label>Organiser Name:</label>
+    <label>Organiser Name: <MandatoryStar>*</MandatoryStar></label>
     <input type="text" id="name" value={organiser?.name} onChange={onOrganiserChange} />
     </InputWrap>
     <InputWrap>
-    <label>Organiser Contact:</label>
+    <label>Organiser Contact: <MandatoryStar>*</MandatoryStar></label>
     <input type="text" id="contact" value={organiser?.contact} onChange={onOrganiserChange} />
     </InputWrap>
     </>
 )
 };
-
     return(
         <EventsContainer>
         <Button 
@@ -436,7 +440,7 @@ font-size: 16px;
 padding: 10px 25px;
 `;
 const MandatoryStar = styled.span`
-
+color: #A71313;
 `;
 
 export default EventsView;
