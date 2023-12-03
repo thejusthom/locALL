@@ -13,7 +13,7 @@
 //   }
   
   $color_white: #fff;
-  $color_prime: #5ad67d;
+  $color_prime: #1976d2;
   $color_grey: #e2e2e2;
   $color_grey_dark: #a2a2a2;
   
@@ -132,10 +132,16 @@
       }
       .read-more {
         text-align: right;
-        a {
+        button {
           color: $color_prime;
           display: inline-block;
           position: relative;
+          background-color: transparent;
+          border: transparent;
+          &:hover {
+            color: darken($color_prime, 10%);
+            cursor: pointer;
+          }
           &:after {
             content: "\f061";
             font-family: FontAwesome;
