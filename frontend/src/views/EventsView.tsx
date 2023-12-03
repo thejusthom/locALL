@@ -29,6 +29,7 @@ import { SearchBox } from '@mapbox/search-js-react';
 import ReactModal from 'react-modal';
 import DatePicker from "react-datepicker";
 import 'react-datepicker/dist/react-datepicker.css';
+import moment from "moment";
 
 const initialNewEvent = {
     eventName: "",
@@ -271,7 +272,7 @@ const onEdit = (eventId: string) => {
         console.log(event);
         setNewEvent(event);
         setCoordinates({...event.address});
-        setStartDate(new Date(event.startDate));
+        setStartDate(startDate);
         setEndDate(new Date(event.endDate));
         setOrganiser(event.organiser);
         setIsEdit(true);
@@ -332,9 +333,9 @@ function a11yProps(index: number) {
         <Button 
         onClick={() => setShowModal(true)}
         >Create an Event</Button>
-               <Tabs value={tab} onChange={handleTabChange} aria-label="basic tabs example">
-          <Tab label="All Events" {...a11yProps(0)} />
-          <Tab label="My Events" {...a11yProps(1)} />
+               <Tabs sx={{margin: "15px 0 0 0"}} value={tab} onChange={handleTabChange} aria-label="basic tabs example">
+          <Tab sx={{fontSize: "16px", fontWeight: "bold"}} label="All Events" {...a11yProps(0)} />
+          <Tab sx={{fontSize: "16px", fontWeight: "bold"}} label="My Events" {...a11yProps(1)} />
         </Tabs>
 <Modal isOpen={showModal}>
     <FormWrap>
@@ -412,8 +413,8 @@ onClick={isEdit ? onUpdate : onSubmit}>{isEdit ? "Update" : "Submit"}</Button>
                <tr key={event._id}>
                     <td>{event.eventName}</td>
                     <td>{event.category}</td>
-                    <td>{event.startDate}</td>
-                    <td>{event.endDate}</td>
+                    <td>{moment(event.startDate).format("MM/DD/YYYY")}</td>
+                    <td>{moment(event.endDate).format("MM/DD/YYYY")}</td>
                     {!!event._id &&
                     <td>
                         <img src={EditIcon} width={25} height={25} onClick={() => onEdit(event._id || "")} />
@@ -433,6 +434,24 @@ onClick={isEdit ? onUpdate : onSubmit}>{isEdit ? "Update" : "Submit"}</Button>
 
 const EventsContainer = styled.article`
 margin: 25px;
+table{
+    width: 100%;
+    border-collapse: collapse;
+    color: #3e3e3e;
+    margin-top: 15px;
+    th{
+        text-align: left;
+    }
+    img{
+        margin-right: 10px;
+    }
+    th, td{
+        padding: 10px 0;
+    }
+    td{
+        border-bottom: solid 1.5px #4a4a4a30;
+    }
+}
 `;
 const MapContainer = styled.section`
     text-align: -webkit-center;
@@ -471,13 +490,13 @@ margin: 50px 0;
 color: #171717;
 overflow-y: auto;
 label{
-    font-size: 20px;
+    font-size: 18px;
     width: 200px;
     text-align: left;
 }
 input, textarea, select{
     border: none;
-    width: 300px;
+    width: 440px;
     height: 35px;
     border-radius: 5px;
 }
@@ -492,7 +511,7 @@ button{
 }
 `;
 const Heading = styled.section`
-margin: 0 0 20px 0;
+/* margin: 0 0 30px 0; */
 background-color: #1976d2;
 position: fixed;
 width: 700px;
@@ -509,6 +528,7 @@ h1{
     margin: 0;
     color: white;
     font-weight: normal;
+    font-size: 25px;
 }`;
 /* span{
     width: 120px;
@@ -520,7 +540,7 @@ h1{
 const Content = styled.section`
 height: 100%;
 padding: 20px;
-margin-top: 65px;
+margin-top: 83px;
 `;
 const InputWrap = styled.div`
     margin-bottom: 20px;
@@ -538,6 +558,8 @@ padding: 7px 20px;
 cursor: pointer;
 border: none;
 border-radius: 25px;
+font-size: 16px;
+padding: 10px 25px;
 `;
 
 export default EventsView;
