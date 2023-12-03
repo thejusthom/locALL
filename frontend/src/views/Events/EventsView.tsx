@@ -36,7 +36,7 @@ const [location, setLocation] = React.useState<{ latitude: number; longitude: nu
 const [add,setAdd] = React.useState('');
 const [events, setEvents] = React.useState<IEvent[]>();
 const [showModal, setShowModal] = React.useState<boolean>(false);
-const [newEvent, setNewEvent] = React.useState<IEvent>(initialNewEvent);
+const [newEvent, setNewEvent] = React.useState<IEvent>({...initialNewEvent, locationId: add});
 const [selectedLocation, setSelectedLocation] = React.useState("");
 const [coordinates, setCoordinates] = React.useState({latitude: 0, longitude: 0});
 const [startDate, setStartDate] = React.useState<Date>();
@@ -45,6 +45,7 @@ const [organiser, setOrganiser] = React.useState({name: "", contact: ""});
 const [tab, setTab] = React.useState(0);
 const [isEdit, setIsEdit] = React.useState<boolean>(false);
 const [eventId, setEventId] = React.useState<string>("");
+const [isValid, setIsValid] = React.useState<boolean>(true);
 
 React.useEffect(() => {
     setLocation({latitude: loc.latitude, longitude: loc.longitude});
@@ -169,6 +170,19 @@ eventsService.getEvents(loc.pincode).then((event)=> {
         });
     });
 }}, [events]);
+React.useEffect(() => {
+const eventValues = Object.values(newEvent);
+const coordinatesValue = Object.values(coordinates);
+const organiserValues = Object.values(organiser);
+console.log(eventValues, coordinatesValue, organiserValues)
+console.log(newEvent)
+if(eventValues.includes("") || eventValues.includes(undefined) || coordinatesValue.includes(0) || organiserValues.includes("") || startDate === undefined || endDate === undefined){
+    setIsValid(false);
+}
+else{
+    setIsValid(true);
+}
+}, [newEvent, coordinates, organiser])
 
 const onNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setNewEvent({...newEvent, eventName: e.target.value});
@@ -220,9 +234,9 @@ const onEdit = (eventId: string) => {
      eventsService.getEventById(loc.pincode, eventId).then((event)=> {
         setNewEvent(event);
         setCoordinates({...event.address});
-        setStartDate(startDate);
+        setStartDate(new Date(event.startDate));
         setEndDate(new Date(event.endDate));
-        setOrganiser(event.organiser);
+        setOrganiser({...event.organiser});
         setIsEdit(true);
         setEventId(eventId);
         setShowModal(true);
@@ -340,6 +354,7 @@ onRetrieve={onLocationChange}
    onCloseModal={onCloseModal} 
    onUpdate={onUpdate} 
    onSubmit={onSubmit}
+   isDisabled={!isValid}
    children={FormFieldsComponent()}
     />
   </Modal>
