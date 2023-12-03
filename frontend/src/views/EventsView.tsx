@@ -14,8 +14,6 @@ import DeleteIcon from ".././assets/images/delete-icon.svg";
 import { useSelector } from 'react-redux';
 import eventsService from "../services/eventsService";
 import { IEvent } from "../models/events";
-// import Button from "@mui/material/Button";
-// import Modal from "@mui/material/Modal";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import FormControl from "@mui/material/FormControl";
@@ -25,7 +23,6 @@ import MenuItem from "@mui/material/MenuItem";
 import Select from "@mui/material/Select";
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
-// import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { SearchBox } from '@mapbox/search-js-react';
@@ -176,15 +173,6 @@ const iconList = [{
             }
         });
         // Add a layer showing the places.
-        const addImageToMap = (map: mapboxgl.Map, name: string, imageUrl: any) => {
-            return new Promise<void>((resolve, reject) => {
-                map?.loadImage(imageUrl, (error: any, image: any) => {
-                    if (error) throw error;
-                    map?.addImage(name, image);
-                    resolve();
-                });
-            });
-        }
         map.current?.addLayer({
             'id': 'places',
             'type': 'symbol',
@@ -195,6 +183,7 @@ const iconList = [{
                 'icon-size': 0.1
             }
         });
+    // });
         // When a click event occurs on a feature in the places layer, open a popup at the
         // location of the feature, with description HTML from its properties.
         map.current?.on('click', 'places', (e) => {
@@ -212,7 +201,6 @@ const iconList = [{
         });
 
         // Change the cursor to a pointer when the mouse is over the places layer.
-        // if(map.current){
         map.current?.on('mouseenter', 'places', () => {
             if(map.current){
             map.current.getCanvas().style.cursor = 'pointer';}
@@ -238,11 +226,9 @@ const onCategoryChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     setNewEvent({...newEvent, category: e.target.value});
 }
 const onStartDateChange = (date: Date) => {
-    // console.log(startDate)
     setStartDate(date);
 }
 const onEndDateChange = (date: Date) => {
-    // console.log(startDate)
     setEndDate(date);
 }
 
@@ -258,7 +244,6 @@ headers: {
 .then(res => {
 setAdd(res.address.postcode)
 const address = event?.features[0]?.properties?.full_address;
-// console.log(event?.features[0]?.properties?.full_address)
 setSelectedLocation(!!address ? address : res.address.postcode);
 })   
 };
@@ -293,47 +278,20 @@ const onEdit = (eventId: string) => {
         setEventId(eventId);
         setShowModal(true);
     });
-    // eventsService.updateEvent(loc.pincode, eventId).then((event)=> {
-    //     console.log(event);
-    //     setEvents(event)});
 };
 const onDelete = (eventId: string) => {
-    // const start = startDate?.toLocaleDateString() || "";
-    // const end = endDate?.toLocaleDateString() || "";
-    // const updatedEvent = {...newEvent, address: {...coordinates}, organiser, startDate: start, endDate: end};
     eventsService.deleteEvent(loc.pincode, eventId).then((event)=> {
-        // console.log(event);
         eventsService.getEvents(loc.pincode).then((event)=> {
-            // console.log(event);
             setEvents(event)});
-        // const eventChanged = events.find((e) => e._id === eventId);
-        // events?.forEach((e: IEvent, index: number) => {
-        //     if(e._id === eventId) {
-        //         events[index] = event;
-        //     }
-        // })
-        // setEvents(event)
     });
-        // setNewEvent(initialNewEvent);
-        // setCoordinates({longitude: 0, latitude:0});
-        // setStartDate(undefined);
-        // setEndDate(undefined);
-        // setOrganiser({name: "", contact: ""});
-        // setIsEdit(false);
-        // setEventId("");
-        // setShowModal(false);
 };
 const onUpdate = () => {
     const start = startDate?.toLocaleDateString() || "";
     const end = endDate?.toLocaleDateString() || "";
     const updatedEvent = {...newEvent, address: {...coordinates}, organiser, startDate: start, endDate: end};
     eventsService.updateEvent(loc.pincode, eventId, updatedEvent).then((event)=> {
-        // console.log(event);
-        // const eventChanged = events.find((e) => e._id === eventId);
         eventsService.getEvents(loc.pincode).then((event)=> {
-            console.log(event);
             setEvents(event)});
-        // setEvents(event)
     });
         setNewEvent(initialNewEvent);
         setCoordinates({longitude: 0, latitude:0});
