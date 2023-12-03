@@ -1,5 +1,5 @@
 import { Date } from "mongoose";
-import { IPerson } from "./user";
+import { IUser } from "./user";
 import { Comment } from "./Comment";
 
 interface FeedShare {
@@ -10,7 +10,7 @@ interface FeedShare {
     address: string;
     image: string;
     organizer: string;
-    createdUser: IPerson;
+    createdUser: IUser;
     locationId: string;
     comments: Comment[];
   }

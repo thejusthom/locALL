@@ -14,7 +14,6 @@ type Props = {
 const FeedShareCard: React.FC<Props> = (props: Props): React.ReactElement => {
 
     const handleSubmit = () => {
-        //  console.log(text);
          props.feedShare.comments.push({author: "You", metaData: "Today", text: text, avatar: "Profile Pic"});
          feedshareService.updateFeedshare(props.feedShare.locationId, props.feedShare, props.feedShare._id);
          setText('');
@@ -27,6 +26,7 @@ const FeedShareCard: React.FC<Props> = (props: Props): React.ReactElement => {
       }
         return(
             <>
+            
             <div className="blog-card">
                 <div className="meta">
                 {/* <div className="photo"></div> */}
@@ -66,15 +66,14 @@ const FeedShareCard: React.FC<Props> = (props: Props): React.ReactElement => {
                     src={`data:image/png;base64,${props.feedShare.image}`}
                     alt={props.feedShare.foodType}
                     wrapped
-                />
-
+                />                
                 <Modal.Description style={{ width: "500px" }}>
                     <p>{props.feedShare.address}</p>
                     <Box sx={{ display: "flex", position: "relative" }}>
                     <Box sx={{ width: "300px", float: "left" }}>
                         <p style={{ margin: 0 }}>
-                        Posted by {props.feedShare.createdUser.firstName}{" "}
-                        {props.feedShare.createdUser.firstName}
+                        Posted by {props.feedShare.createdUser.person.firstName}{" "}
+                        {props.feedShare.createdUser.person.lastName}
                         </p>
                         <Typography level="body-sm">
                         &nbsp; &nbsp; on {props.feedShare.postedDate}
