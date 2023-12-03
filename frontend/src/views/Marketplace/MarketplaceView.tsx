@@ -6,16 +6,8 @@ import marketplaceService from "../../services/marketplaceService";
 import { useSelector } from "react-redux";
 import Button from "@mui/joy/Button";
 import Typography from "@mui/joy/Typography";
-import {
-  Comment,
-  Form,
-  Image,
-  Modal,
-  Header,
-  FormProps,
-  TextAreaProps,
-} from "semantic-ui-react";
-import { set } from "mongoose";
+import { Form, Image, Modal } from "semantic-ui-react";
+import moment from "moment";
 
 type Props = {
   active: string;
@@ -43,7 +35,7 @@ const MarketplaceView = (props: Props) => {
         .getMarketplace(locationId)
         .then((marketplaceCards) => setMarketplaceCards(marketplaceCards));
     }
-  }, [locationId, props.active,update]);
+  }, [locationId, props.active, update]);
   const clearFormData = () => {
     const clData = {
       productName: "",
@@ -79,28 +71,31 @@ const MarketplaceView = (props: Props) => {
     }
     updateData[id as keyof typeof updateData] = event.target.value;
     console.log(updateData);
-    setUpdate(false);
     setFormData(updateData);
   };
-  const handleSubmit = () => {
-    const today = new Date();
-    const month = today.getMonth() + 1;
-    const year = today.getFullYear();
-    const date = today.getDate();
-    const listingDate = `${month}/${date}/${year}`;
+  const handleSubmit = async () => {
+    const listingDate = moment().format("MMMM Do YYYY, h:mm:ss a");
     const marketplace: Marketplace = {
       ...formData,
       locationId,
+      //TODO: change this to the user id from state
       createdUser: "65682596adef270d5ffe1ff6",
       listingDate,
       _id: null,
       comments: [],
     };
-    console.log(marketplace); 
-    marketplaceService.createMarketplace(locationId, marketplace);
-    setCreate(false);
-    setUpdate(true);
-    clearFormData();
+    console.log(marketplace);
+    await marketplaceService
+      .createMarketplace(locationId, marketplace)
+      .then(() => {
+        if (update === false) {
+          setUpdate(true);
+        } else {
+          setUpdate(false);
+        }
+        setCreate(false);
+        clearFormData();
+      });
   };
 
   return (
@@ -124,7 +119,7 @@ const MarketplaceView = (props: Props) => {
           </Typography>
         </Box>
       )}
-      <Box sx={{ display: "flex", m: 1, gap: 2, flexWrap:"wrap"}}>
+      <Box sx={{ display: "flex", m: 1, gap: 2, flexWrap: "wrap" }}>
         {marketplaceCards.map((marketplaceCard: Marketplace) => (
           <MarketplaceCard
             marketplace={marketplaceCard}

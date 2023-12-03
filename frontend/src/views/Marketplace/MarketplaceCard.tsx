@@ -17,6 +17,7 @@ import { Marketplace } from "../../models/marketplace";
 import { Box } from "@mui/system";
 import marketplaceService from "../../services/marketplaceService";
 import image from "../../assets/images/no-image.jpg";
+import moment from "moment";
 
 type Props = {
   marketplace: Marketplace;
@@ -34,8 +35,9 @@ const MarketplaceCard = (props: Props) => {
   };
   const handleSubmit = () => {
     props.marketplace.comments.push({
-      author: "You",
-      metaData: "Today",
+      author: 
+      typeof props.marketplace.createdUser === "string"? "": props.marketplace.createdUser.person.firstName + " " + props.marketplace.createdUser.person.lastName,
+      metaData: moment().format("MMMM Do YYYY, h:mm:ss a"),
       text: text,
       avatar: "Profile Pic",
     });
@@ -68,7 +70,7 @@ const MarketplaceCard = (props: Props) => {
           <div>
             <Typography level="body-xs">Total price:</Typography>
             <Typography fontSize="lg" fontWeight="lg">
-              {props.marketplace.price}
+              ${props.marketplace.price}
             </Typography>
           </div>
           <Button
@@ -118,10 +120,10 @@ const MarketplaceCard = (props: Props) => {
               </Box>
               <Box sx={{ float: "right", position: "absolute", right: 0 }}>
                 <Typography level="body-xs" fontSize="xl">
-                  Total price:
+                  Price:
                 </Typography>
                 <Typography fontSize="lg" fontWeight="lg">
-                  {props.marketplace.price}
+                  ${props.marketplace.price}
                 </Typography>
               </Box>
             </Box>

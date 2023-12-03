@@ -11,7 +11,7 @@ const MarketplaceSchema = new Schema ({
         required: true
     },
     listingDate: {
-        type: Date,
+        type: String,
         required: true
     },
     description: {

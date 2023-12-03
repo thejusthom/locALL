@@ -34,7 +34,7 @@ export const getByParams = async (request, response) => {
 export const post = async (request, response) => {
     try {
         console.log(request.locationId);
-        const newMarketplace = {...request.body, locationId: request.locationId, listingDate: Date.now()};
+        const newMarketplace = {...request.body, locationId: request.locationId};
         // console.log(newMarketplace);
         const marketplace = await marketplaceService.save(newMarketplace);
         setResponse(marketplace, response, 200);
