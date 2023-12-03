@@ -298,6 +298,27 @@ const onEdit = (eventId: string) => {
     //     setEvents(event)});
 };
 
+const onUpdate = () => {
+    const start = startDate?.toLocaleDateString() || "";
+    const end = endDate?.toLocaleDateString() || "";
+    const updatedEvent = {...newEvent, address: {...coordinates}, organiser, startDate: start, endDate: end};
+    eventsService.updateEvent(loc.pincode, eventId, updatedEvent).then((event)=> {
+        // console.log(event);
+        // const eventChanged = events.find((e) => e._id === eventId);
+        eventsService.getEvents(loc.pincode).then((event)=> {
+            console.log(event);
+            setEvents(event)});
+        // setEvents(event)
+    });
+        setNewEvent(initialNewEvent);
+        setCoordinates({longitude: 0, latitude:0});
+        setStartDate(undefined);
+        setEndDate(undefined);
+        setOrganiser({name: "", contact: ""});
+        setIsEdit(false);
+        setEventId("");
+        setShowModal(false);
+};
 function a11yProps(index: number) {
     return {
       id: `simple-tab-${index}`,
