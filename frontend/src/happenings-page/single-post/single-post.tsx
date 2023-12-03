@@ -1,4 +1,4 @@
-import React, { useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import './single-post.scss';
 import { useLocation } from 'react-router-dom';
 import happeningsService from '../../services/happeningsService';
@@ -6,7 +6,7 @@ import Happenings from '../../models/happenings';
 import { useSelector } from 'react-redux';
 import { Modal, Form, Button, TextArea, Image } from 'semantic-ui-react';
 
-const SinglePost: React.FC = () =>{
+const SinglePost: React.FC = () => {
   const [happening, setHappening] = useState({} as Happenings);
   const [isEditing, setIsEditing] = useState(false);
   const [editedData, setEditedData] = useState({
@@ -15,17 +15,18 @@ const SinglePost: React.FC = () =>{
     image: '',
     createdUser: ''
   });
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const locationId = useSelector((state: any) => state.location.pincode);
   const happeningPathObj = useLocation();
   console.log(happeningPathObj);
-  const happeningPath = happeningPathObj.pathname.split("/");
+  const happeningPath = happeningPathObj.pathname.split('/');
   const happeningId = happeningPath[2];
   console.log(happeningId);
 
   useEffect(() => {
     console.log(locationId);
-    happeningsService.getHappeningById("02119", happeningId).then((happening) => setHappening(happening));
-  },[happeningId]);
+    happeningsService.getHappeningById('02119', happeningId).then((happening) => setHappening(happening));
+  }, [happeningId]);
 
   const handleEditClick = () => {
     // Populate the form with existing data
@@ -33,8 +34,8 @@ const SinglePost: React.FC = () =>{
       title: happening.title,
       content: happening.content,
       image: happening.image,
-      //TODO populate user from state
-      createdUser: ''
+      // TODO : populate user from state
+      createdUser: '656a4c392ffccb0858ad498a'
     });
     setIsEditing(true);
   };
@@ -72,33 +73,54 @@ const SinglePost: React.FC = () =>{
     }
   };
 
+  const handleDeleteClick = () => {
+    setIsDeleteModalOpen(true);
+  };
+
+  const handleDeleteConfirm = async () => {
+    try {
+      // Send a DELETE request to delete the happening
+      await happeningsService.deleteHappening('02119', happeningId);
+      // Close the delete confirmation modal
+      setIsDeleteModalOpen(false);
+      window.location.replace('/happenings');
+    } catch (error) {
+      console.error('Error deleting happening:', error);
+    }
+  };
+
+  const handleDeleteCancel = () => {
+    setIsDeleteModalOpen(false);
+  };
+
   return (
-   <div className="singlePost">
+    <div className="singlePost">
       <div className="singlePostWrapper">
         <img className="singlePostImg" src={happening.image} alt="" />
         <h1 className="singlePostTitle">
           {happening.title}
-
           <div className="singlePostEdit">
             <i className="singlePostIcon far fa-edit" onClick={handleEditClick}></i>
-            <i className="singlePostIcon far fa-trash-alt"></i>
+            <i className="singlePostIcon far fa-trash-alt" onClick={handleDeleteClick}></i>
           </div>
         </h1>
 
         <div className="singlePostInfo">
-          <span className="singlePostAuthor">Author: 
+          <span className="singlePostAuthor">
+            Author:
             <b>
-            {typeof happening.createdUser === "string"
-                        ? "Shashikar" : happening.createdUser?.person?.firstName}
-                        {typeof happening.createdUser === "string"
-                        ? "A" : happening.createdUser?.person?.lastName}
-            </b> </span>
+              {typeof happening.createdUser === 'string'
+                ? 'Shashikar'
+                : happening.createdUser?.person?.firstName}
+              {typeof happening.createdUser === 'string'
+                ? 'A'
+                : happening.createdUser?.person?.lastName}
+            </b>{' '}
+          </span>
           <span className="singlePostDate">{happening.postedDate}</span>
         </div>
 
-        <p className="singlePostDesc">
-          {happening.content}
-        </p>
+        <p className="singlePostDesc">{happening.content}</p>
       </div>
 
       {/* Edit Form Modal */}
@@ -130,7 +152,7 @@ const SinglePost: React.FC = () =>{
             {editedData.image && (
               <Image size="medium" style={{ marginTop: '10px' }} src={editedData.image} alt="Image Preview" wrapped />
             )}
-            <Button color="teal" style={{ marginTop: '15px', display: 'block'}} onClick={handleEditSubmit} type="button">
+            <Button color="teal" style={{ display: 'block', marginTop: '15px' }} onClick={handleEditSubmit} type="button">
               Save Changes
             </Button>
           </Form>
@@ -139,8 +161,22 @@ const SinglePost: React.FC = () =>{
           <Button onClick={() => setIsEditing(false)}>Cancel</Button>
         </Modal.Actions>
       </Modal>
-   </div>
-  )
+
+      {/* Delete Confirmation Modal */}
+      <Modal dimmer="inverted" open={isDeleteModalOpen} onClose={handleDeleteCancel}>
+        <Modal.Header>Delete Happening</Modal.Header>
+        <Modal.Content>
+          <p>Are you sure you want to delete this happening?</p>
+        </Modal.Content>
+        <Modal.Actions>
+          <Button negative onClick={handleDeleteConfirm}>
+            Delete
+          </Button>
+          <Button onClick={handleDeleteCancel}>Cancel</Button>
+        </Modal.Actions>
+      </Modal>
+    </div>
+  );
 };
 
 export default SinglePost;
