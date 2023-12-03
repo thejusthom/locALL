@@ -1,16 +1,16 @@
 import { Date } from "mongoose";
-import { IPerson } from "./user";
+import { IUser } from "./user";
 import { Comment } from "./Comment";
 
 interface FeedShare {
-    _id: number;
+    _id: any;
     foodType: string;
-    servings: number;
+    servings: string;
     postedDate: string;
     address: string;
     image: string;
     organizer: string;
-    createdUser: IPerson;
+    createdUser: IUser | string;
     locationId: string;
     comments: Comment[];
   }
