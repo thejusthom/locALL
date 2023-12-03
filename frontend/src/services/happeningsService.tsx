@@ -23,5 +23,10 @@ const updateHappening = async (locationId: string, happeningId: string, newHappe
   return response.data;
 }
 
-const happeningsService = { getAllHappenings, getHappeningById, createHappening, updateHappening };
+const deleteHappening = async (locationId: string, happeningId: string) => {
+  const response = await axios.delete(baseURL + locationId + '/happenings/' + happeningId);
+  return response.data;
+}
+
+const happeningsService = { getAllHappenings, getHappeningById, createHappening, updateHappening, deleteHappening };
 export default happeningsService;

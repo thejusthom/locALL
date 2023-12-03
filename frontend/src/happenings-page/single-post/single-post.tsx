@@ -13,7 +13,7 @@ const SinglePost: React.FC = () =>{
     title: '',
     content: '',
     image: '',
-    // Add other properties as needed
+    createdUser: ''
   });
   const locationId = useSelector((state: any) => state.location.pincode);
   const happeningPathObj = useLocation();
@@ -33,7 +33,8 @@ const SinglePost: React.FC = () =>{
       title: happening.title,
       content: happening.content,
       image: happening.image,
-      // Add other properties as needed
+      //TODO populate user from state
+      createdUser: ''
     });
     setIsEditing(true);
   };
