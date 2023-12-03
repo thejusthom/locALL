@@ -6,17 +6,8 @@ import DeleteIcon from "../../assets/images/delete-icon.svg";
 import { useSelector } from 'react-redux';
 import eventsService from "../../services/eventsService";
 import { IEvent } from "../../models/events";
-import Box from "@mui/material/Box";
-import Typography from "@mui/material/Typography";
-import FormControl from "@mui/material/FormControl";
-import InputLabel from "@mui/material/InputLabel";
-import OutlinedInput from "@mui/material/OutlinedInput";
-import MenuItem from "@mui/material/MenuItem";
-import Select from "@mui/material/Select";
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { SearchBox } from '@mapbox/search-js-react';
 import ReactModal from 'react-modal';
 import DatePicker from "react-datepicker";
@@ -60,7 +51,6 @@ React.useEffect(() => {
 map.current?.setCenter([loc.longitude, loc.latitude]);
 setAdd(loc.pincode);
 eventsService.getEvents(loc.pincode).then((event)=> {
-    console.log(event);
     setEvents(event)});
 }, [loc]);
 
@@ -148,7 +138,6 @@ eventsService.getEvents(loc.pincode).then((event)=> {
                 'icon-size': 0.1
             }
         });
-    // });
         // When a click event occurs on a feature in the places layer, open a popup at the
         // location of the feature, with description HTML from its properties.
         map.current?.on('click', 'places', (e) => {
@@ -177,7 +166,6 @@ eventsService.getEvents(loc.pincode).then((event)=> {
               if(map.current){
             map.current.getCanvas().style.cursor = '';}
         });
-    // }
     });
 }}, [events]);
 
@@ -196,8 +184,6 @@ const onStartDateChange = (date: Date) => {
 const onEndDateChange = (date: Date) => {
     setEndDate(date);
 }
-
-console.log(startDate);
 const onLocationChange = (event: any) => {
     const location = event?.features[0]?.geometry?.coordinates;
     setCoordinates({longitude: location[0], latitude: location[1]});
@@ -220,7 +206,6 @@ const onSubmit = (event: any) => {
     const start = startDate?.toLocaleDateString() || "";
     const end = endDate?.toLocaleDateString() || "";
     eventsService.createEvent(add, {...newEvent, address: {...coordinates}, startDate: start, endDate: end, createdUser: "656bbf4a3b7690ac27e2bcfb", organiser}).then((event)=> {
-        console.log(event);
         !!events ? setEvents([...events, event]) : setEvents([event]);
     });
     setShowModal(false);
@@ -229,11 +214,9 @@ const onSubmit = (event: any) => {
     setStartDate(undefined);
     setEndDate(undefined);
     setOrganiser({name: "", contact: ""});
-    // dispatch(createEvent({...newEvent, address: {...coordinates}}));
 };
 const onEdit = (eventId: string) => {
      eventsService.getEventById(loc.pincode, eventId).then((event)=> {
-        console.log(event);
         setNewEvent(event);
         setCoordinates({...event.address});
         setStartDate(startDate);
@@ -287,7 +270,6 @@ function a11yProps(index: number) {
 };
   const handleTabChange = (event: any, newValue: number) => {
     eventsService.getEvents(loc.pincode).then((event)=> {
-        console.log(event);
         setEvents(event)});
     setTab(newValue);
   };
