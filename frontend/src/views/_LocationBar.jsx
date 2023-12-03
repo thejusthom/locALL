@@ -1,4 +1,5 @@
 import * as React from "react";
+import styled from "styled-components";
 import { AddressAutofill, SearchBox } from '@mapbox/search-js-react';
 import LocationIcon from ".././assets/images/location.svg"
 import { saveLocation } from "../store/slices/location-slice";
@@ -80,14 +81,14 @@ React.useEffect(()=>{
       }}, []);
 return(
     <>
-          <form ref={wrapperRef} style={{display: "flex"}} onClick={onFormClick}>
+          <LocationWrap ref={wrapperRef} style={{display: "flex"}} onClick={onFormClick}>
           <img src={LocationIcon} width={30} height={30} />
 {showSearchBox ? 
 <SearchBox accessToken={'pk.eyJ1IjoiYXNobWl5YS12aWpheWFjaGFuZHJhbiIsImEiOiJjbHBnMXRxc3oxaXd3MmlwcG5zZjBpdXNqIn0.GqCCjkCcmFsgrpMnl7ntzw'}
 value={selectedLocation}
 onRetrieve={onLocationChange}
 /> : <span>{add}</span>}
-        </form>
+        </LocationWrap>
             {/* <span>{selectedLocation}</span>
             <form>
         <AddressAutofill accessToken={"pk.eyJ1IjoiYXNobWl5YS12aWpheWFjaGFuZHJhbiIsImEiOiJjbHBnMXRxc3oxaXd3MmlwcG5zZjBpdXNqIn0.GqCCjkCcmFsgrpMnl7ntzw"}
@@ -109,5 +110,19 @@ onRetrieve={onLocationChange}
     </>
 );
 };
+
+const LocationWrap = styled.form`
+align-items: center;
+    width: 75px;
+    justify-content: space-between;
+    margin-top: 3px;
+    margin-right: 20px;
+    img{
+      margin-right: 7px;
+    }
+    span{
+      font-weight: bold;
+    }
+    `;
 
 export default LocationBar;
