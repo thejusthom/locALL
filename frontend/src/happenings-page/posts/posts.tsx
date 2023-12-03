@@ -2,6 +2,7 @@ import {ReactElement} from 'react';
 import './posts.scss';
 import Happenings from '../../models/happenings';
 import { Link } from "react-router-dom";
+import Button from '@mui/material/Button';
 
 type Props = {
   posts: Happenings[]
@@ -35,9 +36,17 @@ const posts: React.FC<Props> = (props: Props): ReactElement =>{
   });
 
   return (
+    <>
+    <Link to={'/happenings/createPost'} className="link" >
+      <Button sx={{ mt: 5, ml : 159, mb : 5, width: 193}}  variant="contained">
+        Create New Happening
+      </Button>
+    </Link>
+   
     <div className="posts">
       {happeningsEntrees}
     </div>
+    </>
   )
 };
 

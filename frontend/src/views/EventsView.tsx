@@ -376,11 +376,11 @@ function a11yProps(index: number) {
     </InputWrap>
     <InputWrap>
   <label>Location:</label>
-  <SearchBox 
+  {/* <SearchBox 
 accessToken={'pk.eyJ1IjoiYXNobWl5YS12aWpheWFjaGFuZHJhbiIsImEiOiJjbHBnMXRxc3oxaXd3MmlwcG5zZjBpdXNqIn0.GqCCjkCcmFsgrpMnl7ntzw'}
 value={selectedLocation}
 onRetrieve={onLocationChange}
-/>
+/> */}
 </InputWrap>
 <InputWrap>
     <label>Organiser Name:</label>
