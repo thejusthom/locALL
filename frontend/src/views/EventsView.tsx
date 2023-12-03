@@ -297,7 +297,32 @@ const onEdit = (eventId: string) => {
     //     console.log(event);
     //     setEvents(event)});
 };
-
+const onDelete = (eventId: string) => {
+    // const start = startDate?.toLocaleDateString() || "";
+    // const end = endDate?.toLocaleDateString() || "";
+    // const updatedEvent = {...newEvent, address: {...coordinates}, organiser, startDate: start, endDate: end};
+    eventsService.deleteEvent(loc.pincode, eventId).then((event)=> {
+        // console.log(event);
+        eventsService.getEvents(loc.pincode).then((event)=> {
+            // console.log(event);
+            setEvents(event)});
+        // const eventChanged = events.find((e) => e._id === eventId);
+        // events?.forEach((e: IEvent, index: number) => {
+        //     if(e._id === eventId) {
+        //         events[index] = event;
+        //     }
+        // })
+        // setEvents(event)
+    });
+        // setNewEvent(initialNewEvent);
+        // setCoordinates({longitude: 0, latitude:0});
+        // setStartDate(undefined);
+        // setEndDate(undefined);
+        // setOrganiser({name: "", contact: ""});
+        // setIsEdit(false);
+        // setEventId("");
+        // setShowModal(false);
+};
 const onUpdate = () => {
     const start = startDate?.toLocaleDateString() || "";
     const end = endDate?.toLocaleDateString() || "";
