@@ -8,10 +8,11 @@ import Food from ".././assets/images/food.png";
 import Music from ".././assets/images/music.png";
 import Pet from ".././assets/images/pet.png";
 import Plant from ".././assets/images/plant.png";
+import CloseIcon from ".././assets/images/close-white.svg";
 import { useSelector } from 'react-redux';
 import eventsService from "../services/eventsService";
 import { IEvent } from "../models/events";
-import Button from "@mui/material/Button";
+// import Button from "@mui/material/Button";
 // import Modal from "@mui/material/Modal";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
@@ -268,13 +269,21 @@ const onSubmit = () => {
 };
 
     return(
-        <>
+        <EventsContainer>
         <Button 
         onClick={() => setShowModal(true)}
         >Create an Event</Button>
 <Modal isOpen={showModal}>
     <FormWrap>
     <Form>
+        <Heading>
+        <h1>
+            Create Event
+        </h1>
+        <img src={CloseIcon} width={25} height={25} onClick={() => setShowModal(false)} />
+        {/* <span /> */}
+        </Heading>
+        <Content>
     <InputWrap>
     <label>Name:</label>
     <input type="text" id="eventName" onChange={onNameChange} />
@@ -317,22 +326,25 @@ onRetrieve={onLocationChange}
     <label>Organiser Contact:</label>
     <input type="text" id="contact" onChange={onOrganiserChange} />
     </InputWrap>
-<button 
-onClick={onSubmit}
->Submit</button>
+<Button 
+onClick={onSubmit}>Submit</Button>
+</Content>
   </Form>
   </FormWrap>
   </Modal>
     <MapContainer>
         <div ref={mapContainer} className="map-container"></div>
     </MapContainer>
-    </>
+    </EventsContainer>
     );
 }
 
+const EventsContainer = styled.article`
+margin: 25px;
+`;
 const MapContainer = styled.section`
     text-align: -webkit-center;
-    margin-top: 40px;
+    margin-top: 20px;
     .title{
         font-size: 16px;
         color: red;
@@ -351,7 +363,6 @@ const Modal = styled(ReactModal)`
 inset: unset;
 width: 100%;
 height: 100%;
-text-align: -webkit-center;
 background-color: rgba(0,0,0,0.3);
 `;
 
@@ -359,15 +370,16 @@ const Form = styled.form`
 background-color: #eceaea;
 width: 700px;
 height: 75%;
-align-self: center;
+place-self: center;
+/* align-self: center; */
 margin-top: 70px;
 border-radius: 5px;
-padding: 20px;
-margin: 40px 0;
+/* padding: 20px; */
+margin: 50px 0;
+color: #171717;
 overflow-y: auto;
 label{
     font-size: 20px;
-    color: #171717;
     width: 200px;
     text-align: left;
 }
@@ -383,6 +395,40 @@ input:focus, textarea:focus{
 textarea{
     height: 100px;
 }
+button{
+    margin: 20px 0;
+}
+`;
+const Heading = styled.section`
+margin: 0 0 20px 0;
+background-color: #1976d2;
+position: fixed;
+width: 700px;
+border-radius: 5px 5px 0 0;
+display: flex;
+justify-content: space-between;
+padding: 20px;
+align-items: center;
+z-index: 10;
+img{
+    cursor: pointer;
+}
+h1{
+    margin: 0;
+    color: white;
+    font-weight: normal;
+}`;
+/* span{
+    width: 120px;
+    height: 3px;
+    background-color: #1976d2;
+     text-align: left;
+    display: block;
+} */
+const Content = styled.section`
+height: 100%;
+padding: 20px;
+margin-top: 65px;
 `;
 const InputWrap = styled.div`
     margin-bottom: 20px;
@@ -392,6 +438,14 @@ const FormWrap = styled.section`
 height: 100%;
 justify-content: center;
 display: flex;
+`;
+const Button = styled.button`
+background-color: #1976d2;
+color: white;
+padding: 7px 20px;
+cursor: pointer;
+border: none;
+border-radius: 25px;
 `;
 
 export default EventsView;
