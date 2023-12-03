@@ -9,6 +9,8 @@ import Music from ".././assets/images/music.png";
 import Pet from ".././assets/images/pet.png";
 import Plant from ".././assets/images/plant.png";
 import CloseIcon from ".././assets/images/close-white.svg";
+import EditIcon from ".././assets/images/edit-icon.svg";
+import DeleteIcon from ".././assets/images/delete-icon.svg";
 import { useSelector } from 'react-redux';
 import eventsService from "../services/eventsService";
 import { IEvent } from "../models/events";
@@ -21,6 +23,8 @@ import InputLabel from "@mui/material/InputLabel";
 import OutlinedInput from "@mui/material/OutlinedInput";
 import MenuItem from "@mui/material/MenuItem";
 import Select from "@mui/material/Select";
+import Tabs from '@mui/material/Tabs';
+import Tab from '@mui/material/Tab';
 // import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
@@ -29,7 +33,7 @@ import ReactModal from 'react-modal';
 import DatePicker from "react-datepicker";
 import 'react-datepicker/dist/react-datepicker.css';
 
-const initialNewEevnt = {
+const initialNewEvent = {
     eventName: "",
     startDate: "",
     endDate: "",
@@ -49,12 +53,15 @@ const [location, setLocation] = React.useState<{ latitude: number; longitude: nu
 const [add,setAdd] = React.useState('');
 const [events, setEvents] = React.useState<IEvent[]>();
 const [showModal, setShowModal] = React.useState<boolean>(false);
-const [newEvent, setNewEvent] = React.useState<IEvent>(initialNewEevnt);
+const [newEvent, setNewEvent] = React.useState<IEvent>(initialNewEvent);
 const [selectedLocation, setSelectedLocation] = React.useState("");
 const [coordinates, setCoordinates] = React.useState({latitude: 0, longitude: 0});
 const [startDate, setStartDate] = React.useState<Date>();
 const [endDate, setEndDate] = React.useState<Date>();
 const [organiser, setOrganiser] = React.useState({name: "", contact: ""});
+const [tab, setTab] = React.useState(0);
+const [isEdit, setIsEdit] = React.useState<boolean>(false);
+const [eventId, setEventId] = React.useState<string>("");
 
 React.useEffect(() => {
     setLocation({latitude: loc.latitude, longitude: loc.longitude});
@@ -267,36 +274,86 @@ const onSubmit = (event: any) => {
         !!events ? setEvents([...events, event]) : setEvents([event]);
     });
     setShowModal(false);
+    setNewEvent(initialNewEvent);
+    setCoordinates({longitude: 0, latitude:0});
+    setStartDate(undefined);
+    setEndDate(undefined);
+    setOrganiser({name: "", contact: ""});
     // dispatch(createEvent({...newEvent, address: {...coordinates}}));
 };
+const onEdit = (eventId: string) => {
+     eventsService.getEventById(loc.pincode, eventId).then((event)=> {
+        console.log(event);
+        setNewEvent(event);
+        setCoordinates({...event.address});
+        setStartDate(new Date(event.startDate));
+        setEndDate(new Date(event.endDate));
+        setOrganiser(event.organiser);
+        setIsEdit(true);
+        setEventId(eventId);
+        setShowModal(true);
+    });
+    // eventsService.updateEvent(loc.pincode, eventId).then((event)=> {
+    //     console.log(event);
+    //     setEvents(event)});
+};
+
+function a11yProps(index: number) {
+    return {
+      id: `simple-tab-${index}`,
+      'aria-controls': `simple-tabpanel-${index}`,
+    };
+  }
+  const onCloseModal = () => {
+    setNewEvent(initialNewEvent);
+    setCoordinates({longitude: 0, latitude:0});
+    setStartDate(undefined);
+    setEndDate(undefined);
+    setOrganiser({name: "", contact: ""});
+    if(isEdit){
+        setIsEdit(false);
+        setEventId(""); 
+    }
+    setShowModal(false);
+};
+  const handleTabChange = (event: any, newValue: number) => {
+    eventsService.getEvents(loc.pincode).then((event)=> {
+        console.log(event);
+        setEvents(event)});
+    setTab(newValue);
+  };
 
     return(
         <EventsContainer>
         <Button 
         onClick={() => setShowModal(true)}
         >Create an Event</Button>
+               <Tabs value={tab} onChange={handleTabChange} aria-label="basic tabs example">
+          <Tab label="All Events" {...a11yProps(0)} />
+          <Tab label="My Events" {...a11yProps(1)} />
+        </Tabs>
 <Modal isOpen={showModal}>
     <FormWrap>
     <Form>
         <Heading>
         <h1>
-            Create Event
+            {isEdit ? `Edit Event - ${newEvent.eventName}` : "Create Event"}
         </h1>
-        <img src={CloseIcon} width={25} height={25} onClick={() => setShowModal(false)} />
+        <img src={CloseIcon} width={25} height={25} onClick={onCloseModal} />
         {/* <span /> */}
         </Heading>
         <Content>
     <InputWrap>
     <label>Name:</label>
-    <input type="text" id="eventName" onChange={onNameChange} />
+    <input type="text" id="eventName" value={newEvent.eventName} onChange={onNameChange} />
     </InputWrap>
     <InputWrap>
     <label>Description:</label>
-    <textarea id="descriptionInfo" onChange={onDescriptionChange} />
+    <textarea id="descriptionInfo" value={newEvent.descriptionInfo} onChange={onDescriptionChange} />
     </InputWrap>
     <InputWrap>
     <label>Category:</label>
-  <select onChange={onCategoryChange}>
+  <select onChange={onCategoryChange} value={newEvent.category}>
   {iconList?.map((category) => { return<option value={category.label}>{category.label}</option>})}
   </select>
   </InputWrap>
@@ -322,21 +379,50 @@ onRetrieve={onLocationChange}
 </InputWrap>
 <InputWrap>
     <label>Organiser Name:</label>
-    <input type="text" id="name" onChange={onOrganiserChange} />
+    <input type="text" id="name" value={organiser?.name} onChange={onOrganiserChange} />
     </InputWrap>
     <InputWrap>
     <label>Organiser Contact:</label>
-    <input type="text" id="contact" onChange={onOrganiserChange} />
+    <input type="text" id="contact" value={organiser?.contact} onChange={onOrganiserChange} />
     </InputWrap>
 <Button 
-onClick={onSubmit}>Submit</Button>
+onClick={isEdit ? onUpdate : onSubmit}>{isEdit ? "Update" : "Submit"}</Button>
 </Content>
   </Form>
   </FormWrap>
   </Modal>
-    <MapContainer>
+   {tab === 0 ? <MapContainer>
         <div ref={mapContainer} className="map-container"></div>
-    </MapContainer>
+    </MapContainer> 
+    : (
+        <table>
+            <thead>
+                <th>Name</th>
+                <th>Category</th>
+                <th>Start Date</th>
+                <th>End Date</th>
+                <th>Actions</th>
+            </thead>
+            <tbody>
+                {events?.map((event) => 
+               <tr key={event._id}>
+                    <td>{event.eventName}</td>
+                    <td>{event.category}</td>
+                    <td>{event.startDate}</td>
+                    <td>{event.endDate}</td>
+                    {!!event._id &&
+                    <td>
+                        <img src={EditIcon} width={25} height={25} onClick={() => onEdit(event._id || "")} />
+                        <img src={DeleteIcon} width={25} height={25} onClick={() => onDelete(event._id || "")} />
+                    </td>
+                    }
+                </tr>
+            )
+        }
+            </tbody>
+        </table>
+    )
+     }
     </EventsContainer>
     );
 }
