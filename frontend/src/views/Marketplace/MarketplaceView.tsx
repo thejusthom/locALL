@@ -1,5 +1,5 @@
 import { Box } from "@mui/material";
-import { useState, useEffect, ChangeEvent, MouseEventHandler } from "react";
+import { useState, useEffect, ChangeEvent } from "react";
 import MarketplaceCard from "./MarketplaceCard";
 import { Marketplace } from "../../models/marketplace";
 import marketplaceService from "../../services/marketplaceService";
@@ -36,6 +36,13 @@ const MarketplaceView = (props: Props) => {
         .then((marketplaceCards) => setMarketplaceCards(marketplaceCards));
     }
   }, [locationId, props.active, update]);
+  const afterUpdate = () => {
+    if (update === false) {
+      setUpdate(true);
+    } else {
+      setUpdate(false);
+    }
+  };
   const clearFormData = () => {
     const clData = {
       productName: "",
@@ -124,10 +131,12 @@ const MarketplaceView = (props: Props) => {
           <MarketplaceCard
             marketplace={marketplaceCard}
             active={props.active}
+            afterUpdate={afterUpdate}
           />
         ))}
       </Box>
       <Modal
+      dimmer='inverted'
         open={create}
         onClose={() => {
           setCreate(false);
