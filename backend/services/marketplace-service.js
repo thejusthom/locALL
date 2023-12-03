@@ -12,6 +12,12 @@ export const getAll = async (locationId) => {
     return Marketplace.find(location).populate('createdUser');
 }
 
+//Get marketplace by providing params
+export const getByParams = async (params = {}) => {
+    const marketplaces = await Marketplace.find(params).populate('createdUser');
+    return marketplaces;
+}
+
 export const save = async (newMarketplace) => {
     const marketplace = new Marketplace(newMarketplace);
     // console.log(marketplace);

@@ -1,13 +1,13 @@
 import { IUser } from "./user";
 
 interface Happenings {
-  _id: number;
+  _id?: number;
   title: string;
   content: string;
-  postedDate: string;
-  createdUser: IUser;
+  postedDate?: string;
+  createdUser?: IUser | string;
   image: string;
-  locationId: string;
+  locationId?: string;
 }
 
 //Sample data for frontend only
