@@ -20,7 +20,7 @@ const posts: React.FC<Props> = (props: Props): ReactElement =>{
           </div>
 
           <div className="postTitle">
-            <Link to="/happenings/happeningId" className="link">
+            <Link to={`/happenings/${happening._id}`} className="link">
               {happening.title}
             </Link>
           </div>
