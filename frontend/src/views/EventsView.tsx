@@ -390,8 +390,9 @@ onRetrieve={onLocationChange}
     <label>Organiser Contact:</label>
     <input type="text" id="contact" value={organiser?.contact} onChange={onOrganiserChange} />
     </InputWrap>
+    <div style={{textAlign: "center"}}>
 <Button 
-onClick={isEdit ? onUpdate : onSubmit}>{isEdit ? "Update" : "Submit"}</Button>
+onClick={isEdit ? onUpdate : onSubmit}>{isEdit ? "Update" : "Submit"}</Button></div>
 </Content>
   </Form>
   </FormWrap>
@@ -444,6 +445,7 @@ table{
     }
     img{
         margin-right: 10px;
+        cursor: pointer;
     }
     th, td{
         padding: 10px 0;
