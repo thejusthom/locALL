@@ -25,7 +25,7 @@ const SinglePost: React.FC = () =>{
         <img className="singlePostImg" src={happening.image} alt="" />
         <h1 className="singlePostTitle">
           {happening.title}
-          
+
           <div className="singlePostEdit">
             <i className="singlePostIcon far fa-edit"></i>
             <i className="singlePostIcon far fa-trash-alt"></i>
@@ -33,7 +33,7 @@ const SinglePost: React.FC = () =>{
         </h1>
 
         <div className="singlePostInfo">
-          <span className="singlePostAuthor">Author: <b>Shashikar</b></span>
+          <span className="singlePostAuthor">Author: <b>Shashikar A</b></span>
           <span className="singlePostDate">{happening.postedDate}</span>
         </div>
 

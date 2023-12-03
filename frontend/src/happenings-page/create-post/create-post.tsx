@@ -8,7 +8,8 @@ import happeningsService from '../../services/happeningsService';
 const initialState = {
   title: '',
   content: '',
-  image: 'https://images.pexels.com/photos/6685428/pexels-photo-6685428.jpeg?auto=compress&cs=tinysrgb&dpr=2&w=500'
+  createdUser: '',
+  image: 'https://images.pexels.com/photos/6685428/pexels-photo-6685428.jpeg?auto=compress&cs=tinysrgb&dpr=2&w=500',
 };
 
 const CreatePost: React.FC = () =>{
@@ -29,7 +30,7 @@ const CreatePost: React.FC = () =>{
 
   const createHappening = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    happeningsService.createHappening("02119", newHappening);
+    happeningsService.createHappening("02119", {...newHappening, createdUser: '656c36ac5a586d16ebae1886'});
     window.location.replace('/happenings');
   };
 
