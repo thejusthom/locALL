@@ -110,7 +110,7 @@ eventsService.getEvents(loc.pincode).then((event)=> {
                   ({
                     'type': 'Feature',
                     'properties': {
-                        'description': '<strong class="title">'+event.eventName+'</strong><p>'+event.descriptionInfo+'</p><p>Contact: '+event.organiser?.name+' ('+event.organiser?.contact+')</p><p>Date: '+event.startDate+' - '+event.endDate+'</p><button onclick="(function(){window.open(\'https://maps.google.com?q='+location.latitude+','+location.longitude+'\');})();">Open in Google Maps</button>',
+                        'description': '<strong class="title">'+event.eventName+'</strong><p>'+event.descriptionInfo+'</p><p>Contact: '+event.organiser?.name+' ('+event.organiser?.contact+')</p><p>Date: '+event.startDate+' - '+event.endDate+'</p><button class="maps-button" onclick="(function(){window.open(\'https://maps.google.com?q='+location.latitude+','+location.longitude+'\');})();">Open in Google Maps</button>',
                         'icon': event.category,
                     },
                     'geometry': {
@@ -337,6 +337,15 @@ mapContainer={mapContainer} />)
 
 const EventsContainer = styled.article`
 margin: 25px;
+.maps-button{
+    background-color: #1976d2;
+color: white;
+cursor: pointer;
+border: none;
+border-radius: 25px;
+font-size: 14px;
+padding: 7px 17px;
+}
 `;
 
 const Modal = styled(ReactModal)`

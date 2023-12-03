@@ -163,7 +163,7 @@ const FeedShareView: React.FC = () => {
                 </Form>
             </Modal>
             {
-                feedShareCards.map((feedShareCard: FeedShare) => ( 
+                feedShareCards?.map((feedShareCard: FeedShare) => ( 
                 <FeedShareCard feedShare = {feedShareCard}></FeedShareCard>
             ))}
         </div>
