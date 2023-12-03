@@ -1,7 +1,7 @@
 import { lazy } from 'react';
 // project imports
 import HomeLayout from '../views/layouts/HomeLayout';
-import Marketplace from '../views/Marketplace/MarketplaceView';
+import Marketplace from '../views/Marketplace/MarketplaceNav';
 import Events from '../views/EventsView';
 import FeedShare from '../views/FeedShare/FeedShareView';
 import Home from '../views/Home';

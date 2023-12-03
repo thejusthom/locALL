@@ -2,30 +2,51 @@ import AspectRatio from "@mui/joy/AspectRatio";
 import Button from "@mui/joy/Button";
 import Card from "@mui/joy/Card";
 import CardContent from "@mui/joy/CardContent";
-import IconButton from "@mui/joy/IconButton";
 import Typography from "@mui/joy/Typography";
-import { Comment, Form, Image, Modal, Header,FormProps, TextAreaProps } from "semantic-ui-react";
+import {
+  Comment,
+  Form,
+  Image,
+  Modal,
+  Header,
+  FormProps,
+  TextAreaProps,
+} from "semantic-ui-react";
 import React, { ChangeEvent, FormEvent } from "react";
 import { Marketplace } from "../../models/marketplace";
 import { Box } from "@mui/system";
 import marketplaceService from "../../services/marketplaceService";
-import { TextareaProps } from "@mui/joy";
+import image from "../../assets/images/no-image.jpg";
+import moment from "moment";
 
 type Props = {
   marketplace: Marketplace;
+  active: string;
 };
 
 const MarketplaceCard = (props: Props) => {
   const [open, setOpen] = React.useState(false);
-  const [text, setText] = React.useState('');
-  const handleChange = (e: ChangeEvent<HTMLTextAreaElement>,value: TextAreaProps) => {
+  const [text, setText] = React.useState("");
+  const handleChange = (
+    e: ChangeEvent<HTMLTextAreaElement>,
+    value: TextAreaProps
+  ) => {
     setText(value.value as string);
-  }
+  };
   const handleSubmit = () => {
-    //  console.log(text);
-     props.marketplace.comments.push({author: "You", metaData: "Today", text: text, avatar: "Profile Pic"});
-     marketplaceService.updateMarketplace(props.marketplace.locationId, props.marketplace, props.marketplace._id);
-     setText('');
+    props.marketplace.comments.push({
+      author: 
+      typeof props.marketplace.createdUser === "string"? "": props.marketplace.createdUser.person.firstName + " " + props.marketplace.createdUser.person.lastName,
+      metaData: moment().format("MMMM Do YYYY, h:mm:ss a"),
+      text: text,
+      avatar: "Profile Pic",
+    });
+    marketplaceService.updateMarketplace(
+      props.marketplace.locationId,
+      props.marketplace,
+      props.marketplace._id
+    );
+    setText("");
   };
   return (
     <Box>
@@ -39,9 +60,8 @@ const MarketplaceCard = (props: Props) => {
           </Typography>
         </div>
         <AspectRatio minHeight="120px" maxHeight="200px">
-          <img
-            src={`data:image/png;base64,${props.marketplace.image}`}
-            srcSet={`data:image/png;base64,${props.marketplace.image}`}
+          <Image
+            srcSet={props.marketplace.image}
             loading="lazy"
             alt={props.marketplace.productName}
           />
@@ -50,7 +70,7 @@ const MarketplaceCard = (props: Props) => {
           <div>
             <Typography level="body-xs">Total price:</Typography>
             <Typography fontSize="lg" fontWeight="lg">
-              {props.marketplace.price}
+              ${props.marketplace.price}
             </Typography>
           </div>
           <Button
@@ -75,7 +95,8 @@ const MarketplaceCard = (props: Props) => {
           <Image
             size="medium"
             style={{ position: "sticky", top: 0 }}
-            src={`data:image/png;base64,${props.marketplace.image}`}
+            src={props.marketplace.image}
+            srcSet={props.marketplace.image}
             alt={props.marketplace.productName}
             wrapped
           />
@@ -85,8 +106,13 @@ const MarketplaceCard = (props: Props) => {
             <Box sx={{ display: "flex", position: "relative" }}>
               <Box sx={{ width: "300px", float: "left" }}>
                 <p style={{ margin: 0 }}>
-                  Posted by {props.marketplace.createdUser.person.firstName}{" "}
-                  {props.marketplace.createdUser.person.lastName}
+                  Posted by{" "}
+                  {typeof props.marketplace.createdUser === "string"
+                    ? ""
+                    : props.marketplace.createdUser.person.firstName}{" "}
+                  {typeof props.marketplace.createdUser === "string"
+                    ? ""
+                    : props.marketplace.createdUser.person.lastName}
                 </p>
                 <Typography level="body-sm">
                   &nbsp; &nbsp; on {props.marketplace.listingDate}
@@ -94,10 +120,10 @@ const MarketplaceCard = (props: Props) => {
               </Box>
               <Box sx={{ float: "right", position: "absolute", right: 0 }}>
                 <Typography level="body-xs" fontSize="xl">
-                  Total price:
+                  Price:
                 </Typography>
                 <Typography fontSize="lg" fontWeight="lg">
-                  {props.marketplace.price}
+                  ${props.marketplace.price}
                 </Typography>
               </Box>
             </Box>
@@ -107,22 +133,28 @@ const MarketplaceCard = (props: Props) => {
                 Comments
               </Header>
               {props.marketplace.comments.map((comment) => (
-              <Comment>
-                <Comment.Avatar src={`data:image/png;base64,${comment.avatar}`} />
-                <Comment.Content>
-                  <Comment.Author as='span'>{comment.author}</Comment.Author>
-                  <Comment.Metadata>
-                    <div>{comment.metaData}</div>
-                  </Comment.Metadata>
-                  <Comment.Text>{comment.text}</Comment.Text>
-                </Comment.Content>
-              </Comment> ))}
-   
+                <Comment>
+                  <Comment.Avatar
+                    src={comment.avatar}
+                    srcSet={[comment.avatar, image]}
+                  />
+                  <Comment.Content>
+                    <Comment.Author as="span">{comment.author}</Comment.Author>
+                    <Comment.Metadata>
+                      <div>{comment.metaData}</div>
+                    </Comment.Metadata>
+                    <Comment.Text>{comment.text}</Comment.Text>
+                  </Comment.Content>
+                </Comment>
+              ))}
+
               <Form onSubmit={handleSubmit}>
-                <Form.TextArea placeholder='Write your comments here'
-              name='text' value={text}
-              onChange={handleChange}
-              />
+                <Form.TextArea
+                  placeholder="Write your comments here"
+                  name="text"
+                  value={text}
+                  onChange={handleChange}
+                />
                 <Button type="submit">Post</Button>
               </Form>
             </Comment.Group>
