@@ -34,6 +34,9 @@ const FeedShareSchema = new Schema ({
     locationId: {
         type: String,
         required: true
+    },
+    comments: {
+        type: Array
     }
 });
 
