@@ -272,22 +272,9 @@ const onSubmit = () => {
         <Button 
         onClick={() => setShowModal(true)}
         >Create an Event</Button>
-{/* <Modal
-  open={showModal}
-  onClose={() => setShowModal(false)}
-  aria-labelledby="modal-modal-title"
-  aria-describedby="modal-modal-description"
-> */}
 <Modal isOpen={showModal}>
     <FormWrap>
     <Form>
-  {/* <Box sx={style}> */}
-    {/* <Typography id="modal-modal-title" variant="h6" component="h2">
-      Create an Event
-    </Typography>
-    <Typography id="modal-modal-description" sx={{ mt: 2 }}>
-      Duis mollis, est non commodo luctus, nisi erat porttitor ligula.
-    </Typography> */}
     <InputWrap>
     <label>Name:</label>
     <input type="text" id="eventName" onChange={onNameChange} />
@@ -296,7 +283,6 @@ const onSubmit = () => {
     <label>Description:</label>
     <textarea id="descriptionInfo" onChange={onDescriptionChange} />
     </InputWrap>
-    {/* <FormControl fullWidth> */}
     <InputWrap>
     <label>Category:</label>
   <select onChange={onCategoryChange}>
@@ -305,18 +291,12 @@ const onSubmit = () => {
   </InputWrap>
   <InputWrap>
     <label>Start Date:</label>
-      {/* <LocalizationProvider dateAdapter={AdapterDayjs}>
-  <DatePicker onChange={onStartDateChange} value={startDate} />
- </LocalizationProvider> */}
  <DatePicker 
  selected={startDate} 
  onChange={onStartDateChange} />
   </InputWrap>
 <InputWrap>
     <label>End Date:</label>
-    {/* <LocalizationProvider dateAdapter={AdapterDayjs}>
-  <DatePicker />
-  </LocalizationProvider> */}
    <DatePicker 
  selected={endDate} 
  onChange={onEndDateChange} />
@@ -381,7 +361,6 @@ width: 700px;
 height: 75%;
 align-self: center;
 margin-top: 70px;
-/* text-align: -webkit-center; */
 border-radius: 5px;
 padding: 20px;
 margin: 40px 0;
