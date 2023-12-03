@@ -114,7 +114,7 @@ onRetrieve={onLocationChange}
 const LocationWrap = styled.form`
 align-items: center;
     margin-top: 3px;
-    margin-right: 25px;
+    margin-right: 20px;
     img{
       margin-right: 7px;
     }
