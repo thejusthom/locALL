@@ -36,26 +36,3 @@
     transform: rotate(360deg);
   }
 }
-
-/* .map-container {
-  height: 500px;
-  /* width: 95%; 
-}
-
-.sidebar {
-  background-color: rgb(35 55 75 / 90%);
-  color: #fff;
-  padding: 6px 12px;
-  font-family: monospace;
-  z-index: 1;
-  position: absolute;
-  top: 0;
-  left: 0;
-  margin: 12px;
-  border-radius: 4px;
-}
-
-.mapboxgl-popup {
-  max-width: 400px;
-  font: 12px/20px 'Helvetica Neue', Arial, Helvetica, sans-serif;
-  } */

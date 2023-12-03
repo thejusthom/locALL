@@ -104,7 +104,7 @@ height: 100%;
 justify-content: center;
 display: flex;
 `;
-const Button = styled.button`
+export const Button = styled.button`
 background-color: #1976d2;
 color: white;
 padding: 7px 20px;

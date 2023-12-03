@@ -31,7 +31,6 @@ list-style-type: none;
 }
 .map-container {
   height: 500px;
-  /* width: 95%; */
 }
 
 .sidebar {

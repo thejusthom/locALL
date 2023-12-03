@@ -1,8 +1,6 @@
 import * as React from "react";
 import mapboxgl from 'mapbox-gl';
 import styled from "styled-components";
-import EditIcon from "../../assets/images/edit-icon.svg";
-import DeleteIcon from "../../assets/images/delete-icon.svg";
 import { useSelector } from 'react-redux';
 import eventsService from "../../services/eventsService";
 import { IEvent } from "../../models/events";
@@ -13,7 +11,7 @@ import ReactModal from 'react-modal';
 import DatePicker from "react-datepicker";
 import 'react-datepicker/dist/react-datepicker.css';
 import moment from "moment";
-import EvenstForm from "./_EventsForm";
+import EvenstForm, { Button } from "./_EventsForm";
 import { iconList } from "./Constants";
 import MyEvents from "./_MyEvents";
 import EventsMap from "./_EventsMap";
@@ -71,15 +69,6 @@ eventsService.getEvents(loc.pincode).then((event)=> {
                     });
                 }
     React.useEffect(() => {
-        // if (map.current) return; // initialize map only once
-    //     if (mapContainer.current) {
-    //     map.current = new mapboxgl.Map({
-    //     container: mapContainer.current,
-    //     style: 'mapbox://styles/mapbox/streets-v12',
-    //     center: [location?.longitude, location?.latitude],
-    //     zoom: 15
-    //     });
-    // }
     if (mapContainer.current && !!location?.latitude) {
         map.current = new mapboxgl.Map({
             container: mapContainer.current,
@@ -361,9 +350,6 @@ onRetrieve={onLocationChange}
     />
   </Modal>
    {tab === 0 && !!events ? 
-//    <MapContainer>
-//         <div ref={mapContainer} className="map-container"></div>
-//     </MapContainer> 
 (<EventsMap
 mapContainer={mapContainer} />)
     : (
@@ -391,16 +377,6 @@ background-color: rgba(0,0,0,0.3);
 const InputWrap = styled.div`
     margin-bottom: 20px;
     display: flex;
-`;
-const Button = styled.button`
-background-color: #1976d2;
-color: white;
-padding: 7px 20px;
-cursor: pointer;
-border: none;
-border-radius: 25px;
-font-size: 16px;
-padding: 10px 25px;
 `;
 const MandatoryStar = styled.span`
 color: #A71313;
