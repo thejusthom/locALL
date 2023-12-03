@@ -23,7 +23,14 @@ const SinglePost: React.FC = () =>{
    <div className="singlePost">
       <div className="singlePostWrapper">
         <img className="singlePostImg" src={happening.image} alt="" />
-        <h1 className="singlePostTitle">{happening.title}</h1>
+        <h1 className="singlePostTitle">
+          {happening.title}
+          
+          <div className="singlePostEdit">
+            <i className="singlePostIcon far fa-edit"></i>
+            <i className="singlePostIcon far fa-trash-alt"></i>
+          </div>
+        </h1>
 
         <div className="singlePostInfo">
           <span className="singlePostAuthor">Author: <b>Shashikar</b></span>
