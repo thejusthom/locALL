@@ -1,5 +1,4 @@
 import FeedShare from "../../models/feedShare"
-import { feedShare } from "../../models/feedShare";
 import { useEffect, useState } from "react";
 import FeedShareCard from "./FeedShareCard";
 import { useSelector } from 'react-redux'
