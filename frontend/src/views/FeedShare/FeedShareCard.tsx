@@ -6,6 +6,8 @@ import Typography from "@mui/joy/Typography";
 import Button from "@mui/joy/Button";
 import React, { ChangeEvent, FormEvent } from "react";
 import feedshareService from "../../services/feedshareService";
+import EditIcon from "../../assets/images/edit-icon.svg";
+import DeleteIcon from "../../assets/images/delete-icon.svg";
 
 type Props = {
     feedShare: FeedShare;
@@ -23,7 +25,28 @@ const FeedShareCard: React.FC<Props> = (props: Props): React.ReactElement => {
     const [text, setText] = React.useState('');
     const handleChange = (e: ChangeEvent<HTMLTextAreaElement>,value: TextAreaProps) => {
         setText(value.value as string);
+        console.log(props.feedShare.createdUser);
       }
+
+      const onEdit = () => {
+        feedshareService.getFeedshareById(props.feedShare.locationId, props.feedShare._id).then((event)=> {
+            console.log(event);
+            // setNewEvent(event);
+            // setCoordinates({...event.address});
+            // setStartDate(startDate);
+            // setEndDate(new Date(event.endDate));
+            // setOrganiser(event.organiser);
+            // setIsEdit(true);
+            // setEventId(eventId);
+            // setShowModal(true);
+            });
+        };
+
+        const onDelete = () => {
+            feedshareService.deleteFeedshare(props.feedShare.locationId, props.feedShare._id).then((event)=> {
+                feedshareService.getFeedshare(props.feedShare.locationId).then((feedShareCards)=> feedShareCards(feedShareCards));
+            })
+        }
         return(
             <>
             
@@ -47,6 +70,8 @@ const FeedShareCard: React.FC<Props> = (props: Props): React.ReactElement => {
                 <div className="description">
                 <h1>{props.feedShare.foodType}</h1>
                 <h2>{props.feedShare.address}</h2>
+                <img src={EditIcon} width={25} height={25} onClick={() => onEdit()} />
+                 <img src={DeleteIcon} width={25} height={25} onClick={() => onDelete()} />
                 <p>{props.feedShare.organizer}</p>
                 <p className="read-more">
                     <button onClick={() => setOpen(true)}>Read More</button>

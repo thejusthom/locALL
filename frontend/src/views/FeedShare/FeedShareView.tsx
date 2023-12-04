@@ -10,6 +10,7 @@ import { SearchBox } from '@mapbox/search-js-react';
 import { render } from "@testing-library/react";
 import Button from "@mui/joy/Button";
 import moment from "moment";
+import { Tab, Tabs } from "@mui/material";
 
 const FeedShareView: React.FC = () => {
     // get data from json
@@ -20,6 +21,8 @@ const FeedShareView: React.FC = () => {
     const [selectedLocation, setSelectedLocation] = React.useState("");
     const [coordinates, setCoordinates] = React.useState({latitude: 0, longitude: 0});
     const [add,setAdd] = React.useState('');
+    const [update, setUpdate] = useState(false);
+    const [tab, setTab] = React.useState(0);
 
     const onLocationChange = (event: any) => {
         const location = event?.features[0]?.geometry?.coordinates;
@@ -37,7 +40,7 @@ const FeedShareView: React.FC = () => {
     };
 
     useEffect(()=>{
-        console.log(locationId);
+        // console.log(locationId);
         feedShareService.getFeedshare(locationId).then((feedShareCards)=> setFeedShareCards(feedShareCards));
     },[locationId]);
 
@@ -51,15 +54,43 @@ const FeedShareView: React.FC = () => {
         locationId: ''
     });
 
+    const clearFormData = () => {
+        const clData = {
+            image: '',
+            foodType: '',
+            servings: '',
+            organizer: '',
+            address: '',
+            postedDate: '',
+            locationId: ''
+        };
+        setInputData(clData);
+      };
+
     const handleOnChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        // event.preventDefault();
         const id = event.target.id;
         const updateData = { ...inputData };
+        if (
+            event.target instanceof HTMLInputElement &&
+            event.target.type === "file"
+          ) {
+            const file = event.target.files?.[0];
+            if (file) {
+              const reader = new FileReader();
+              reader.readAsDataURL(file);
+              reader.onloadend = () => {
+                reader.result as string;
+                updateData[id as keyof typeof updateData] = reader.result as string;
+                console.log(updateData);
+                setInputData(updateData);
+              };
+              return;
+            }
+          }
         setInputData({...inputData});
         updateData[id as keyof typeof updateData] = event.target.value;
         setInputData(updateData);
-        // console.log(inputData);
-    };
+    };   
 
     const addFeedShare = async () => {
         console.log(add);
@@ -75,18 +106,39 @@ const FeedShareView: React.FC = () => {
             _id: null,
             createdUser: '656c0c6e058e16521ca0e166'
         }
-        console.log(feedShare);
-        await feedShareService.createFeedshare(feedShare.locationId, feedShare).then((feedShareCards)=> setFeedShareCards(feedShareCards));
-        console.log(feedShareCards);
+        await feedShareService
+            .createFeedshare(feedShare.locationId, feedShare)
+            .then(()=> {
+                feedShareCards.push(feedShare); 
+                setUpdate(true); 
+                setFormOpen(false);
+                clearFormData();
+            });
     }
+
+    function a11yProps(index: number) {
+        return {
+          id: `simple-tab-${index}`,
+          'aria-controls': `simple-tabpanel-${index}`,
+        };
+      }
+      
+    const handleTabChange = (event: any, newValue: number) => {
+        feedShareService.getFeedshareByUser(locationId, "656c0c6e058e16521ca0e166").then((event)=> {
+            setFeedShareCards(event)});
+        setTab(newValue);
+        console.log(event);     
+      };
 
     return(
         <div>
             <div className="new-feedshare">
-                <span>Have leftovers? Share them </span>
-                <button className="new-button" onClick={() => setFormOpen(true)}>here</button>
+                <Button className="new-button" onClick={() => setFormOpen(true)}>New Listing</Button>
             </div>
-            
+            <Tabs sx={{margin: "15px 0 0 0"}} value={tab} onChange={handleTabChange} aria-label="basic tabs example">
+                <Tab sx={{fontSize: "16px", fontWeight: "bold"}} label="All Feedshare" {...a11yProps(0)} />
+                <Tab sx={{fontSize: "16px", fontWeight: "bold"}} label="My Feedshare" {...a11yProps(1)} />
+            </Tabs>
             <Modal
             open={formOpen}
             onClose={() => setFormOpen(false)}
@@ -112,11 +164,11 @@ const FeedShareView: React.FC = () => {
                         onChange = {handleOnChange}
                         id="organizer"/>
                     <Form.Field required label='Location'/>
-                    <SearchBox 
-                    accessToken={'pk.eyJ1IjoiYXNobWl5YS12aWpheWFjaGFuZHJhbiIsImEiOiJjbHBnMXRxc3oxaXd3MmlwcG5zZjBpdXNqIn0.GqCCjkCcmFsgrpMnl7ntzw'}
+                   {!!process.env.REACT_APP_MAPBOX_API_KEY && <SearchBox 
+                    accessToken={process.env.REACT_APP_MAPBOX_API_KEY}
                     value={selectedLocation}
                     onRetrieve={onLocationChange}
-                    />
+                    />}
                     <Form.Input
                         fluid
                         label="Upload your images here"
@@ -125,30 +177,7 @@ const FeedShareView: React.FC = () => {
                         // required
                         onChange={handleOnChange}
                     />
-                    </Form.Group>
-                    {/* <label>HTML radios</label>                    
-                    <Form.Field
-                        label='This one'
-                        control='input'
-                        type='radio'
-                        name='htmlRadios'
-                    />
-                    <Form.Field
-                        label='That one'
-                        control='input'
-                        type='radio'
-                        name='htmlRadios'
-                    /> */}
-                    {/* 
-                    <Form.Group grouped>
-                    <label>HTML checkboxes</label>
-                    <Form.Field label='This one' control='input' type='checkbox' />
-                    <Form.Field label='That one' control='input' type='checkbox' />
-                    </Form.Group>
-                    <Form.Field label='An HTML <textarea>' control='textarea' rows='3' />
-                    <Form.Field label='An HTML <button>' control='button'>
-                    HTML Button
-                    </Form.Field> */}
+                    </Form.Group>                    
                     <Button type="submit" onClick={addFeedShare}>Post</Button>
                     <Button
                     variant="solid"
@@ -164,7 +193,7 @@ const FeedShareView: React.FC = () => {
             </Modal>
             {
                 feedShareCards.map((feedShareCard: FeedShare) => ( 
-                <FeedShareCard feedShare = {feedShareCard}></FeedShareCard>
+                <FeedShareCard feedShare = {feedShareCard}/>
             ))}
         </div>
     )

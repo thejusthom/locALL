@@ -80,10 +80,12 @@ export const search = async (request, response) => {
     }
 }
 
-export const getFeedShareByLocation = async (request, response) => {
+export const getByParams = async (request, response) => {
     try {
-        const locationId = request.params.locationId;
-        const feedshare = await feedshareService.getFeedShareByLocation(locationId);
+        const locationId = request.locationId;
+        const params = {...request.query, locationId};
+        console.log(params);
+        const feedshare = await feedshareService.getByParams(params);
         setResponse(feedshare, response, 200);
     }
     catch (err) {
@@ -92,28 +94,4 @@ export const getFeedShareByLocation = async (request, response) => {
     }
 }
 
-export const getFeedShareByUser = async (request, response) => {
-    try {
-        const userId = request.params.userId;
-        const feedshare = await feedshareService.getFeedShareByUser(userId);
-        setResponse(feedshare, response, 200);
-    }
-    catch (err) {
-        console.log(err);
-        setErrorResponse(err,response);   
-    }
-}
-
-export const getFeedShareByLocationAndUser = async (request, response) => {
-    try {
-        const locationId = request.params.locationId;
-        const userId = request.params.userId;
-        const feedshare = await feedshareService.getFeedShareByLocationAndUser(locationId, userId);
-        setResponse(feedshare, response, 200);
-    }
-    catch (err) {
-        console.log(err);
-        setErrorResponse(err,response);   
-    }
-}
 
