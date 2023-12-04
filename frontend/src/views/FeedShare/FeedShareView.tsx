@@ -112,11 +112,11 @@ const FeedShareView: React.FC = () => {
                         onChange = {handleOnChange}
                         id="organizer"/>
                     <Form.Field required label='Location'/>
-                    <SearchBox 
-                    accessToken={'pk.eyJ1IjoiYXNobWl5YS12aWpheWFjaGFuZHJhbiIsImEiOiJjbHBnMXRxc3oxaXd3MmlwcG5zZjBpdXNqIn0.GqCCjkCcmFsgrpMnl7ntzw'}
+                   {!!process.env.REACT_APP_MAPBOX_API_KEY && <SearchBox 
+                    accessToken={process.env.REACT_APP_MAPBOX_API_KEY}
                     value={selectedLocation}
                     onRetrieve={onLocationChange}
-                    />
+                    />}
                     <Form.Input
                         fluid
                         label="Upload your images here"

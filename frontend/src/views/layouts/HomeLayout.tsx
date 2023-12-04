@@ -139,7 +139,7 @@ function HomeLayout() {
                 </Button>
               ))}
             </Box>
-            <LocationBar />
+            {!!process.env.REACT_APP_MAPBOX_API_KEY && <LocationBar accessToken={process.env.REACT_APP_MAPBOX_API_KEY} />}
             <Box sx={{ flexGrow: 0 }}>
               <Button
                 key="login"
