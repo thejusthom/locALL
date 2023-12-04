@@ -60,7 +60,13 @@ var ddate = d.getDate()+"-"+months[d.getMonth()]+"-"+d.getUTCFullYear();
 console.log(ddate);
 const selectLocation = (state: any) => state.location.city;
 const city = useSelector(selectLocation);
-
+React.useEffect(() => {
+    if(!!city){
+    const url = "http://api.openweathermap.org/data/2.5/weather?q="+city+"&appid="+apiKey+"&units=metric";
+weatherService.getWeather(url).then((response)=> {
+    setWData(response);});
+}
+}, [city]);
 // function search(){
 // if(city===""){
 // setWarning("Please select a city.");
