@@ -6,4 +6,5 @@ export interface ICoordinates{
 export interface ILocation{
 coordinates: ICoordinates;
 pincode: number;
+city: string;
 }

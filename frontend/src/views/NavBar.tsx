@@ -2,7 +2,7 @@ import * as React from "react";
 import styled from "styled-components";
 // import { AddressAutofill, SearchBox } from '@mapbox/search-js-react';
 // import LoactionIcon from ".././assets/images/location.svg"
-import LocationBar from "./_LocationBar";
+// import LocationBar from "./_LocationBar";
 
 const NavBar = () => {
     // const [selectedLocation, setSelectedLocation] = React.useState("02119");
@@ -55,7 +55,7 @@ const NavBar = () => {
         <form>
 <SearchBox accessToken={'pk.eyJ1IjoiYXNobWl5YS12aWpheWFjaGFuZHJhbiIsImEiOiJjbHBnMXRxc3oxaXd3MmlwcG5zZjBpdXNqIn0.GqCCjkCcmFsgrpMnl7ntzw'} />
         </form> */}
-        <LocationBar />
+        {/* <LocationBar /> */}
         </Right>
         </section>
     );
