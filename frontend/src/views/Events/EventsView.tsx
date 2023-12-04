@@ -15,6 +15,8 @@ import MyEvents from "./_MyEvents";
 import EventsMap from "./_EventsMap";
 import FormFieldsComponent from "./_FormFields";
 import { ToastContainer, toast } from "react-toastify";
+import { WeatherDashboard } from "../Weather/WeatherDashboard";
+import Section from "../Weather/_WeatherComp";
 
 const initialNewEvent = {
     eventName: "",
@@ -55,11 +57,13 @@ eventsService.getEvents(loc.pincode).then((event)=> {
     const availableEvents = event.filter((e: IEvent) => !!e.endDate && moment(e.endDate) >= moment());
     setEvents(availableEvents)});
 }, [loc]);
-
+console.log(loc);
   const mapContainer = React.useRef<HTMLDivElement | null>(null);
   const map = React.useRef<mapboxgl.Map | null>(null);
 
-	mapboxgl.accessToken = 'pk.eyJ1IjoiYXNobWl5YS12aWpheWFjaGFuZHJhbiIsImEiOiJjbHBnMXRxc3oxaXd3MmlwcG5zZjBpdXNqIn0.GqCCjkCcmFsgrpMnl7ntzw';
+	if(!!process.env.REACT_APP_MAPBOX_API_KEY){
+        mapboxgl.accessToken = process.env.REACT_APP_MAPBOX_API_KEY
+    };
             if (!map.current && mapContainer.current && !!location?.latitude) {
                 map.current = new mapboxgl.Map({
                     container: mapContainer.current,
@@ -287,8 +291,10 @@ function a11yProps(index: number) {
     setTab(newValue);
   };
     return(
-        
-        <EventsContainer><ToastContainer position="top-center" closeOnClick />
+        <EventsContainer>
+            <ToastContainer position="top-center" closeOnClick />
+            <WeatherDashboard />
+            <Section />
         <Button 
         onClick={() => setShowModal(true)}
         >Create an Event</Button>
@@ -316,7 +322,8 @@ function a11yProps(index: number) {
               onEndDateChange={onEndDateChange}
               onLocationChange={onLocationChange} 
               onOrganiserChange={onOrganiserChange}
-              isEdit={isEdit} />
+              isEdit={isEdit}
+              accessToken={mapboxgl.accessToken} />
             }
     />
   </Modal>
