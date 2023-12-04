@@ -1,8 +1,6 @@
 import * as React from "react";
 import styled from "styled-components";
-import axios from "axios";
 import { useSelector } from "react-redux";
-import { toast } from "react-toastify";
 import weatherService from "../../services/weatherService";
 
 const Section = () => {
@@ -55,7 +53,6 @@ var [wdata, setWData] = React.useState(ad);
 var d = new Date();
 var months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul","Aug", "Sep", "Oct", "Nov", "Dec"];
 var ddate = d.getDate()+"-"+months[d.getMonth()]+"-"+d.getUTCFullYear();
-console.log(ddate);
 const selectLocation = (state: any) => state.location.city;
 const city = useSelector(selectLocation);
 React.useEffect(() => {
@@ -65,8 +62,6 @@ weatherService.getWeather(url).then((response)=> {
     setWData(response);});
 }
 }, [city]);
-
-console.log(apiKey);
 return(
 <WeatherWrap>
 <Card>
@@ -127,9 +122,6 @@ h5{
     font-size: 45px;
 }
 `;
-const ImageWrap = styled.div`
-
-`;
 const WeatherData = styled.div``;
 const ExtraDescription = styled.div``;
 const Body = styled.div`
@@ -138,10 +130,6 @@ padding: 0 20px 20px 20px;
 const BodyUp = styled.div`
 display: flex;
 justify-content: space-between;
-`;
-const TempRow = styled.div`
-display: flex;
-align-items: center;
 `;
 const BodyDown = styled.div`
 display: flex;
