@@ -108,7 +108,8 @@ text-align: -webkit-center;
 `;
 const WeatherWrap = styled.article`
 width: 50%;
-background-color: lightblue;
+background-color: #aad3e0;
+box-shadow: 0px 0px 15px 5px #b4b1b1;
     border-radius: 7px;
     padding: 20px 0;
     color: white;
@@ -121,7 +122,7 @@ border-bottom: 1px solid;
 h5{
     margin: 0;
     font-size: 24px;
-    padding: 0 20px 10px 20px;
+    padding: 3px 25px 20px 25px;
 }
 `;
 const TempWrap = styled.div`
@@ -150,11 +151,12 @@ p{
 }
 `;
 const Body = styled.div`
-padding: 0 20px 20px 20px;
+padding: 0 20px 40px 20px;
 `;
 const BodyUp = styled.div`
 display: flex;
 justify-content: space-between;
+margin: 0 25px;
 `;
 const BodyDown = styled.div`
 display: flex;
