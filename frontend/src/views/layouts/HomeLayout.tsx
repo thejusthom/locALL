@@ -14,6 +14,7 @@ import LocationBar from "../_LocationBar";
 
 const pages = [
   { name: "Home", path: "/" },
+  {name: "Weather", path: "/weather"},
   { name: "Events", path: "/events" },
   { name: "Marketplace", path: "/marketplace" },
   { name: "Feed Share", path: "/feedshare" },

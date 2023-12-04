@@ -8,6 +8,7 @@ import Home from '../views/Home';
 import Happenings from '../views/HappeningsView';
 import SinglePost from '../happenings-page/single-post/single-post';
 import CreatePost from '../happenings-page/create-post/create-post';
+import WeatherView from '../views/Weather/WeatherView';
 
 // ==============================|| MAIN ROUTING ||============================== //
 
@@ -18,6 +19,10 @@ const MainRoutes = {
         {
             path: '/',
             element: <Home />
+        },
+        {
+            path: '/weather',
+            element: <WeatherView />
         },
         {
             path: '/marketplace',

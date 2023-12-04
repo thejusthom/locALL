@@ -15,8 +15,6 @@ import MyEvents from "./_MyEvents";
 import EventsMap from "./_EventsMap";
 import FormFieldsComponent from "./_FormFields";
 import { ToastContainer, toast } from "react-toastify";
-import { WeatherDashboard } from "../Weather/WeatherDashboard";
-import Section from "../Weather/_WeatherComp";
 
 const initialNewEvent = {
     eventName: "",
@@ -293,8 +291,6 @@ function a11yProps(index: number) {
     return(
         <EventsContainer>
             <ToastContainer position="top-center" closeOnClick />
-            <WeatherDashboard />
-            <Section />
         <Button 
         onClick={() => setShowModal(true)}
         >Create an Event</Button>
