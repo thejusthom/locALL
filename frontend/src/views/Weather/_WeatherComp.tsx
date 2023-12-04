@@ -6,8 +6,6 @@ import { toast } from "react-toastify";
 import weatherService from "../../services/weatherService";
 
 const Section = () => {
-// var [city, setCity] = React.useState("");
-// var [warning, setWarning] = React.useState("");
 
 const apiKey = process.env.REACT_APP_OPEN_WEATHER_API_KEY;
 var ad = {
@@ -67,87 +65,26 @@ weatherService.getWeather(url).then((response)=> {
     setWData(response);});
 }
 }, [city]);
-// function search(){
-// if(city===""){
-// setWarning("Please select a city.");
-// }
-// else{
-// var url = "http://api.openweathermap.org/data/2.5/weather?q="+city+"&appid="+apiKey+"&units=metric";
-// // var url = `http://api.openweathermap.org/data/2.5/weather?q=&lat=${42.3284508}&lon=${-71.0863725}&appid=`+apiKey+"&units=metric";
-// // {latitude: , longitude: }
-// axios.get(url)
-// .then(function (response) {
-// // handle success
-// console.log(response);
-// setWData(response.data);
-// })
-// .catch(function (error) {
-// // handle error
-// console.log(error);
-// // if(error.response.status){
-// //     setWarning("Please enter a valid city name");
-// // }
-// })
-// .then(function () {
-// // always executed
-// });
-// }
-// console.log(wdata)
-// }
+
 console.log(apiKey);
 return(
 <WeatherWrap>
-{/* <div className="container"> */}
-{/* <div className="search">
-<center>
-<div className="searchbar">
-<input type="text" onChange={(e)=>{setCity(e.target.value); setWarning("")}} placeholder="City name" name="" id="" />
-{!!apiKey && <button onClick={search}><i className="fas fa-search"></i></button>}
-</div>
-<br /><sub style={{color: "red"}}>{warning}</sub>
-</center>
-</div> */}
-{/* <div className="cardd">
-<div className="header">
-<div className="row">
-<div className="col-lg-6 col-md-6 col-sm-6 col-s-12 card-header-left">
-<h5>{wdata.name}</h5>
-</div>
-<div className="col-lg-6 col-md-6 col-sm-6 col-s-12 card-header-right">
-<h5>{ddate}</h5>
-</div>
-</div>
-</div> */}
 <Card>
     <h5>{wdata.name}</h5>
     <h5>{ddate}</h5>
 </Card>
 <Body>
     <BodyUp className="bodyup">
-    {/* <TempRow className="row"> */}
-{/* <ImageWrap> */}
 <img src={"http://openweathermap.org/img/wn/"+wdata.weather[0].icon+"@4x.png"} alt="" />
-{/* </ImageWrap> */}
-{/* <div className="col-lg-6 col-md-12 col-sm-12 col-s-12 align-self-center"> */}
 <TempWrap>
-{/* <div className="col-lg-6 col-md-6 col-sm-6"> */}
 <h5>{wdata.main.temp}</h5>
-{/* <p>{wdata.main.feels_like}°C feels like</p> */}
-{/* </div> */}
-{/* <div className="col-lg-4 col-md-4 col-sm-4 col-s-4"> */}
 <div className="row align-self-center">
 <p><i className="fas fa-sort-up"></i> {wdata.main.temp_max}°C</p>
 <span style={{fontSize: "10px", color: "rgba(0,0,0,0)"}}>.</span>
 <p><i className="fas fa-sort-down"></i> {wdata.main.temp_min}°C</p>
 </div>
-{/* </div> */}
 </TempWrap>
-{/* <div className="row" style={{textAlign: "left"}}>
-</div> */}
-{/* </div> */}
-{/* </TempRow> */}
  </BodyUp> 
-{/* <BodyDown className="bodydown"> */}
 <BodyDown className="row">
 <WeatherData>
 <h1>{wdata.weather[0].main}</h1>
@@ -161,10 +98,7 @@ return(
 <p><i className="fas fa-wind"></i> Wind Angle {wdata.wind.deg}°</p>
 </ExtraDescription>
 </BodyDown>
-{/* </BodyDown> */}
 </Body>
-{/* </div> */}
-{/* // </div> */}
 </WeatherWrap>
 );
 }
