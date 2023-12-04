@@ -8,9 +8,12 @@ feedshareRouter.route('/')
     .get(feedshareController.find)
     .post(feedshareController.post);
 
+feedshareRouter.route('/params')
+    .get(feedshareController.getByParams);
+
 feedshareRouter.route('/:id')
     .get(feedshareController.get)
     .put(feedshareController.put)
     .delete(feedshareController.remove);
-
+   
 export default feedshareRouter;

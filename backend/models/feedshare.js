@@ -29,7 +29,8 @@ const FeedShareSchema = new Schema ({
     },
     createdUser: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'User'
+        ref: 'User',
+        required: true
     },
     locationId: {
         type: String,

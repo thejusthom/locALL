@@ -1,7 +1,7 @@
 import FeedShare from "../models/feedShare.js";
 
 export const search = async (params = {}) => {
-  const feedShare = await FeedShare.find(params).exec();
+  const feedShare = await FeedShare.find(params).populate('createdUser');
   return feedShare;
 }
 
@@ -30,4 +30,10 @@ export const update = async (updatedFeedShare, id) => {
 
 export const remove = async (id) => {
     return await FeedShare.findByIdAndDelete(id).exec()
+}
+
+export const getByParams = async (params = {}) => {
+    console.log(params);
+    const feedShare = await FeedShare.find(params).populate('createdUser');
+    return feedShare;
 }
