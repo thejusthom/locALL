@@ -1,20 +1,20 @@
 import * as React from "react";
 import mapboxgl from 'mapbox-gl';
 import styled from "styled-components";
-import EditIcon from "../../assets/images/edit-icon.svg";
-import DeleteIcon from "../../assets/images/delete-icon.svg";
 import { useSelector } from 'react-redux';
 import eventsService from "../../services/eventsService";
 import { IEvent } from "../../models/events";
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
-import { SearchBox } from '@mapbox/search-js-react';
 import ReactModal from 'react-modal';
-import DatePicker from "react-datepicker";
 import 'react-datepicker/dist/react-datepicker.css';
 import moment from "moment";
-import EvenstForm from "./_EventsForm";
+import EvenstForm, { Button } from "./_EventsForm";
 import { iconList } from "./Constants";
+import MyEvents from "./_MyEvents";
+import EventsMap from "./_EventsMap";
+import FormFieldsComponent from "./_FormFields";
+import { ToastContainer, toast } from "react-toastify";
 
 const initialNewEvent = {
     eventName: "",
@@ -69,15 +69,6 @@ eventsService.getEvents(loc.pincode).then((event)=> {
                     });
                 }
     React.useEffect(() => {
-        // if (map.current) return; // initialize map only once
-    //     if (mapContainer.current) {
-    //     map.current = new mapboxgl.Map({
-    //     container: mapContainer.current,
-    //     style: 'mapbox://styles/mapbox/streets-v12',
-    //     center: [location?.longitude, location?.latitude],
-    //     zoom: 15
-    //     });
-    // }
     if (mapContainer.current && !!location?.latitude) {
         map.current = new mapboxgl.Map({
             container: mapContainer.current,
@@ -171,18 +162,17 @@ eventsService.getEvents(loc.pincode).then((event)=> {
     });
 }}, [events]);
 React.useEffect(() => {
-const eventValues = Object.values(newEvent);
 const coordinatesValue = Object.values(coordinates);
 const organiserValues = Object.values(organiser);
-console.log(eventValues, coordinatesValue, organiserValues)
-console.log(newEvent)
-if(eventValues.includes("") || eventValues.includes(undefined) || coordinatesValue.includes(0) || organiserValues.includes("") || startDate === undefined || endDate === undefined){
+const {eventName, descriptionInfo, category} = newEvent;
+const eventValues = [eventName, descriptionInfo, category];
+if(eventValues.includes("") || coordinatesValue.includes(0) || !(organiserValues?.length >= 2) || organiserValues.includes("") || startDate === undefined || endDate === undefined){
     setIsValid(false);
 }
 else{
     setIsValid(true);
 }
-}, [newEvent, coordinates, organiser])
+}, [newEvent, coordinates, organiser]);
 
 const onNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setNewEvent({...newEvent, eventName: e.target.value});
@@ -222,6 +212,7 @@ const onSubmit = (event: any) => {
     const end = endDate?.toLocaleDateString() || "";
     eventsService.createEvent(add, {...newEvent, address: {...coordinates}, startDate: start, endDate: end, createdUser: "656bbf4a3b7690ac27e2bcfb", organiser}).then((event)=> {
         !!events ? setEvents([...events, event]) : setEvents([event]);
+        toast.success("Event Created Successfully!");
     });
     setShowModal(false);
     setNewEvent(initialNewEvent);
@@ -246,7 +237,9 @@ const onDelete = (eventId: string) => {
     eventsService.deleteEvent(loc.pincode, eventId).then((event)=> {
         eventsService.getEvents(loc.pincode).then((event)=> {
             const availableEvents = event.filter((e: IEvent) => !!e.endDate && moment(e.endDate) >= moment());
-            setEvents(availableEvents)});
+            setEvents(availableEvents)
+        });
+            toast.success(`Event Deleted Successfully!`);
     });
 };
 const onUpdate = () => {
@@ -257,7 +250,9 @@ const onUpdate = () => {
         eventsService.getEvents(loc.pincode).then((event)=> {
             const availableEvents = event.filter((e: IEvent) => !!e.endDate && moment(e.endDate) >= moment());
             setEvents(availableEvents)}
-    );});
+    );
+    toast.success(`${event.eventName} Updated Successfully!`);
+});
         setNewEvent(initialNewEvent);
         setCoordinates({longitude: 0, latitude:0});
         setStartDate(undefined);
@@ -288,59 +283,12 @@ function a11yProps(index: number) {
   const handleTabChange = (event: any, newValue: number) => {
     eventsService.getEvents(loc.pincode).then((event)=> {
         const availableEvents = event.filter((e: IEvent) => !!e.endDate && moment(e.endDate) >= moment());
-        // setEvents(availableEvents)}
         setEvents(newValue === 0 ? availableEvents : event)});
     setTab(newValue);
   };
-  const FormFieldsComponent = () => {return(
-    <>
-    <InputWrap>
-    <label>Name: <MandatoryStar>*</MandatoryStar></label>
-    <input type="text" id="eventName" value={newEvent.eventName} onChange={onNameChange} />
-    </InputWrap>
-    <InputWrap>
-    <label>Description: <MandatoryStar>*</MandatoryStar></label>
-    <textarea id="descriptionInfo" value={newEvent.descriptionInfo} onChange={onDescriptionChange} />
-    </InputWrap>
-    <InputWrap>
-    <label>Category: <MandatoryStar>*</MandatoryStar></label>
-  <select onChange={onCategoryChange} value={newEvent.category}>
-  {iconList?.map((category) => { return<option value={category.label}>{category.label}</option>})}
-  </select>
-  </InputWrap>
-  <InputWrap>
-    <label>Start Date: <MandatoryStar>*</MandatoryStar></label>
- <DatePicker 
- selected={startDate} 
- onChange={onStartDateChange} />
-  </InputWrap>
-<InputWrap>
-    <label>End Date: <MandatoryStar>*</MandatoryStar></label>
-   <DatePicker 
- selected={endDate} 
- onChange={onEndDateChange} />
-    </InputWrap>
- {!isEdit && <InputWrap>
-  <label>Location: <MandatoryStar>*</MandatoryStar></label>
-  <SearchBox 
-accessToken={'pk.eyJ1IjoiYXNobWl5YS12aWpheWFjaGFuZHJhbiIsImEiOiJjbHBnMXRxc3oxaXd3MmlwcG5zZjBpdXNqIn0.GqCCjkCcmFsgrpMnl7ntzw'}
-value={selectedLocation}
-onRetrieve={onLocationChange}
-/>
-</InputWrap>}
-<InputWrap>
-    <label>Organiser Name: <MandatoryStar>*</MandatoryStar></label>
-    <input type="text" id="name" value={organiser?.name} onChange={onOrganiserChange} />
-    </InputWrap>
-    <InputWrap>
-    <label>Organiser Contact: <MandatoryStar>*</MandatoryStar></label>
-    <input type="text" id="contact" value={organiser?.contact} onChange={onOrganiserChange} />
-    </InputWrap>
-    </>
-)
-};
     return(
-        <EventsContainer>
+        
+        <EventsContainer><ToastContainer position="top-center" closeOnClick />
         <Button 
         onClick={() => setShowModal(true)}
         >Create an Event</Button>
@@ -355,82 +303,40 @@ onRetrieve={onLocationChange}
    onUpdate={onUpdate} 
    onSubmit={onSubmit}
    isDisabled={!isValid}
-   children={FormFieldsComponent()}
+   children={<FormFieldsComponent
+              newEvent={newEvent}
+              onCategoryChange={onCategoryChange}
+              startDate={startDate}
+              endDate={endDate}
+              selectedLocation={selectedLocation}
+              organiser={organiser}
+              onNameChange={onNameChange}
+              onDescriptionChange={onDescriptionChange}
+              onStartDateChange={onStartDateChange}
+              onEndDateChange={onEndDateChange}
+              onLocationChange={onLocationChange} 
+              onOrganiserChange={onOrganiserChange}
+              isEdit={isEdit} />
+            }
     />
   </Modal>
-   {tab === 0 ? <MapContainer>
-        <div ref={mapContainer} className="map-container"></div>
-    </MapContainer> 
+   {tab === 0 && !!events ? 
+(<EventsMap
+mapContainer={mapContainer} />)
     : (
-        <table>
-            <thead>
-                <th>Name</th>
-                <th>Category</th>
-                <th>Start Date</th>
-                <th>End Date</th>
-                <th>Actions</th>
-            </thead>
-            <tbody>
-                {events?.map((event) => 
-               <tr key={event._id}>
-                    <td>{event.eventName}</td>
-                    <td>{event.category}</td>
-                    <td>{moment(event.startDate).format("MM/DD/YYYY")}</td>
-                    <td>{moment(event.endDate).format("MM/DD/YYYY")}</td>
-                    {!!event._id &&
-                    <td>
-                        <img src={EditIcon} width={25} height={25} onClick={() => onEdit(event._id || "")} />
-                        <img src={DeleteIcon} width={25} height={25} onClick={() => onDelete(event._id || "")} />
-                    </td>
-                    }
-                </tr>
-            )
-        }
-            </tbody>
-        </table>
+        <MyEvents
+        events={events}
+        onEdit={onEdit}
+        onDelete={onDelete} />
     )
      }
     </EventsContainer>
+    // </ToastContainer>
     );
 }
 
 const EventsContainer = styled.article`
 margin: 25px;
-table{
-    width: 100%;
-    border-collapse: collapse;
-    color: #3e3e3e;
-    margin-top: 15px;
-    th{
-        text-align: left;
-    }
-    img{
-        margin-right: 10px;
-        cursor: pointer;
-    }
-    th, td{
-        padding: 10px 0;
-    }
-    td{
-        border-bottom: solid 1.5px #4a4a4a30;
-    }
-}
-`;
-const MapContainer = styled.section`
-    text-align: -webkit-center;
-    margin-top: 20px;
-    .title{
-        font-size: 16px;
-        color: red;
-    }
-    .geocoder {
-position: absolute;
-z-index: 20;
-right: 10%;
-top: 14%;
-text-decoration: none;
-list-style-type: none;
-}
 `;
 
 const Modal = styled(ReactModal)`
@@ -438,24 +344,6 @@ inset: unset;
 width: 100%;
 height: 100%;
 background-color: rgba(0,0,0,0.3);
-`;
-
-const InputWrap = styled.div`
-    margin-bottom: 20px;
-    display: flex;
-`;
-const Button = styled.button`
-background-color: #1976d2;
-color: white;
-padding: 7px 20px;
-cursor: pointer;
-border: none;
-border-radius: 25px;
-font-size: 16px;
-padding: 10px 25px;
-`;
-const MandatoryStar = styled.span`
-color: #A71313;
 `;
 
 export default EventsView;
