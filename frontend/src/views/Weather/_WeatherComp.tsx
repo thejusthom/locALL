@@ -60,31 +60,7 @@ var ddate = d.getDate()+"-"+months[d.getMonth()]+"-"+d.getUTCFullYear();
 console.log(ddate);
 const selectLocation = (state: any) => state.location.city;
 const city = useSelector(selectLocation);
-React.useEffect(() => {
-    if(!!city){
-    const url = "http://api.openweathermap.org/data/2.5/weather?q="+city+"&appid="+apiKey+"&units=metric";
-//     axios.get(url)
-// .then(function (response) {
-// // handle success
-// // console.log(response);
-// setWData(response.data);
-// })
-// .catch(function (error) {
-// // handle error
-// // console.log(error);
-// toast.error(error);
-// // if(error.response.status){
-// //     setWarning("Please enter a valid city name");
-// // }
-// })
-weatherService.getWeather(url).then((response)=> {
-    // const availableEvents = event.filter((e: IEvent) => !!e.endDate && moment(e.endDate) >= moment());
-    setWData(response);});
-// .then(function () {
-// // always executed
-// });
-}
-}, [city]);
+
 // function search(){
 // if(city===""){
 // setWarning("Please select a city.");
