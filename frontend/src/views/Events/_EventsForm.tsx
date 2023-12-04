@@ -82,7 +82,7 @@ width: 700px;
 border-radius: 5px 5px 0 0;
 display: flex;
 justify-content: space-between;
-padding: 20px;
+padding: 15px 20px;
 align-items: center;
 z-index: 10;
 img{

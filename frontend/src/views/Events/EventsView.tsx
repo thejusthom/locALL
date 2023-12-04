@@ -55,11 +55,13 @@ eventsService.getEvents(loc.pincode).then((event)=> {
     const availableEvents = event.filter((e: IEvent) => !!e.endDate && moment(e.endDate) >= moment());
     setEvents(availableEvents)});
 }, [loc]);
-
+console.log(loc);
   const mapContainer = React.useRef<HTMLDivElement | null>(null);
   const map = React.useRef<mapboxgl.Map | null>(null);
 
-	mapboxgl.accessToken = 'pk.eyJ1IjoiYXNobWl5YS12aWpheWFjaGFuZHJhbiIsImEiOiJjbHBnMXRxc3oxaXd3MmlwcG5zZjBpdXNqIn0.GqCCjkCcmFsgrpMnl7ntzw';
+	if(!!process.env.REACT_APP_MAPBOX_API_KEY){
+        mapboxgl.accessToken = process.env.REACT_APP_MAPBOX_API_KEY
+    };
             if (!map.current && mapContainer.current && !!location?.latitude) {
                 map.current = new mapboxgl.Map({
                     container: mapContainer.current,
@@ -110,7 +112,7 @@ eventsService.getEvents(loc.pincode).then((event)=> {
                   ({
                     'type': 'Feature',
                     'properties': {
-                        'description': '<strong class="title">'+event.eventName+'</strong><p>'+event.descriptionInfo+'</p><p>Contact: '+event.organiser?.name+' ('+event.organiser?.contact+')</p><p>Date: '+event.startDate+' - '+event.endDate+'</p><button onclick="(function(){window.open(\'https://maps.google.com?q='+location.latitude+','+location.longitude+'\');})();">Open in Google Maps</button>',
+                        'description': '<strong class="title">'+event.eventName+'</strong><p>'+event.descriptionInfo+'</p><p>Contact: '+event.organiser?.name+' ('+event.organiser?.contact+')</p><p>Date: '+event.startDate+' - '+event.endDate+'</p><button class="maps-button" onclick="(function(){window.open(\'https://maps.google.com?q='+location.latitude+','+location.longitude+'\');})();">Open in Google Maps</button>',
                         'icon': event.category,
                     },
                     'geometry': {
@@ -287,8 +289,8 @@ function a11yProps(index: number) {
     setTab(newValue);
   };
     return(
-        
-        <EventsContainer><ToastContainer position="top-center" closeOnClick />
+        <EventsContainer>
+            <ToastContainer position="top-center" closeOnClick />
         <Button 
         onClick={() => setShowModal(true)}
         >Create an Event</Button>
@@ -316,7 +318,8 @@ function a11yProps(index: number) {
               onEndDateChange={onEndDateChange}
               onLocationChange={onLocationChange} 
               onOrganiserChange={onOrganiserChange}
-              isEdit={isEdit} />
+              isEdit={isEdit}
+              accessToken={mapboxgl.accessToken} />
             }
     />
   </Modal>
@@ -337,6 +340,15 @@ mapContainer={mapContainer} />)
 
 const EventsContainer = styled.article`
 margin: 25px;
+.maps-button{
+    background-color: #1976d2;
+color: white;
+cursor: pointer;
+border: none;
+border-radius: 25px;
+font-size: 14px;
+padding: 7px 17px;
+}
 `;
 
 const Modal = styled(ReactModal)`
