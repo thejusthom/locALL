@@ -1,35 +1,20 @@
 import * as React from "react";
 import mapboxgl from 'mapbox-gl';
 import styled from "styled-components";
-import Dance from ".././assets/images/dance.png";
-import Book from ".././assets/images/book.png";
-import Drink from ".././assets/images/drink.png";
-import Food from ".././assets/images/food.png";
-import Music from ".././assets/images/music.png";
-import Pet from ".././assets/images/pet.png";
-import Plant from ".././assets/images/plant.png";
-import CloseIcon from ".././assets/images/close-white.svg";
-import EditIcon from ".././assets/images/edit-icon.svg";
-import DeleteIcon from ".././assets/images/delete-icon.svg";
 import { useSelector } from 'react-redux';
-import eventsService from "../services/eventsService";
-import { IEvent } from "../models/events";
-import Box from "@mui/material/Box";
-import Typography from "@mui/material/Typography";
-import FormControl from "@mui/material/FormControl";
-import InputLabel from "@mui/material/InputLabel";
-import OutlinedInput from "@mui/material/OutlinedInput";
-import MenuItem from "@mui/material/MenuItem";
-import Select from "@mui/material/Select";
+import eventsService from "../../services/eventsService";
+import { IEvent } from "../../models/events";
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
-import { SearchBox } from '@mapbox/search-js-react';
 import ReactModal from 'react-modal';
-import DatePicker from "react-datepicker";
 import 'react-datepicker/dist/react-datepicker.css';
 import moment from "moment";
+import EvenstForm, { Button } from "./_EventsForm";
+import { iconList } from "./Constants";
+import MyEvents from "./_MyEvents";
+import EventsMap from "./_EventsMap";
+import FormFieldsComponent from "./_FormFields";
+import { ToastContainer, toast } from "react-toastify";
 
 const initialNewEvent = {
     eventName: "",
@@ -51,7 +36,7 @@ const [location, setLocation] = React.useState<{ latitude: number; longitude: nu
 const [add,setAdd] = React.useState('');
 const [events, setEvents] = React.useState<IEvent[]>();
 const [showModal, setShowModal] = React.useState<boolean>(false);
-const [newEvent, setNewEvent] = React.useState<IEvent>(initialNewEvent);
+const [newEvent, setNewEvent] = React.useState<IEvent>({...initialNewEvent, locationId: add});
 const [selectedLocation, setSelectedLocation] = React.useState("");
 const [coordinates, setCoordinates] = React.useState({latitude: 0, longitude: 0});
 const [startDate, setStartDate] = React.useState<Date>();
@@ -60,45 +45,16 @@ const [organiser, setOrganiser] = React.useState({name: "", contact: ""});
 const [tab, setTab] = React.useState(0);
 const [isEdit, setIsEdit] = React.useState<boolean>(false);
 const [eventId, setEventId] = React.useState<string>("");
+const [isValid, setIsValid] = React.useState<boolean>(true);
 
 React.useEffect(() => {
     setLocation({latitude: loc.latitude, longitude: loc.longitude});
 map.current?.setCenter([loc.longitude, loc.latitude]);
 setAdd(loc.pincode);
 eventsService.getEvents(loc.pincode).then((event)=> {
-    console.log(event);
-    setEvents(event)});
+    const availableEvents = event.filter((e: IEvent) => !!e.endDate && moment(e.endDate) >= moment());
+    setEvents(availableEvents)});
 }, [loc]);
-console.log(events);
-const iconList = [{
-    label: "Book",
-    url: Book
-},
-{
-    label: "Dance",
-    url: Dance
-},
-{
-    label: "Drink",
-    url: Drink
-},
-{
-    label: "Food",
-    url: Food
-},
-{
-    label: "Music",
-    url: Music
-},
-{
-    label: "Pet",
-    url: Pet
-},
-{
-    label: "Plant",
-    url: Plant
-}
-]
 
   const mapContainer = React.useRef<HTMLDivElement | null>(null);
   const map = React.useRef<mapboxgl.Map | null>(null);
@@ -113,15 +69,6 @@ const iconList = [{
                     });
                 }
     React.useEffect(() => {
-        // if (map.current) return; // initialize map only once
-    //     if (mapContainer.current) {
-    //     map.current = new mapboxgl.Map({
-    //     container: mapContainer.current,
-    //     style: 'mapbox://styles/mapbox/streets-v12',
-    //     center: [location?.longitude, location?.latitude],
-    //     zoom: 15
-    //     });
-    // }
     if (mapContainer.current && !!location?.latitude) {
         map.current = new mapboxgl.Map({
             container: mapContainer.current,
@@ -184,7 +131,6 @@ const iconList = [{
                 'icon-size': 0.1
             }
         });
-    // });
         // When a click event occurs on a feature in the places layer, open a popup at the
         // location of the feature, with description HTML from its properties.
         map.current?.on('click', 'places', (e) => {
@@ -213,9 +159,20 @@ const iconList = [{
               if(map.current){
             map.current.getCanvas().style.cursor = '';}
         });
-    // }
     });
 }}, [events]);
+React.useEffect(() => {
+const coordinatesValue = Object.values(coordinates);
+const organiserValues = Object.values(organiser);
+const {eventName, descriptionInfo, category} = newEvent;
+const eventValues = [eventName, descriptionInfo, category];
+if(eventValues.includes("") || coordinatesValue.includes(0) || !(organiserValues?.length >= 2) || organiserValues.includes("") || startDate === undefined || endDate === undefined){
+    setIsValid(false);
+}
+else{
+    setIsValid(true);
+}
+}, [newEvent, coordinates, organiser]);
 
 const onNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setNewEvent({...newEvent, eventName: e.target.value});
@@ -232,8 +189,6 @@ const onStartDateChange = (date: Date) => {
 const onEndDateChange = (date: Date) => {
     setEndDate(date);
 }
-
-console.log(startDate);
 const onLocationChange = (event: any) => {
     const location = event?.features[0]?.geometry?.coordinates;
     setCoordinates({longitude: location[0], latitude: location[1]});
@@ -256,8 +211,8 @@ const onSubmit = (event: any) => {
     const start = startDate?.toLocaleDateString() || "";
     const end = endDate?.toLocaleDateString() || "";
     eventsService.createEvent(add, {...newEvent, address: {...coordinates}, startDate: start, endDate: end, createdUser: "656bbf4a3b7690ac27e2bcfb", organiser}).then((event)=> {
-        console.log(event);
         !!events ? setEvents([...events, event]) : setEvents([event]);
+        toast.success("Event Created Successfully!");
     });
     setShowModal(false);
     setNewEvent(initialNewEvent);
@@ -265,16 +220,14 @@ const onSubmit = (event: any) => {
     setStartDate(undefined);
     setEndDate(undefined);
     setOrganiser({name: "", contact: ""});
-    // dispatch(createEvent({...newEvent, address: {...coordinates}}));
 };
 const onEdit = (eventId: string) => {
      eventsService.getEventById(loc.pincode, eventId).then((event)=> {
-        console.log(event);
         setNewEvent(event);
         setCoordinates({...event.address});
-        setStartDate(startDate);
+        setStartDate(new Date(event.startDate));
         setEndDate(new Date(event.endDate));
-        setOrganiser(event.organiser);
+        setOrganiser({...event.organiser});
         setIsEdit(true);
         setEventId(eventId);
         setShowModal(true);
@@ -283,7 +236,10 @@ const onEdit = (eventId: string) => {
 const onDelete = (eventId: string) => {
     eventsService.deleteEvent(loc.pincode, eventId).then((event)=> {
         eventsService.getEvents(loc.pincode).then((event)=> {
-            setEvents(event)});
+            const availableEvents = event.filter((e: IEvent) => !!e.endDate && moment(e.endDate) >= moment());
+            setEvents(availableEvents)
+        });
+            toast.success(`Event Deleted Successfully!`);
     });
 };
 const onUpdate = () => {
@@ -292,8 +248,11 @@ const onUpdate = () => {
     const updatedEvent = {...newEvent, address: {...coordinates}, organiser, startDate: start, endDate: end};
     eventsService.updateEvent(loc.pincode, eventId, updatedEvent).then((event)=> {
         eventsService.getEvents(loc.pincode).then((event)=> {
-            setEvents(event)});
-    });
+            const availableEvents = event.filter((e: IEvent) => !!e.endDate && moment(e.endDate) >= moment());
+            setEvents(availableEvents)}
+    );
+    toast.success(`${event.eventName} Updated Successfully!`);
+});
         setNewEvent(initialNewEvent);
         setCoordinates({longitude: 0, latitude:0});
         setStartDate(undefined);
@@ -323,13 +282,13 @@ function a11yProps(index: number) {
 };
   const handleTabChange = (event: any, newValue: number) => {
     eventsService.getEvents(loc.pincode).then((event)=> {
-        console.log(event);
-        setEvents(event)});
+        const availableEvents = event.filter((e: IEvent) => !!e.endDate && moment(e.endDate) >= moment());
+        setEvents(newValue === 0 ? availableEvents : event)});
     setTab(newValue);
   };
-
     return(
-        <EventsContainer>
+        
+        <EventsContainer><ToastContainer position="top-center" closeOnClick />
         <Button 
         onClick={() => setShowModal(true)}
         >Create an Event</Button>
@@ -338,138 +297,46 @@ function a11yProps(index: number) {
           <Tab sx={{fontSize: "16px", fontWeight: "bold"}} label="My Events" {...a11yProps(1)} />
         </Tabs>
 <Modal isOpen={showModal}>
-    <FormWrap>
-    <Form>
-        <Heading>
-        <h1>
-            {isEdit ? `Edit Event - ${newEvent.eventName}` : "Create Event"}
-        </h1>
-        <img src={CloseIcon} width={25} height={25} onClick={onCloseModal} />
-        {/* <span /> */}
-        </Heading>
-        <Content>
-    <InputWrap>
-    <label>Name:</label>
-    <input type="text" id="eventName" value={newEvent.eventName} onChange={onNameChange} />
-    </InputWrap>
-    <InputWrap>
-    <label>Description:</label>
-    <textarea id="descriptionInfo" value={newEvent.descriptionInfo} onChange={onDescriptionChange} />
-    </InputWrap>
-    <InputWrap>
-    <label>Category:</label>
-  <select onChange={onCategoryChange} value={newEvent.category}>
-  {iconList?.map((category) => { return<option value={category.label}>{category.label}</option>})}
-  </select>
-  </InputWrap>
-  <InputWrap>
-    <label>Start Date:</label>
- <DatePicker 
- selected={startDate} 
- onChange={onStartDateChange} />
-  </InputWrap>
-<InputWrap>
-    <label>End Date:</label>
-   <DatePicker 
- selected={endDate} 
- onChange={onEndDateChange} />
-    </InputWrap>
-    <InputWrap>
-  <label>Location:</label>
-  {/* <SearchBox 
-accessToken={'pk.eyJ1IjoiYXNobWl5YS12aWpheWFjaGFuZHJhbiIsImEiOiJjbHBnMXRxc3oxaXd3MmlwcG5zZjBpdXNqIn0.GqCCjkCcmFsgrpMnl7ntzw'}
-value={selectedLocation}
-onRetrieve={onLocationChange}
-/> */}
-</InputWrap>
-<InputWrap>
-    <label>Organiser Name:</label>
-    <input type="text" id="name" value={organiser?.name} onChange={onOrganiserChange} />
-    </InputWrap>
-    <InputWrap>
-    <label>Organiser Contact:</label>
-    <input type="text" id="contact" value={organiser?.contact} onChange={onOrganiserChange} />
-    </InputWrap>
-    <div style={{textAlign: "center"}}>
-<Button 
-onClick={isEdit ? onUpdate : onSubmit}>{isEdit ? "Update" : "Submit"}</Button></div>
-</Content>
-  </Form>
-  </FormWrap>
+  <EvenstForm isEdit={isEdit}
+   eventName={newEvent.eventName}
+   onCloseModal={onCloseModal} 
+   onUpdate={onUpdate} 
+   onSubmit={onSubmit}
+   isDisabled={!isValid}
+   children={<FormFieldsComponent
+              newEvent={newEvent}
+              onCategoryChange={onCategoryChange}
+              startDate={startDate}
+              endDate={endDate}
+              selectedLocation={selectedLocation}
+              organiser={organiser}
+              onNameChange={onNameChange}
+              onDescriptionChange={onDescriptionChange}
+              onStartDateChange={onStartDateChange}
+              onEndDateChange={onEndDateChange}
+              onLocationChange={onLocationChange} 
+              onOrganiserChange={onOrganiserChange}
+              isEdit={isEdit} />
+            }
+    />
   </Modal>
-   {tab === 0 ? <MapContainer>
-        <div ref={mapContainer} className="map-container"></div>
-    </MapContainer> 
+   {tab === 0 && !!events ? 
+(<EventsMap
+mapContainer={mapContainer} />)
     : (
-        <table>
-            <thead>
-                <th>Name</th>
-                <th>Category</th>
-                <th>Start Date</th>
-                <th>End Date</th>
-                <th>Actions</th>
-            </thead>
-            <tbody>
-                {events?.map((event) => 
-               <tr key={event._id}>
-                    <td>{event.eventName}</td>
-                    <td>{event.category}</td>
-                    <td>{moment(event.startDate).format("MM/DD/YYYY")}</td>
-                    <td>{moment(event.endDate).format("MM/DD/YYYY")}</td>
-                    {!!event._id &&
-                    <td>
-                        <img src={EditIcon} width={25} height={25} onClick={() => onEdit(event._id || "")} />
-                        <img src={DeleteIcon} width={25} height={25} onClick={() => onDelete(event._id || "")} />
-                    </td>
-                    }
-                </tr>
-            )
-        }
-            </tbody>
-        </table>
+        <MyEvents
+        events={events}
+        onEdit={onEdit}
+        onDelete={onDelete} />
     )
      }
     </EventsContainer>
+    // </ToastContainer>
     );
 }
 
 const EventsContainer = styled.article`
 margin: 25px;
-table{
-    width: 100%;
-    border-collapse: collapse;
-    color: #3e3e3e;
-    margin-top: 15px;
-    th{
-        text-align: left;
-    }
-    img{
-        margin-right: 10px;
-        cursor: pointer;
-    }
-    th, td{
-        padding: 10px 0;
-    }
-    td{
-        border-bottom: solid 1.5px #4a4a4a30;
-    }
-}
-`;
-const MapContainer = styled.section`
-    text-align: -webkit-center;
-    margin-top: 20px;
-    .title{
-        font-size: 16px;
-        color: red;
-    }
-    .geocoder {
-position: absolute;
-z-index: 20;
-right: 10%;
-top: 14%;
-text-decoration: none;
-list-style-type: none;
-}
 `;
 
 const Modal = styled(ReactModal)`
@@ -477,91 +344,6 @@ inset: unset;
 width: 100%;
 height: 100%;
 background-color: rgba(0,0,0,0.3);
-`;
-
-const Form = styled.form`
-background-color: #eceaea;
-width: 700px;
-height: 75%;
-place-self: center;
-/* align-self: center; */
-margin-top: 70px;
-border-radius: 5px;
-/* padding: 20px; */
-margin: 50px 0;
-color: #171717;
-overflow-y: auto;
-label{
-    font-size: 18px;
-    width: 200px;
-    text-align: left;
-}
-input, textarea, select{
-    border: none;
-    width: 440px;
-    height: 35px;
-    border-radius: 5px;
-}
-input:focus, textarea:focus{
-    outline: 0;
-}
-textarea{
-    height: 100px;
-}
-button{
-    margin: 20px 0;
-}
-`;
-const Heading = styled.section`
-/* margin: 0 0 30px 0; */
-background-color: #1976d2;
-position: fixed;
-width: 700px;
-border-radius: 5px 5px 0 0;
-display: flex;
-justify-content: space-between;
-padding: 20px;
-align-items: center;
-z-index: 10;
-img{
-    cursor: pointer;
-}
-h1{
-    margin: 0;
-    color: white;
-    font-weight: normal;
-    font-size: 25px;
-}`;
-/* span{
-    width: 120px;
-    height: 3px;
-    background-color: #1976d2;
-     text-align: left;
-    display: block;
-} */
-const Content = styled.section`
-height: 100%;
-padding: 20px;
-margin-top: 83px;
-`;
-const InputWrap = styled.div`
-    margin-bottom: 20px;
-    display: flex;
-`;
-const FormWrap = styled.section`
-height: 100%;
-justify-content: center;
-display: flex;
-`;
-const Button = styled.button`
-background-color: #1976d2;
-color: white;
-padding: 7px 20px;
-cursor: pointer;
-border: none;
-border-radius: 25px;
-font-size: 16px;
-padding: 10px 25px;
 `;
 
 export default EventsView;
