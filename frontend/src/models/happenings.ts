@@ -1,7 +1,7 @@
 import { IUser } from "./user";
 
 interface Happenings {
-  _id?: number;
+  _id?: any;
   title: string;
   content: string;
   postedDate?: string;
