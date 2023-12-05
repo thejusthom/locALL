@@ -21,5 +21,10 @@ const createMarketplace = async (locationId:string,body:Marketplace) => {
     return response.data;
 };
 
-const marketplaceService = { getMarketplace , updateMarketplace, getMarketplaceByParams, createMarketplace};
+const deleteMarketplace = async (locationId:string,_id:string) => {
+    const response = await axios.delete(API_URL + locationId +"/marketplace/"+_id);
+    return response.data;
+};
+
+const marketplaceService = { getMarketplace , updateMarketplace, getMarketplaceByParams, createMarketplace, deleteMarketplace};
 export default marketplaceService;
