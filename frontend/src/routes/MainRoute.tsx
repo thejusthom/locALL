@@ -9,8 +9,8 @@ import Happenings from '../views/HappeningsView';
 import SinglePost from '../happenings-page/single-post/single-post';
 import CreatePost from '../happenings-page/create-post/create-post';
 import WeatherView from '../views/Weather/WeatherView';
-import Login from '../happenings-page/login-page/login';
-import Register from '../happenings-page/register-page/register';
+import Login from '../views/LoginPage/login';
+import Register from '../views/RegisterPage/register';
 
 // ==============================|| MAIN ROUTING ||============================== //
 
