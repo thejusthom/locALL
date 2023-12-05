@@ -9,6 +9,7 @@ import Happenings from '../views/HappeningsView';
 import SinglePost from '../happenings-page/single-post/single-post';
 import CreatePost from '../happenings-page/create-post/create-post';
 import WeatherView from '../views/Weather/WeatherView';
+import Login from '../happenings-page/login-page/login';
 
 // ==============================|| MAIN ROUTING ||============================== //
 
@@ -47,6 +48,10 @@ const MainRoutes = {
         {
             path: '/happenings/createPost',
             element: <CreatePost />
+        },
+        {
+            path: '/login',
+            element: <Login />
         }
     ]
 };
