@@ -1,54 +1,57 @@
-import React, { ReactNode } from 'react'
-import {Image} from 'semantic-ui-react'
-import Box from '@mui/material/Box'
-import Grid from '@mui/material/Grid'
-import Container from '@mui/material/Container'
-import Typography from '@mui/material/Typography'
+import React, { ReactNode } from "react";
+import { Image } from "semantic-ui-react";
+import Box from "@mui/material/Box";
+import Grid from "@mui/material/Grid";
+import Container from "@mui/material/Container";
+import Typography from "@mui/material/Typography";
 import building from "../../assets/images/HighBuilding.jpg";
-import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
-import ArticleIcon from '@mui/icons-material/Article';
-import LocalLibraryIcon from '@mui/icons-material/LocalLibrary'
-import EventIcon from '@mui/icons-material/Event';
-
+import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
+import ArticleIcon from "@mui/icons-material/Article";
+import LocalLibraryIcon from "@mui/icons-material/LocalLibrary";
+import EventIcon from "@mui/icons-material/Event";
 
 interface Data {
-    title: string
-    description: string
-    icon?: ReactNode
-  }
-  
-  export const data: Data[] = [
-    {
-      title: 'Local Marketplace',
-      description: 'Buy and sell products within your community.',
-      icon: <ShoppingCartIcon />,
-    },
-    {
-      title: 'Everyday Happenings',
-      description: 'curated feed showcasing the latest activities, and local news in your area.',
-      icon: <ArticleIcon />,
-    },
-    {
-      title: 'User Publishing',
-      description: 'Publish your events, marketplace listings, or community initiatives.',
-      icon: <LocalLibraryIcon />,
-    },
-    {
-      title: 'Events Map',
-      description: 'Search for events happening in your area, or publish your own.',
-      icon: <EventIcon />,
-    },
-  ]
-  
+  title: string;
+  description: string;
+  icon?: ReactNode;
+}
 
+export const data: Data[] = [
+  {
+    title: "Local Marketplace",
+    description: "Buy and sell products within your community.",
+    icon: <ShoppingCartIcon />,
+  },
+  {
+    title: "Everyday Happenings",
+    description:
+      "curated feed showcasing the latest activities, and local news in your area.",
+    icon: <ArticleIcon />,
+  },
+  {
+    title: "User Publishing",
+    description:
+      "Publish your events, marketplace listings, or community initiatives.",
+    icon: <LocalLibraryIcon />,
+  },
+  {
+    title: "Events Map",
+    description:
+      "Search for events happening in your area, or publish your own.",
+    icon: <EventIcon />,
+  },
+];
 
 const SecondSection = () => {
   return (
-    <Box id="feature" sx={{ py: { xs: 10, md: 14 }, backgroundColor: '#f6f6f6' }}>
+    <Box
+      id="feature"
+      sx={{ py: { xs: 10, md: 14 }, backgroundColor: "#f6f6f6" }}
+    >
       <Container>
         <Grid container spacing={3}>
           <Grid item xs={12} md={5}>
-            <Box sx={{ position: 'relative' }}>
+            <Box sx={{ position: "relative" }}>
               <Image src={building} alt="Feature img" />
             </Box>
           </Grid>
@@ -56,24 +59,24 @@ const SecondSection = () => {
             <Typography
               component="h2"
               sx={{
-                position: 'relative',
+                position: "relative",
                 fontSize: { xs: 40, md: 50 },
                 ml: { xs: 0, md: 4 },
                 mt: 2,
                 mb: 3,
                 lineHeight: 1,
-                fontWeight: 'bold',
+                fontWeight: "bold",
               }}
             >
-              Make your{' '}
+              Make your{" "}
               <Typography
                 component="mark"
                 sx={{
-                  position: 'relative',
-                  color: 'primary.main',
-                  fontSize: 'inherit',
-                  fontWeight: 'inherit',
-                  backgroundColor: 'unset',
+                  position: "relative",
+                  color: "primary.main",
+                  fontSize: "inherit",
+                  fontWeight: "inherit",
+                  backgroundColor: "unset",
                 }}
               >
                 Life <br />
@@ -81,38 +84,62 @@ const SecondSection = () => {
               Enjoyable
             </Typography>
 
-            <Typography sx={{ color: 'text.secondary', mb: 2, ml: { xs: 0, md: 4 } }}>
-              Set the way of learning according to your wishes with some of the benefits that you get us, so you on
-              enjoy the lessons that we provide.
+            <Typography
+              sx={{ color: "text.secondary", mb: 2, ml: { xs: 0, md: 4 } }}
+            >
+              Join locAll today and be an active participant in building a
+              vibrant and connected local community. Together, let's make every
+              neighborhood a better place!
             </Typography>
 
             <Grid container spacing={2} sx={{ ml: { xs: 0, md: 2 } }}>
               {data.map(({ title, description, icon }, index) => (
                 <Grid key={String(index)} item xs={12} md={6}>
-                  <Box sx={{ px: 2, py: 1.5, boxShadow: 1, borderRadius: 4, display: 'flex', alignItems: 'center' }}>
+                  <Box
+                    sx={{
+                      px: 2,
+                      py: 1.5,
+                      boxShadow: 1,
+                      borderRadius: 4,
+                      display: "flex",
+                      alignItems: "center",
+                    }}
+                  >
                     <Box
                       sx={{
                         mr: 1,
-                        backgroundColor: 'primary.main',
-                        borderRadius: '50%',
+                        backgroundColor: "primary.main",
+                        borderRadius: "50%",
                         height: 36,
                         width: 36,
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        color: 'primary.contrastText',
-                        '& svg': {
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        color: "primary.contrastText",
+                        "& svg": {
                           fontSize: 20,
                         },
                       }}
                     >
                       {icon}
                     </Box>
-                    <Box sx={{ display: 'flex', flex: 1, flexDirection: 'column' }}>
-                      <Typography variant="h6" sx={{ fontSize: '1rem', mb: 1, color: 'secondary.main' }}>
+                    <Box
+                      sx={{ display: "flex", flex: 1, flexDirection: "column" }}
+                    >
+                      <Typography
+                        variant="h6"
+                        sx={{
+                          fontSize: "1rem",
+                          mb: 1,
+                          color: "secondary.main",
+                        }}
+                      >
                         {title}
                       </Typography>
-                      <Typography sx={{ lineHeight: 1.3, color: 'text.secondary' }} variant="subtitle1">
+                      <Typography
+                        sx={{ lineHeight: 1.3, color: "text.secondary" }}
+                        variant="subtitle1"
+                      >
                         {description}
                       </Typography>
                     </Box>
@@ -124,8 +151,7 @@ const SecondSection = () => {
         </Grid>
       </Container>
     </Box>
+  );
+};
 
-  )
-}
-
-export default SecondSection
+export default SecondSection;
