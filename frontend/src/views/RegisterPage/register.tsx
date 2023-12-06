@@ -58,7 +58,7 @@ const Register: React.FC = () => {
     {
       const createdUser = await userService.createUser(newUser);
       console.log('User created:', createdUser);
-      window.location.replace('/');
+      window.location.replace('/login');
     } 
     catch(error)
     {

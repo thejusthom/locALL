@@ -12,6 +12,9 @@ import Grid from '@mui/material/Grid';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography, { TypographyProps }from '@mui/material/Typography';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
+import { saveUser } from '../../store/slices/user-slice';
+import { useDispatch } from 'react-redux';
+import { IPerson, IUser } from '../../models/user';
 
 const Copyright = (props: TypographyProps) => {
   return (
@@ -27,13 +30,20 @@ const Copyright = (props: TypographyProps) => {
 }
 
 const Login: React.FC = () => {
+  const dispatch = useDispatch();
+
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    console.log({
-      username: data.get('userName'),
-      password: data.get('password'),
-    });
+
+    const user: IUser = {
+      username: String(data.get('userName')),
+      password: String(data.get('password')),
+      person: {} as IPerson
+    };
+
+    dispatch(saveUser(user));
+    console.log(user);
   };
 
   return (
