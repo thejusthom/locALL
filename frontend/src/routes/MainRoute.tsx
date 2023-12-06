@@ -9,6 +9,7 @@ import Happenings from '../views/HappeningsView';
 import SinglePost from '../happenings-page/single-post/single-post';
 import CreatePost from '../happenings-page/create-post/create-post';
 import WeatherView from '../views/Weather/WeatherView';
+import Donations from '../views/'
 
 // ==============================|| MAIN ROUTING ||============================== //
 
@@ -31,6 +32,10 @@ const MainRoutes = {
         {
             path: '/events',
             element: <Events />
+        },
+        {
+            path: '/donations',
+            element: <Donations />
         },
         {
             path: '/feedshare',
