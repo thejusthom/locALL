@@ -3,13 +3,18 @@ import './posts.scss';
 import Happenings from '../../models/happenings';
 import { Link } from "react-router-dom";
 import Button from '@mui/material/Button';
+import { useSelector } from 'react-redux';
 
 type Props = {
   posts: Happenings[]
 }
 
 const posts: React.FC<Props> = (props: Props): ReactElement =>{
-
+  // const user = useSelector((state: any) => state.user);
+  // if(user){
+  //   console.log(user);
+  // }
+  
   const happeningsEntrees = props.posts.map(happening => {
     return(
       <div className="post">
@@ -42,7 +47,7 @@ const posts: React.FC<Props> = (props: Props): ReactElement =>{
         Create New Happening
       </Button>
     </Link>
-   
+
     <div className="posts">
       {happeningsEntrees}
     </div>
