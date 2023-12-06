@@ -36,7 +36,7 @@ function HomeLayout() {
 
   return (
     <>
-      <AppBar position="sticky" sx={{pr:15,pl:20}}>
+      <AppBar position="sticky" sx={{pr:{md:15,xs:2},pl:{md:20,xs:2}}}>
         <Container maxWidth="xl">
           <Toolbar disableGutters>
             <Typography

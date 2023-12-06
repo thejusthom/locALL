@@ -235,7 +235,7 @@ const MarketplaceCard = (props: Props) => {
         <Modal.Content image scrolling>
           <Image
             size="medium"
-            style={{ position: "sticky", top: 0 }}
+            style={{ position: {md:"sticky",xs:"block"}, top: 0 }}
             src={props.marketplace.image}
             srcSet={props.marketplace.image}
             alt={props.marketplace.productName}
