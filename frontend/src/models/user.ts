@@ -8,7 +8,7 @@ export interface IPerson{
 }
 
 export interface IUser{
-    person: IPerson;
+    person?: IPerson;
     username: string;
     password: string;
 }
