@@ -36,7 +36,7 @@ function HomeLayout() {
 
   return (
     <>
-      <AppBar position="sticky">
+      <AppBar position="sticky" sx={{pr:{md:15,xs:2},pl:{md:20,xs:2}}}>
         <Container maxWidth="xl">
           <Toolbar disableGutters>
             <Typography
@@ -145,6 +145,8 @@ function HomeLayout() {
               <Button
                 key="login"
                 onClick={handleCloseNavMenu}
+                component={Link}
+                to='/login'
                 sx={{ my: 2, mx: 1.1, color: "white", display: "block", fontSize: "16px", fontWeight: 600, '&:hover': {
                   color: "#101a45",
                 }

@@ -19,6 +19,7 @@ import image from "../../assets/images/no-image.jpg";
 import moment from "moment";
 import IconButton from "@mui/joy/IconButton";
 import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
+import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
 
 type Props = {
   marketplace: Marketplace;
@@ -30,6 +31,7 @@ const MarketplaceCard = (props: Props) => {
   const [open, setOpen] = React.useState(false);
   const [text, setText] = React.useState("");
   const [update, setUpdate] = React.useState(false);
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
 
   const [formData, setFormData] = useState({
     productName: props.marketplace.productName,
@@ -138,9 +140,29 @@ const MarketplaceCard = (props: Props) => {
     );
     setText("");
   };
+
+  const handleDeleteConfirm = async () => {
+    try {
+      // Send a DELETE request to delete the listing
+      await marketplaceService
+        .deleteMarketplace(props.marketplace.locationId, props.marketplace._id)
+        .then(() => {
+          // Close the delete confirmation modal
+          setIsDeleteModalOpen(false);
+          props.afterUpdate();
+        });
+    } catch (error) {
+      console.error("Error deleting listing:", error);
+    }
+  };
+
+  const handleDeleteCancel = () => {
+    setIsDeleteModalOpen(false);
+  };
+
   return (
     <Box>
-      <Card sx={{ width: 320 }}>
+      <Card sx={{ width: 320, height: 310 }}>
         <div>
           <Typography level="title-lg">
             {props.marketplace.productName}
@@ -149,16 +171,28 @@ const MarketplaceCard = (props: Props) => {
             {props.marketplace.listingDate}
           </Typography>
           {props.active === "my-items" && (
-            <IconButton
-              aria-label="bookmark Bahamas Islands"
-              variant="plain"
-              color="neutral"
-              size="sm"
-              sx={{ position: "absolute", top: "0.875rem", right: "0.5rem" }}
-              onClick={() => setUpdate(true)}
-            >
-              <EditOutlinedIcon />
-            </IconButton>
+            <Box>
+              <IconButton
+                aria-label="bookmark Bahamas Islands"
+                variant="plain"
+                color="neutral"
+                size="sm"
+                sx={{ position: "absolute", top: "0.875rem", right: "2.5rem" }}
+                onClick={() => setUpdate(true)}
+              >
+                <EditOutlinedIcon />
+              </IconButton>
+              <IconButton
+                aria-label="bookmark Bahamas Islands"
+                variant="plain"
+                color="neutral"
+                size="sm"
+                sx={{ position: "absolute", top: "0.875rem", right: "0.5rem" }}
+                onClick={() => setIsDeleteModalOpen(true)}
+              >
+                <DeleteOutlineIcon />
+              </IconButton>
+            </Box>
           )}
         </div>
         <AspectRatio minHeight="120px" maxHeight="200px">
@@ -201,7 +235,7 @@ const MarketplaceCard = (props: Props) => {
         <Modal.Content image scrolling>
           <Image
             size="medium"
-            style={{ position: "sticky", top: 0 }}
+            style={{ position: {md:"sticky",xs:"block"}, top: 0 }}
             src={props.marketplace.image}
             srcSet={props.marketplace.image}
             alt={props.marketplace.productName}
@@ -367,6 +401,25 @@ const MarketplaceCard = (props: Props) => {
             }}
           >
             Close
+          </Button>
+        </Modal.Actions>
+      </Modal>
+
+      <Modal
+        dimmer="inverted"
+        open={isDeleteModalOpen}
+        onClose={handleDeleteCancel}
+      >
+        <Modal.Header>Delete Listing</Modal.Header>
+        <Modal.Content>
+          <p>Are you sure you want to delete this listing?</p>
+        </Modal.Content>
+        <Modal.Actions>
+          <Button color="danger" onClick={handleDeleteConfirm} sx={{ mr: 2 }}>
+            Delete
+          </Button>
+          <Button color="neutral" onClick={handleDeleteCancel}>
+            Cancel
           </Button>
         </Modal.Actions>
       </Modal>
