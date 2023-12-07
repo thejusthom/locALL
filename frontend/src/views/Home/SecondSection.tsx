@@ -52,7 +52,7 @@ const SecondSection = () => {
         <Grid container spacing={3}>
           <Grid item xs={12} md={5}>
             <Box sx={{ position: "relative" }}>
-              <Image src={building} alt="Feature img" />
+              <Image src={building} alt="Local City" />
             </Box>
           </Grid>
           <Grid item xs={12} md={7}>

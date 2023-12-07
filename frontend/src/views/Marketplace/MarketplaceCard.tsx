@@ -126,9 +126,9 @@ const MarketplaceCard = (props: Props) => {
       author:
         typeof props.marketplace.createdUser === "string"
           ? ""
-          : props.marketplace.createdUser.person.firstName +
+          : props.marketplace.createdUser.person?.firstName +
             " " +
-            props.marketplace.createdUser.person.lastName,
+            props.marketplace.createdUser.person?.lastName,
       metaData: moment().format("MMMM Do YYYY, h:mm:ss a"),
       text: text,
       avatar: "Profile Pic",
@@ -250,10 +250,10 @@ const MarketplaceCard = (props: Props) => {
                   Posted by{" "}
                   {typeof props.marketplace.createdUser === "string"
                     ? ""
-                    : props.marketplace.createdUser.person.firstName}{" "}
+                    : props.marketplace.createdUser.person?.firstName}{" "}
                   {typeof props.marketplace.createdUser === "string"
                     ? ""
-                    : props.marketplace.createdUser.person.lastName}
+                    : props.marketplace.createdUser.person?.lastName}
                 </p>
                 <Typography level="body-sm">
                   &nbsp; &nbsp; on {props.marketplace.listingDate}

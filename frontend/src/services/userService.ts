@@ -8,6 +8,11 @@ const createUser = async (newUser: IUser) => {
   return response.data;
 }
 
-const userService = {createUser};
+const loginUser = async (user: IUser) => {
+  const response = await axios.post(baseURL + '/login', user);
+  return response.data;
+}
+
+const userService = { createUser, loginUser };
 
 export default userService;

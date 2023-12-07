@@ -36,6 +36,37 @@ const initialStateUser = {
 const Register: React.FC = () => {
   //const locationId = useSelector((state: any) => state.location.pincode);
   const [newUser, setNewUser] = useState<IUser>(initialStateUser);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    const timeoutId = setTimeout(() => {
+      setError(null);
+    }, 3000);
+
+    return () => clearTimeout(timeoutId);
+  }, [error]);
+
+  useEffect(() => {
+    const register = async () => {
+      try
+      {
+        const createdUser = await userService.createUser(newUser);
+        console.log('User created:', createdUser);
+        setError(null);
+        //window.location.replace('/login');
+      } 
+      catch(error)
+      {
+        console.error(`Error creating user: ${error}`);
+        setError('Registration failed. Please try again.');
+      }
+    }
+
+    if (newUser.username && newUser.password && newUser.person) {
+      register();
+    }
+
+  }, [newUser]);
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -53,24 +84,7 @@ const Register: React.FC = () => {
       username: String(data.get('userName')),
       password: String(data.get('password')),
     });
-
-    try
-    {
-      const createdUser = await userService.createUser(newUser);
-      console.log('User created:', createdUser);
-      window.location.replace('/login');
-    } 
-    catch(error)
-    {
-      console.error(`Error creating user: ${error}`);
-    }
-
   };
-
-  // Log the values when the state is updated
-  useEffect(() => {
-    console.log(newUser);
-  }, [newUser]);
 
   return (
     <ThemeProvider theme={createTheme()}>
@@ -91,6 +105,12 @@ const Register: React.FC = () => {
           Sign up
         </Typography>
         <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
+          {/* Render error message if it exists */}
+          {error && (
+          <Typography variant="body2" color="error" align="center" sx={{ mb: 2 }}>
+            {error}
+          </Typography>
+          )}
           <Grid container spacing={2}>
             <Grid item xs={12} sm={6}>
               <TextField
