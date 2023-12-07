@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -13,8 +13,9 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography, { TypographyProps }from '@mui/material/Typography';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { saveUser } from '../../store/slices/user-slice';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { IPerson, IUser } from '../../models/user';
+import userService from '../../services/userService';
 
 const Copyright = (props: TypographyProps) => {
   return (
@@ -29,21 +30,56 @@ const Copyright = (props: TypographyProps) => {
   );
 }
 
+const initialStateUser = {
+  username: '',
+  password: ''
+};
+
 const Login: React.FC = () => {
   const dispatch = useDispatch();
+  const [user, setUser] = useState<IUser>(initialStateUser);
+  const [error, setError] = useState<string | null>(null);
 
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+  useEffect(() => {
+    const timeoutId = setTimeout(() => {
+      setError(null);
+    }, 3000);
+
+    return () => clearTimeout(timeoutId);
+  }, [error]);
+
+  useEffect(() => {
+    const login = async () => {
+      try 
+      {
+        const validatedUser = await userService.loginUser(user);
+        console.log(validatedUser);
+        setError(null);
+        dispatch(saveUser(validatedUser));
+        //window.location.replace('/');
+      } 
+      catch (error) 
+      {
+        console.error(`Error logging in: ${error}`);
+        setError('Invalid username or password');
+      }
+    };
+
+    if (user.username && user.password) {
+      login();
+    }
+
+  }, [user, dispatch]);
+
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
 
-    const user: IUser = {
+    setUser({
+      ...user,
       username: String(data.get('userName')),
       password: String(data.get('password')),
-      person: {} as IPerson
-    };
-
-    dispatch(saveUser(user));
-    console.log(user);
+    });
   };
 
   return (
@@ -113,6 +149,12 @@ const Login: React.FC = () => {
               >
                 Sign In
               </Button>
+              {/* Error message display */}
+              {error && (
+                <Typography color="error" variant="body2" align="center" sx={{ mt: 2 }}>
+                  {error}
+                </Typography>
+              )}
               <Grid container>
                 <Grid item xs>
                   <Link href="#" variant="body2">
