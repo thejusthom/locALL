@@ -7,7 +7,7 @@ interface IProgressBar{
     height: number;
 }
 
-const Progress_bar = (props: IProgressBar) => {
+const ProgressBar = (props: IProgressBar) => {
     const { bgcolor, progress, height } = props;
 	return (
 	<Parentdiv height={height}>
@@ -40,4 +40,4 @@ padding: 10;
     font-weight: 900;
     `;
 
-export default Progress_bar;
+export default ProgressBar;
