@@ -76,3 +76,21 @@ export const remove = async (request, response) => {
     }
 }
 
+//Method to validate login for a user
+export const loginUser = async (request, response) => {
+    try {
+        const user = { ...request.body };
+        const validatedUser = await userService.login(user);
+        setResponse(validatedUser, response, 200);
+    } catch (err) {
+        if (err.message === 'User not found') {
+            // Handle the case where the user is not found
+            response.status(404).json({ error: 'User not found' });
+        } else {
+            // Handle other errors
+            console.log(err);
+            setErrorResponse(err, response);
+        }
+    }
+}
+
