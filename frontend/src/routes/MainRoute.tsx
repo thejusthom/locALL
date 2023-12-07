@@ -23,10 +23,6 @@ const MainRoutes = {
             element: <Home />
         },
         {
-            path: '/weather',
-            element: <WeatherView />
-        },
-        {
             path: '/marketplace',
             element: <Marketplace />
         },

@@ -33,3 +33,14 @@ export const update = async (updatedUser, id) => {
 export const remove = async (id) => {
     return await User.findByIdAndDelete(id).exec();
 }
+
+//Validating login
+export const login = async (user) => {
+    const foundUser = await User.findOne(user).exec();
+
+    if (!foundUser) {
+        throw new Error('User not found');
+    }
+    
+    return foundUser;
+}
