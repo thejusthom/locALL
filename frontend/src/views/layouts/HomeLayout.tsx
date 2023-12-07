@@ -19,6 +19,7 @@ const pages = [
   { name: "Marketplace", path: "/marketplace" },
   { name: "Feed Share", path: "/feedshare" },
   { name: "Happenings", path: "/happenings" },
+  { name: "Donations", path: "/donations" },
 ];
 
 function HomeLayout() {
