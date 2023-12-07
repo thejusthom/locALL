@@ -14,7 +14,7 @@ import Typography, { TypographyProps }from '@mui/material/Typography';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { saveUser } from '../../store/slices/user-slice';
 import { useDispatch, useSelector } from 'react-redux';
-import { IUser } from '../../models/user';
+import { IPerson, IUser } from '../../models/user';
 import userService from '../../services/userService';
 
 const Copyright = (props: TypographyProps) => {
@@ -55,7 +55,7 @@ const Login: React.FC = () => {
         const validatedUser = await userService.loginUser(user);
         console.log(validatedUser);
         setError(null);
-        dispatch(saveUser(user));
+        dispatch(saveUser(validatedUser));
         //window.location.replace('/');
       } 
       catch (error) 

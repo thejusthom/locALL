@@ -1,23 +1,37 @@
-import {ReactElement} from 'react';
+import {ReactElement, useEffect, useState} from 'react';
 import './posts.scss';
 import Happenings from '../../models/happenings';
 import { Link } from "react-router-dom";
 import Button from '@mui/material/Button';
 import { useSelector } from 'react-redux';
+import { IPerson, IUser } from '../../models/user';
 
 type Props = {
   posts: Happenings[]
 }
 
-const posts: React.FC<Props> = (props: Props): ReactElement =>{
-  // const user = useSelector((state: any) => state.user);
-  // if(user){
-  //   console.log(user);
-  // }
-  
+const initialStateUser = {
+  person: {} as IPerson,
+  username: '',
+  password: ''
+};
+
+const Posts: React.FC<Props> = (props: Props): ReactElement =>{
+  const [user, setUser] = useState<IUser>(initialStateUser);
+  const currentUser : IUser = useSelector((state: any) => state.user);
+ 
+  useEffect(() => {
+    setUser(currentUser);
+    console.log(currentUser);
+  }, [currentUser]);
+
+  useEffect(() => {
+    console.log(user);
+  },[user]);
+
   const happeningsEntrees = props.posts.map(happening => {
     return(
-      <div className="post">
+      <div key={happening._id} className="post">
         <img className="postImg" src={happening.image} alt="" />
         <div className="postInfo">
 
@@ -55,4 +69,4 @@ const posts: React.FC<Props> = (props: Props): ReactElement =>{
   )
 };
 
-export default posts;
+export default Posts;
