@@ -108,7 +108,7 @@ const HomeItemCards = () => {
   };
 
   return (
-    <Box sx={{ pb: { xs: 6, md: 10 }, backgroundColor: "background.paper" }}>
+    <Box sx={{ pb: { xs: 6, md: 10 }}}>
       <Container>
         <Grid container spacing={5}>
           <Grid item xs={12} md={6}>
@@ -156,7 +156,7 @@ const HomeItemCards = () => {
             <Box sx={{ width: { xs: "100%", md: "90%" } }}>
               <Image
                 src={localEvents}
-                alt="Testimonial img"
+                alt="Local Events"
               />
             </Box>
           </Grid>
