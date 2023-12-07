@@ -11,6 +11,7 @@ import LocationOnIcon from "@mui/icons-material/LocationOn";
 import CloudOutlinedIcon from "@mui/icons-material/CloudOutlined";
 import FoodBankOutlinedIcon from "@mui/icons-material/FoodBankOutlined";
 import CelebrationOutlinedIcon from "@mui/icons-material/CelebrationOutlined";
+import { Link } from "react-router-dom";
 
 const TopHome = () => {
   return (
@@ -110,13 +111,7 @@ const TopHome = () => {
                 </Typography>
               </Box>
               <Box sx={{ "& button": { mr: 2 } }}>
-                <ScrollLink
-                  to="popular-course"
-                  spy={true}
-                  smooth={true}
-                  offset={0}
-                  duration={350}
-                >
+                <Link to="/login">
                   <StyledButton
                     color="primary"
                     size="large"
@@ -124,16 +119,16 @@ const TopHome = () => {
                   >
                     Get Started
                   </StyledButton>
-                </ScrollLink>
+                </Link>
                 <ScrollLink
-                  to="video-section"
+                  to="weather-section"
                   spy={true}
                   smooth={true}
                   offset={0}
                   duration={350}
                 >
                   <StyledButton color="primary" size="large" variant="outlined">
-                    Explore Events
+                    Explore Weather
                   </StyledButton>
                 </ScrollLink>
               </Box>
@@ -141,7 +136,7 @@ const TopHome = () => {
           </Grid>
           <Grid item xs={12} md={5} sx={{ position: "relative" }}>
             <Box sx={{ lineHeight: 0 }}>
-              <Image src={locality} alt="Hero img" />
+              <Image src={locality} alt="Locall" />
             </Box>
           </Grid>
         </Grid>
@@ -213,7 +208,7 @@ const TopHome = () => {
                     mb: { xs: 1, md: 2 },
                   }}
                 >
-                  <CelebrationOutlinedIcon sx={{fontSize:'large'}}/>
+                  <CelebrationOutlinedIcon sx={{ fontSize: "large" }} />
                 </IconButton>
                 <Typography color="text.secondary" variant="h5">
                   Event Management
@@ -224,8 +219,7 @@ const TopHome = () => {
         </Box>
       </Container>
     </Box>
+  );
+};
 
-  )
-}
-
-export default TopHome
+export default TopHome;
