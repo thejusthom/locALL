@@ -1,13 +1,43 @@
 import * as React from "react";
 import styled from "styled-components";
+import {loadStripe} from '@stripe/stripe-js';
 import CheckoutForm from "./SubscriptionPlans";
-import Girl from "../../assets/images/girl1.jpg";
+// import Girl from "../../assets/images/girl1.jpg";
 import { Button } from "../Events/_EventsForm";
+import DonationCard from "./_DonationCard";
+
+const donations = [1, 2, 3,4];
 
 const DonationsView = () => {
+    const handleMakePayment = async()=>{
+        const stripe = await loadStripe("pk_test_51OKDhEAul8oR9y69J7pdRY2qMBmY6sux6srL1tbqBlmoaKW0OsuutywjQATMAadyiX60Wmtp0CSxYT2QsHuGVSn1004nwatlKT");
+  
+        const body = {
+            products:[{name:"test", price:12}, {name:"shhd", price: 14}]
+        }
+        const headers = {
+            "Content-Type":"application/json"
+        }
+        const response = await fetch("http://localhost:3001/donations/api/create-checkout-session",{
+            method:"POST",
+            headers:headers,
+            body:JSON.stringify(body)
+        });
+  
+        const session = await response.json();
+  
+        const result = await stripe?.redirectToCheckout({
+            sessionId:session.id
+        });
+        
+        if(!!result && result.error){
+            console.log(result.error);
+        }
+    }
     return(
         <>
-        <Card>
+        {donations.map(() => {return(<DonationCard handleMakePayment={handleMakePayment} />)} )}
+        {/* <Card>
             <img src={Girl} />
             <div>
             <Top>
@@ -19,30 +49,10 @@ const DonationsView = () => {
             <span>Required amount: $10000</span>
             <Button>Donate Now</Button>
             </div>
-        </Card>
+        </Card> */}
         <CheckoutForm />
         </>
     );
 }
-
-const Card = styled.div`
-display: flex;
-background-color: #adaaaa;
-width: 1000px;
-    height: 300px;
-    padding: 20px;
-    place-items: center;
-    border-radius: 20px;
-    img{
-        width: 30%;
-    height: 80%;
-    }
-`;
-const Title = styled.h2`
-
-`;
-const Top = styled.div`
-display: flex;
-`;
 
 export default DonationsView;
