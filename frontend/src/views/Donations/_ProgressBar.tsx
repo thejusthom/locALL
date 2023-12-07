@@ -19,24 +19,24 @@ const ProgressBar = (props: IProgressBar) => {
 }
 
 const Parentdiv = styled.div<{height: number}>`
-    height: ${(props) => props.height};
-    width: '100%';
-    background-color: 'whitesmoke';
-    border-radius: 40;
+    height: ${(props) => props.height}px;
+    width: 100%;
+    background-color: whitesmoke;
+    border-radius: 40px;
     margin: 50;
     `;
 
 const Childdiv = styled.div<{progress: number, bgColor: string}>`
-    height: '100%';
+    height: 100%;
     width: ${(props) => props.progress}%;
     background-color:  ${(props) => props.bgColor};
-border-radius:40;
-    text-align: 'right';
+border-radius:40px;
+    text-align: right;
 `;
 
 const ProgressText = styled.span`
 padding: 10;
-    color: 'black';
+    color: black;
     font-weight: 900;
     `;
 
