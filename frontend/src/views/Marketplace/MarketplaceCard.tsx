@@ -20,6 +20,7 @@ import moment from "moment";
 import IconButton from "@mui/joy/IconButton";
 import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
 import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
+import { useSelector } from "react-redux";
 
 type Props = {
   marketplace: Marketplace;
@@ -32,6 +33,7 @@ const MarketplaceCard = (props: Props) => {
   const [text, setText] = React.useState("");
   const [update, setUpdate] = React.useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const user = useSelector((state: any) => state.user);
 
   const [formData, setFormData] = useState({
     productName: props.marketplace.productName,
@@ -93,7 +95,6 @@ const MarketplaceCard = (props: Props) => {
   };
 
   const handleSubmit = async () => {
-    const listingDate = moment().format("MMMM Do YYYY, h:mm:ss a");
     props.marketplace.productName = formData.productName;
     props.marketplace.description = formData.description;
     props.marketplace.price = formData.price;
@@ -123,12 +124,7 @@ const MarketplaceCard = (props: Props) => {
 
   const handleCommentsSubmit = () => {
     props.marketplace.comments.push({
-      author:
-        typeof props.marketplace.createdUser === "string"
-          ? ""
-          : props.marketplace.createdUser.person?.firstName +
-            " " +
-            props.marketplace.createdUser.person?.lastName,
+      author: user.person.firstName + " " + user.person.lastName,
       metaData: moment().format("MMMM Do YYYY, h:mm:ss a"),
       text: text,
       avatar: "Profile Pic",
@@ -289,7 +285,7 @@ const MarketplaceCard = (props: Props) => {
                 </Comment>
               ))}
 
-              <Form onSubmit={handleCommentsSubmit}>
+             {user._id! && <Form onSubmit={handleCommentsSubmit}>
                 <Form.TextArea
                   placeholder="Write your comments here"
                   name="text"
@@ -297,7 +293,7 @@ const MarketplaceCard = (props: Props) => {
                   onChange={handleChange}
                 />
                 <Button type="submit">Post</Button>
-              </Form>
+              </Form>}
             </Comment.Group>
           </Modal.Description>
         </Modal.Content>
