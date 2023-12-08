@@ -5,6 +5,7 @@ import eventRouter from './event-route.js';
 import marketplaceRouter from './marketplace-route.js';
 import feedshareRouter from './feedshare-route.js';
 import donationRouter from './donation-route.js';
+import paymentRouter from './payment-route.js';
 
 const LocationEndpoint = '/location/:locationId';
 
@@ -15,5 +16,6 @@ export default (app) => {
     app.use(`${LocationEndpoint}/events`, eventRouter);
     app.use('/marketplace', marketplaceRouter);
     app.use('/feedshare', feedshareRouter);
-    app.use('/donations', donationRouter);
+    app.use(`${LocationEndpoint}/donations`, donationRouter);
+    app.use('', paymentRouter);
 }
