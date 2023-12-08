@@ -2,22 +2,22 @@ import express from 'express';
 import * as donationController from '../controllers/donation-controller.js';
 import stripe from 'stripe';
 
-const stripeInstance = stripe("sk_test_51OKDhEAul8oR9y69DTyGhz8VZr9DE979PWyIilrSW0X5G7SH4Fg6FQVHUm9U2u1e7NvXF7TMqZxNAt5ItgMHbZNP00nX1SW3H3");
+const stripeInstance = stripe(process.env.REACT_APP_STRIPE_SECRET_KEY);
 
-const router = express.Router();
+const donationRouter = express.Router();
 
 //get all happenings and post a donation
-router.route('/')
+donationRouter.route('/')
     .get(donationController.get)
     .post(donationController.post);
     
 //get, update and delete a donation
-router.route('/:donationId')
+donationRouter.route('/:donationId')
     .get(donationController.getById)
     .put(donationController.update)
     .delete(donationController.remove);
 
-router.route("/api/create-checkout-session").post(async(req,res)=>{
+    donationRouter.route("/payment/create-checkout-session").post(async(req,res)=>{
         const {products} = req.body;
     
     
@@ -45,4 +45,4 @@ router.route("/api/create-checkout-session").post(async(req,res)=>{
      
     })
 
-export default router;
+export default donationRouter;
