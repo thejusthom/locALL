@@ -308,6 +308,7 @@ function a11yProps(index: number) {
    onUpdate={onUpdate} 
    onSubmit={onSubmit}
    isDisabled={!isValid}
+   type="Event"
    children={<FormFieldsComponent
               newEvent={newEvent}
               onCategoryChange={onCategoryChange}

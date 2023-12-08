@@ -10,6 +10,7 @@ onSubmit: (event: any) => void;
 eventName?: string;
 isDisabled: boolean;
 children: string | JSX.Element | JSX.Element[];
+type: string;
 }
 
 const EventsForm = (props: IEventsForm) => {
@@ -27,7 +28,7 @@ const EventsForm = (props: IEventsForm) => {
         <Form>
             <Heading>
             <h1>
-                {isEdit && !!eventName ? `Edit Event - ${eventName}` : "Create Event"}
+                {isEdit && !!eventName ? `Edit ${Event} - ${type}` : `Create ${type}`}
             </h1>
             <img src={CloseIcon} width={25} height={25} onClick={onCloseModal} />
             </Heading>
