@@ -1,25 +1,38 @@
-import React from 'react';
+import * as React from 'react';
+import Box from '@mui/material/Box';
+import Tab from '@mui/material/Tab';
+import TabContext from '@mui/lab/TabContext';
+import TabList from '@mui/lab/TabList';
+import TabPanel from '@mui/lab/TabPanel';
+import UserProfileBlock from './UserProfileBlock';
 
-const UserProfileView = () => {
-    return (
-        <div className="user-profile">
-            <div className="user-profile-header">
-                <img src="user-avatar.jpg" alt="User Avatar" className="user-avatar" />
-                <h1 className="user-name">John Doe</h1>
-                <p className="user-email">john.doe@example.com</p>
-            </div>
-            <div className="user-profile-content">
-                <h2>About Me</h2>
-                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla vitae elit libero, a pharetra augue.</p>
-                <h2>Interests</h2>
-                <ul>
-                    <li>Reading</li>
-                    <li>Traveling</li>
-                    <li>Photography</li>
-                </ul>
-            </div>
-        </div>
-    );
+export default function UserProfileView() {
+  const [value, setValue] = React.useState('1');
+
+  const handleChange = (event: React.SyntheticEvent, newValue: string) => {
+    setValue(newValue);
+  };
+
+  return (
+    <Box sx={{ width: '100%', typography: 'body1' }}>
+      <TabContext value={value}>
+        <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
+          <TabList onChange={handleChange} aria-label="lab API tabs example">
+            <Tab label="Profile" value="1" />
+            <Tab label="My Events" value="2" />
+            <Tab label="My Marketplace" value="3" />
+            <Tab label="My FeedShares" value="4" />
+            <Tab label="My Happenings" value="5" />
+            <Tab label="My Donation Requests" value="6" />
+
+          </TabList>
+        </Box>
+        <TabPanel value="1">
+            <UserProfileBlock></UserProfileBlock>
+        </TabPanel>
+        <TabPanel value="2">Item Two</TabPanel>
+        <TabPanel value="3">Item Three</TabPanel>
+      </TabContext>
+    </Box>
+  );
 }
-
-export default UserProfileView;

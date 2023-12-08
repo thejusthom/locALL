@@ -172,7 +172,8 @@ const FeedShareView:React.FC = () => {
                         onChange = {handleOnChange}
                         id="organizer"/>
                     <Form.Field required label='Location'/>
-                    {!!process.env.REACT_APP_MAPBOX_API_KEY && <SearchBox 
+                    {!!process.env.REACT_APP_MAPBOX_API_KEY && 
+                    <SearchBox 
                     accessToken={process.env.REACT_APP_MAPBOX_API_KEY}
                     value={selectedLocation}
                     onRetrieve={onLocationChange}
