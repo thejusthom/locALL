@@ -12,7 +12,7 @@ interface IMyDonations{
     onDelete: (id: string) => void;
 }
 
-const MyEvents = (props: IMyDonations) => {
+const MyDonations = (props: IMyDonations) => {
     const { donations, onEdit, onDelete } = props;
     
     return(
@@ -67,4 +67,4 @@ const Table = styled.table`
     }
 `;
 
-export default MyEvents;
+export default MyDonations;
