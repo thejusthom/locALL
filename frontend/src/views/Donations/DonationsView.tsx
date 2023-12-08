@@ -13,8 +13,6 @@ import Tab from '@mui/material/Tab';
 import { ToastContainer, toast } from "react-toastify";
 import MyDonations from "./_MyDonations";
 
-// const donationsList = [1, 2, 3,4];
-
 const initialDonationState = {
     donationName: "",
       descriptionInfo: "",
