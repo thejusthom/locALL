@@ -10,6 +10,10 @@ import { styled } from "@mui/material/styles";
 import IconArrowBack from "@mui/icons-material/ArrowBack";
 import IconArrowForward from "@mui/icons-material/ArrowForward";
 import localEvents from "../../assets/images/localEvents.jpg";
+import weatherCard from "../../assets/images/weatherCard.avif";
+import marketplaceCard from "../../assets/images/marketplaceCard.png";
+import locationCard from "../../assets/images/locationCard.png";
+import happeningsCard from "../../assets/images/happeningsCard.jpg";
 import HomeItemCard from "./HomeItemCard";
 import '../../assets/styles/react-slick.scss'
 
@@ -22,36 +26,42 @@ export interface ItemCard {
   id: number | string;
   title: string;
   content: string;
+  image:string
 }
 
 const data: Array<ItemCard> = [
   {
     id: 1,
     title: "Location-Centric Experience",
+    image: locationCard,
     content:
       "Navigate through a tailored experience based on your zipcode, ensuring that all information is relevant to your local community."
   },
   {
     id: 2,
     title: "Dynamic Marketplace",
+    image: marketplaceCard,
     content:
       "Buy and sell products within your community. Post detailed listings with images, descriptions, and pricing to engage with local buyers."
   },
   {
     id: 3,
     title: "Real-Time Weather Updates",
+    image: weatherCard,
     content:
       "Stay informed about local weather conditions, ensuring that your outdoor plans are always well-informed."
   },
   {
     id: 4,
     title: "Happenings Feed",
+    image: happeningsCard,
     content:
       "Access a single, curated feed showcasing the latest activities, community announcements, and local news in your area."
   },
   {
     id: 5,
     title: "Event Management",
+    image: localEvents,
     content:
       "Organize and promote local events such as fairs, festivals, and functions. Sell tickets directly through the platform to streamline event planning."
   },
@@ -68,9 +78,9 @@ const SliderArrow: FC<SliderArrowArrow> = (props) => {
           backgroundColor: "primary.main",
           color: "primary.contrastText",
         },
-        bottom: { xs: "-28px !important", md: "5px !important" },
+        bottom: { xs: "-28px !important", md: "-10px !important" },
         left: "unset !important",
-        right: type === "prev" ? "90px !important" : "30px !important",
+        right: {md:type === "prev" ? "380px !important" : "310px !important" ,xs:type === "prev" ? "270px !important" : "200px !important"},
         zIndex: 10,
         boxShadow: 1,
       }}
@@ -80,7 +90,7 @@ const SliderArrow: FC<SliderArrowArrow> = (props) => {
       className={className}
     >
       {type === "next" ? (
-        <IconArrowForward sx={{ fontSize: 22 ,bottom:'-34px !important'}} />
+        <IconArrowForward sx={{ fontSize: 22}} />
       ) : (
         <IconArrowBack sx={{ fontSize: 22 }} />
       )}
@@ -108,10 +118,10 @@ const HomeItemCards = () => {
   };
 
   return (
-    <Box sx={{ pb: { xs: 6, md: 10 }}}>
+    <Box sx={{ py: { xs: 6, md: 10 }}}>
       <Container>
-        <Grid container spacing={5}>
-          <Grid item xs={12} md={6}>
+        <Grid container spacing={5} sx={{display:'flex',justifyContent:'center', px:{xs:2, md:30}}}>
+          <Grid item xs={12} md={12} >
             <Typography
               component="h2"
               sx={{
@@ -146,19 +156,6 @@ const HomeItemCards = () => {
                 ))}
               </Slider>
             </StyledSlickContainer>
-          </Grid>
-          <Grid
-            item
-            xs={12}
-            md={6}
-            sx={{ display: { xs: "none", md: "block" } }}
-          >
-            <Box sx={{ width: { xs: "100%", md: "90%" } }}>
-              <Image
-                src={localEvents}
-                alt="Local Events"
-              />
-            </Box>
           </Grid>
         </Grid>
       </Container>
