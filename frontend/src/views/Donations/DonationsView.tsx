@@ -16,12 +16,12 @@ const donationsList = [1, 2, 3,4];
 
 const initialDonationState = {
     donationName: "",
-      postedOn: "",
+    //   postedOn: "",
       descriptionInfo: "",
       amountRequired: 0,
-      amountAchieved: 0,
-      createdUser: "",
-      locationId: "",
+    //   amountAchieved: 0,
+    //   createdUser: "",
+    //   locationId: "",
       category: "medical",
       receiver: {
         name: "",
@@ -54,7 +54,9 @@ React.useEffect(() => {
 
     // const []
     const handleMakePayment = async()=>{
-        const stripe = await loadStripe("pk_test_51OKDhEAul8oR9y69J7pdRY2qMBmY6sux6srL1tbqBlmoaKW0OsuutywjQATMAadyiX60Wmtp0CSxYT2QsHuGVSn1004nwatlKT");
+        if(!!process.env.REACT_APP_STRIPE_PUBLISHING_KEY){
+            console.log(process.env.REACT_APP_STRIPE_PUBLISHING_KEY)
+        const stripe = await loadStripe(process.env.REACT_APP_STRIPE_PUBLISHING_KEY);
   
         const body = {
             products:[{name:"test", price:12}, {name:"shhd", price: 14}]
@@ -62,7 +64,7 @@ React.useEffect(() => {
         const headers = {
             "Content-Type":"application/json"
         }
-        const response = await fetch("http://localhost:3001/donations/api/create-checkout-session",{
+        const response = await fetch(`http://localhost:3001/payment/create-checkout-session`,{
             method:"POST",
             headers:headers,
             body:JSON.stringify(body)
@@ -76,7 +78,7 @@ React.useEffect(() => {
         
         if(!!result && result.error){
             console.log(result.error);
-        }
+        }}
     }
         const onCloseModal = () => {
         // setNewEvent(initialNewEvent);
@@ -110,7 +112,7 @@ React.useEffect(() => {
     };
     const onSubmit = (event: any) => {
         event.preventDefault();
-        donationServices.createDonation(loc.pincode, {...newDonation, createdUser: "656bbf4a3b7690ac27e2bcfb"}).then((donation)=> {
+        donationServices.createDonation(loc.pincode, {...newDonation, createdUser: "656bbf4a3b7690ac27e2bcfb", locationId: loc.pincode, postedOn: new Date().toLocaleDateString()}).then((donation)=> {
             !!donations ? setDonations([...donations, donation]) : setDonations([donation]);
             toast.success("Donation Created Successfully!");
         });
@@ -127,6 +129,7 @@ React.useEffect(() => {
    onUpdate={onUpdate} 
    onSubmit={onSubmit}
    isDisabled={!isValid}
+   type="Donation"
    children={<DonationForm
               newDonation={newDonation}
               onCategoryChange={onCategoryChange}
@@ -144,7 +147,9 @@ React.useEffect(() => {
     />
   </Modal>
         <Button onClick={() => setShowModal(true)}>Create New Donation</Button>
+        <DonationCardsWrap>
         {donationsList.map(() => {return(<DonationCard handleMakePayment={handleMakePayment} />)} )}
+        </DonationCardsWrap>
         {/* <Card>
             <img src={Girl} />
             <div>
@@ -162,5 +167,11 @@ React.useEffect(() => {
         </>
     );
 }
+
+const DonationCardsWrap = styled.article`
+section{
+    margin: 20px 0;
+}
+`;
 
 export default DonationsView;
