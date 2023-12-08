@@ -1,6 +1,6 @@
 import * as React from "react";
 import { InputWrap, MandatoryStar } from "../Events/_FormFields";
-import { donationCategories } from "../../models/Constants";
+import { donationCategories } from "./Constants";
 import { IDonation } from "../../models/donation";
 
 interface IDonationForm{
