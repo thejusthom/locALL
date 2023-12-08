@@ -219,6 +219,7 @@ const onSubmit = (event: any) => {
     setShowModal(false);
     setNewEvent(initialNewEvent);
     setCoordinates({longitude: 0, latitude:0});
+    setSelectedLocation("");
     setStartDate(undefined);
     setEndDate(undefined);
     setOrganiser({name: "", contact: ""});
@@ -260,6 +261,7 @@ const onUpdate = () => {
         setStartDate(undefined);
         setEndDate(undefined);
         setOrganiser({name: "", contact: ""});
+        setSelectedLocation("");
         setIsEdit(false);
         setEventId("");
         setShowModal(false);
@@ -275,6 +277,7 @@ function a11yProps(index: number) {
     setCoordinates({longitude: 0, latitude:0});
     setStartDate(undefined);
     setEndDate(undefined);
+    setSelectedLocation("");
     setOrganiser({name: "", contact: ""});
     if(isEdit){
         setIsEdit(false);
