@@ -36,8 +36,6 @@ const loc = useSelector(selectLocation);
 React.useEffect(() => {
     const newDonationValues = Object.values(newDonation);
     const receiverValues = Object.values(newDonation.receiver);
-    // const {eventName, descriptionInfo, category} = newEvent;
-    // const eventValues = [eventName, descriptionInfo, category];
     if(newDonationValues.includes("") || newDonationValues.includes(0) || receiverValues.includes("") || receiverValues.includes(0)){
         setIsValid(false);
     }
@@ -46,10 +44,9 @@ React.useEffect(() => {
     }
     }, [newDonation]);
 
-    // const []
     const handleMakePayment = async()=>{
         if(!!process.env.REACT_APP_STRIPE_PUBLISHING_KEY){
-            console.log(process.env.REACT_APP_STRIPE_PUBLISHING_KEY)
+
         const stripe = await loadStripe(process.env.REACT_APP_STRIPE_PUBLISHING_KEY);
   
         const body = {
@@ -75,16 +72,12 @@ React.useEffect(() => {
         }}
     }
         const onCloseModal = () => {
-        // setNewEvent(initialNewEvent);
-        // setCoordinates({longitude: 0, latitude:0});
-        // setStartDate(undefined);
-        // setEndDate(undefined);
-        // setOrganiser({name: "", contact: ""});
-        // if(isEdit){
-        //     setIsEdit(false);
-        //     setEventId(""); 
-        // }
-        // setShowModal(false);
+        setNewDonation(initialDonationState);
+        if(isEdit){
+            setIsEdit(false);
+            setEventId(""); 
+        }
+        setShowModal(false);
     };
     const onNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setNewDonation({...newDonation, donationName: e.target.value});
