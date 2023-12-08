@@ -21,7 +21,8 @@ const EventsForm = (props: IEventsForm) => {
         onSubmit,
         eventName,
         isDisabled,
-        children
+        children,
+        type
     } = props;
     return(
         <FormWrap>
