@@ -29,7 +29,7 @@ const DonationCard = (props: IDonationCardProps) => {
     );
 }
 
-const Card = styled.div`
+const Card = styled.section`
 display: flex;
 background-color: #adaaaa;
 width: 1000px;
@@ -49,7 +49,7 @@ width: 1000px;
     }
 `;
 const Title = styled.h2`
-
+margin: 0;
 `;
 const Name = styled.div`
 span{
