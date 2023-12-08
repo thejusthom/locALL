@@ -162,7 +162,7 @@ React.useEffect(() => {
         <ToastContainer position="top-center" closeOnClick />
         <Modal isOpen={showModal}>
   <EventsForm 
-  isEdit={false}
+  isEdit={isEdit}
    eventName={newDonation.donationName}
    onCloseModal={onCloseModal} 
    onUpdate={onUpdate} 
@@ -188,7 +188,7 @@ React.useEffect(() => {
         </Tabs>
         {tab === 0 && !!donations ? 
         <DonationCardsWrap>
-        {donations.map(() => {return(<DonationCard handleMakePayment={handleMakePayment} />)} )}
+        {donations.map((donation) => {return(<DonationCard donation={donation} handleMakePayment={handleMakePayment} />)} )}
         </DonationCardsWrap> 
         : <MyDonations donations={donations} onEdit={onEdit} onDelete={onDelete} />
         }
