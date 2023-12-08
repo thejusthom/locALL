@@ -13,7 +13,7 @@ import Tab from '@mui/material/Tab';
 import { ToastContainer, toast } from "react-toastify";
 import MyDonations from "./_MyDonations";
 
-const donationsList = [1, 2, 3,4];
+// const donationsList = [1, 2, 3,4];
 
 const initialDonationState = {
     donationName: "",
@@ -38,6 +38,12 @@ const DonationsView = () => {
 
     const selectLocation = (state: any) => state.location;
 const loc = useSelector(selectLocation);
+
+React.useEffect(() => {
+donationServices.getDonations(loc.pincode).then((donation)=> {
+    // const availableEvents = event.filter((e: IEvent) => !!e.endDate && moment(e.endDate) >= moment());
+    setDonations(donation)});
+}, [loc]);
 
 React.useEffect(() => {
     const newDonationValues = Object.values(newDonation);
@@ -88,7 +94,7 @@ React.useEffect(() => {
         setNewDonation(initialDonationState);
         if(isEdit){
             setIsEdit(false);
-            setEventId(""); 
+            setDonationId(""); 
         }
         setShowModal(false);
     };
@@ -184,7 +190,7 @@ React.useEffect(() => {
         </Tabs>
         {tab === 0 && !!donations ? 
         <DonationCardsWrap>
-        {donationsList.map(() => {return(<DonationCard handleMakePayment={handleMakePayment} />)} )}
+        {donations.map(() => {return(<DonationCard handleMakePayment={handleMakePayment} />)} )}
         </DonationCardsWrap> 
         : <MyDonations donations={donations} onEdit={onEdit} onDelete={onDelete} />
         }
