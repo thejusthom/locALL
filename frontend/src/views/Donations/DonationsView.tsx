@@ -8,6 +8,8 @@ import { Modal } from "../Events/EventsView";
 import { IDonation } from "../../models/donation";
 import DonationForm from "./_DonationForm";
 import { useSelector } from 'react-redux';
+import Tabs from '@mui/material/Tabs';
+import Tab from '@mui/material/Tab';
 import { ToastContainer, toast } from "react-toastify";
 
 const donationsList = [1, 2, 3,4];
@@ -29,6 +31,9 @@ const DonationsView = () => {
     const [showModal, setShowModal] = React.useState(false);
     const [newDonation, setNewDonation] = React.useState<IDonation>(initialDonationState);
     const [isValid, setIsValid] = React.useState(false);
+    const [tab, setTab] = React.useState(0);
+    const [isEdit, setIsEdit] = React.useState<boolean>(false);
+    const [eventId, setEventId] = React.useState<string>("");
 
     const selectLocation = (state: any) => state.location;
 const loc = useSelector(selectLocation);
@@ -43,6 +48,13 @@ React.useEffect(() => {
         setIsValid(true);
     }
     }, [newDonation]);
+
+    function a11yProps(index: number) {
+        return {
+          id: `simple-tab-${index}`,
+          'aria-controls': `simple-tabpanel-${index}`,
+        };
+      }
 
     const handleMakePayment = async()=>{
         if(!!process.env.REACT_APP_STRIPE_PUBLISHING_KEY){
@@ -106,8 +118,15 @@ React.useEffect(() => {
         setShowModal(false);
         setNewDonation(initialDonationState);
     };
+    const handleTabChange = (event: any, newValue: number) => {
+        donationServices.getDonations(loc.pincode).then((donation)=> {
+            // const availa = donation.filter((e: IEvent) => !!e.endDate && moment(e.endDate) >= moment());
+            setDonations(donation)});
+        setTab(newValue);
+      };
     return(
         <>
+        <ToastContainer position="top-center" closeOnClick />
         <Modal isOpen={showModal}>
   <EventsForm 
   isEdit={false}
@@ -124,12 +143,16 @@ React.useEffect(() => {
               onDescriptionChange={onDescriptionChange}
               onReceiverChange={onReceiverChange}
               onAmountChange={onAmountChange}
-              isEdit={false}
+              isEdit={isEdit}
             />
             }
     />
   </Modal>
         <Button onClick={() => setShowModal(true)}>Create New Donation</Button>
+        <Tabs sx={{margin: "15px 0 0 0"}} value={tab} onChange={handleTabChange} aria-label="basic tabs example">
+          <Tab sx={{fontSize: "16px", fontWeight: "bold"}} label="All Donations" {...a11yProps(0)} />
+          <Tab sx={{fontSize: "16px", fontWeight: "bold"}} label="My Donations" {...a11yProps(1)} />
+        </Tabs>
         <DonationCardsWrap>
         {donationsList.map(() => {return(<DonationCard handleMakePayment={handleMakePayment} />)} )}
         </DonationCardsWrap>
