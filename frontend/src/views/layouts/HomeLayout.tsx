@@ -40,7 +40,7 @@ function HomeLayout() {
       <Box>
         <AppBar
           position="sticky"
-          sx={{ pr: { md: 15, xs: 2 }, pl: { md: 20, xs: 2 } }}
+          sx={{ pr: { md: 2, xs: 2 }, pl: { md: 2, xs: 2 } }}
         >
           <Container maxWidth="xl">
             <Toolbar disableGutters>
