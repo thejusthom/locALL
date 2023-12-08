@@ -1,8 +1,6 @@
 import * as React from "react";
 import styled from "styled-components";
 import {loadStripe} from '@stripe/stripe-js';
-// import CheckoutForm from "./SubscriptionPlans";
-// import Girl from "../../assets/images/girl1.jpg";
 import donationServices from "../../services/donationsService";
 import EventsForm, { Button } from "../Events/_EventsForm";
 import DonationCard from "./_DonationCard";
@@ -16,12 +14,8 @@ const donationsList = [1, 2, 3,4];
 
 const initialDonationState = {
     donationName: "",
-    //   postedOn: "",
       descriptionInfo: "",
       amountRequired: 0,
-    //   amountAchieved: 0,
-    //   createdUser: "",
-    //   locationId: "",
       category: "medical",
       receiver: {
         name: "",
@@ -137,10 +131,6 @@ React.useEffect(() => {
               onDescriptionChange={onDescriptionChange}
               onReceiverChange={onReceiverChange}
               onAmountChange={onAmountChange}
-            //   onStartDateChange={onStartDateChange}
-            //   onEndDateChange={onEndDateChange}
-            //   onLocationChange={onLocationChange} 
-            //   onOrganiserChange={onOrganiserChange}
               isEdit={false}
             />
             }
@@ -150,20 +140,6 @@ React.useEffect(() => {
         <DonationCardsWrap>
         {donationsList.map(() => {return(<DonationCard handleMakePayment={handleMakePayment} />)} )}
         </DonationCardsWrap>
-        {/* <Card>
-            <img src={Girl} />
-            <div>
-            <Top>
-                <Title>Donation for Ear Surgery</Title>
-                <div>graph</div>
-            </Top>
-            <span>Aurora Rose</span> | <span>5 years</span>
-            <p>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Esse optio exercitationem nihil expedita quae illo assumenda voluptatibus saepe ea tempore. Corporis eaque impedit veritatis totam. Maiores, nam, aut minima sunt assumenda similique vel magnam amet esse fugiat veniam, dolor impedit iure iste? Beatae sint, molestias corporis quis neque odit, pariatur ipsa aliquid nobis eveniet mollitia? Laboriosam odit accusamus numquam blanditiis sunt! Quo alias minus veniam aut fuga voluptas optio autem veritatis molestiae quasi officia ullam corporis, et, quidem distinctio consectetur quam reiciendis harum, laudantium vero facere! Expedita sit doloremque dolorum tempora perspiciatis. Velit error quod, officia tempora vero animi culpa.</p>
-            <span>Required amount: $10000</span>
-            <Button>Donate Now</Button>
-            </div>
-        </Card> */}
-        {/* <CheckoutForm /> */}
         </>
     );
 }
