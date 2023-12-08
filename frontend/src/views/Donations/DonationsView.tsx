@@ -197,6 +197,7 @@ React.useEffect(() => {
 }
 
 const DonationCardsWrap = styled.article`
+margin: 60px 40px;
 section{
     margin: 20px 0;
 }

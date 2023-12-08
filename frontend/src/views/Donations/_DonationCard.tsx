@@ -33,7 +33,12 @@ const DonationCard = (props: IDonationCardProps) => {
 
 const Card = styled.section`
 display: flex;
-background-color: #adaaaa;
+background-color: #fbf3f3;
+box-shadow: 0px 0px 15px 5px #b4b1b1;
+&:hover{
+    width: 1050px;
+    height: 325px;
+}
 width: 1000px;
     height: 300px;
     padding: 20px;
