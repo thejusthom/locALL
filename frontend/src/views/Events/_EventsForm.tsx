@@ -12,7 +12,7 @@ isDisabled: boolean;
 children: string | JSX.Element | JSX.Element[];
 }
 
-const EvenstForm = (props: IEventsForm) => {
+const EventsForm = (props: IEventsForm) => {
     const {
         isEdit = false,
         onCloseModal,
@@ -119,4 +119,4 @@ padding: 10px 25px;
 }
 `;
 
-export default EvenstForm;
+export default EventsForm;
