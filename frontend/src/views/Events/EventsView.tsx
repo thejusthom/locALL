@@ -9,7 +9,7 @@ import Tab from '@mui/material/Tab';
 import ReactModal from 'react-modal';
 import 'react-datepicker/dist/react-datepicker.css';
 import moment from "moment";
-import EvenstForm, { Button } from "./_EventsForm";
+import EventsForm, { Button } from "./_EventsForm";
 import { iconList } from "./Constants";
 import MyEvents from "./_MyEvents";
 import EventsMap from "./_EventsMap";
@@ -299,7 +299,7 @@ function a11yProps(index: number) {
           <Tab sx={{fontSize: "16px", fontWeight: "bold"}} label="My Events" {...a11yProps(1)} />
         </Tabs>
 <Modal isOpen={showModal}>
-  <EvenstForm isEdit={isEdit}
+  <EventsForm isEdit={isEdit}
    eventName={newEvent.eventName}
    onCloseModal={onCloseModal} 
    onUpdate={onUpdate} 
@@ -326,12 +326,11 @@ function a11yProps(index: number) {
    {tab === 0 && !!events ? 
 (<EventsMap
 mapContainer={mapContainer} />)
-    : (
+    : 
         <MyEvents
         events={events}
         onEdit={onEdit}
         onDelete={onDelete} />
-    )
      }
     </EventsContainer>
     // </ToastContainer>
@@ -351,7 +350,7 @@ padding: 7px 17px;
 }
 `;
 
-const Modal = styled(ReactModal)`
+export const Modal = styled(ReactModal)`
 inset: unset;
 width: 100%;
 height: 100%;
