@@ -199,6 +199,12 @@ const MarketplaceView = (props: Props) => {
               sx={{ ml: "auto", alignSelf: "center", fontWeight: 600 }}
               onClick={handleSubmit}
               type="submit"
+              disabled={
+                !formData.productName ||
+                !formData.price ||
+                !formData.description ||
+                !formData.image
+              }
             >
               Create
             </Button>

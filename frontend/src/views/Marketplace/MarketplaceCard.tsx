@@ -42,13 +42,13 @@ const MarketplaceCard = (props: Props) => {
     image: props.marketplace.image,
   });
   useEffect(() => {
-    const clData = {
+    const data = {
       productName: props.marketplace.productName,
       description: props.marketplace.description,
       price: props.marketplace.price,
       image: props.marketplace.image,
     };
-    setFormData(clData);
+    setFormData(data);
   }, [props.marketplace]);
   const clearFormData = () => {
     const clData = {
@@ -379,6 +379,12 @@ const MarketplaceCard = (props: Props) => {
               sx={{ ml: "auto", alignSelf: "center", fontWeight: 600 }}
               onClick={handleSubmit}
               type="submit"
+              disabled={
+                !formData.productName ||
+                !formData.price ||
+                !formData.description ||
+                !formData.image
+              }
             >
               Update
             </Button>
