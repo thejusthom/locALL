@@ -214,9 +214,9 @@ const FeedShareCard = (props: Props): React.ReactElement => {
                         <p style={{ margin: 0 }}>
                         Posted by{" "}
                         {typeof props.feedShare.createdUser === "string"
-                        ? "" :props.feedShare.createdUser.person?.firstName}{" "}
+                        ? "" :props.feedShare.createdUser?.person?.firstName}{" "}
                         {typeof props.feedShare.createdUser === "string"
-                        ? "" :props.feedShare.createdUser.person?.lastName}
+                        ? "" :props.feedShare.createdUser?.person?.lastName}
                         </p>
                         <Typography level="body-sm">
                         &nbsp; &nbsp; on {props.feedShare.postedDate}
