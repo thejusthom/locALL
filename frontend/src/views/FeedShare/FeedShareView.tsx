@@ -12,7 +12,7 @@ import Button from "@mui/joy/Button";
 import moment from "moment";
 import { Tab, Tabs } from "@mui/material";
 
-const FeedShareView: React.FC = () => {
+const FeedShareView:React.FC = () => {
     // get data from json
     // const feedShareCards = [...feedShare];
     const [formOpen, setFormOpen] = React.useState(false);
@@ -38,6 +38,14 @@ const FeedShareView: React.FC = () => {
     setSelectedLocation(!!address ? address : res.address.postcode);
     })   
     };
+
+    const afterUpdate = () => {
+        if (update === false) {
+          setUpdate(true);
+        } else {
+          setUpdate(false);
+        }
+      };
 
     useEffect(()=>{
         // console.log(locationId);
@@ -164,7 +172,8 @@ const FeedShareView: React.FC = () => {
                         onChange = {handleOnChange}
                         id="organizer"/>
                     <Form.Field required label='Location'/>
-                   {!!process.env.REACT_APP_MAPBOX_API_KEY && <SearchBox 
+                    {!!process.env.REACT_APP_MAPBOX_API_KEY && 
+                    <SearchBox 
                     accessToken={process.env.REACT_APP_MAPBOX_API_KEY}
                     value={selectedLocation}
                     onRetrieve={onLocationChange}
@@ -177,23 +186,28 @@ const FeedShareView: React.FC = () => {
                         // required
                         onChange={handleOnChange}
                     />
-                    </Form.Group>                    
-                    <Button type="submit" onClick={addFeedShare}>Post</Button>
+                    </Form.Group> 
+                    <Button type="submit" onClick={addFeedShare}
+                    size="md"
+                    color="primary"
+                    sx = {{float: "right", ml:2, mr: 3, mb: 1, fontWeight: 600}}>
+                        Post</Button>                   
                     <Button
                     variant="solid"
                     size="md"
                     color="primary"
-                    aria-label="Explore Bahamas Islands"
-                    sx={{ ml: 98, alignSelf: "right", fontWeight: 600 }}
+                    sx={{float: "left", ml:2, mr: 3, mb: 1, fontWeight: 600}}
                     onClick={() => setFormOpen(false)}
                     >
                     Close
-                    </Button>
+                    </Button>                   
                 </Form>
             </Modal>
             {
                 feedShareCards.map((feedShareCard: FeedShare) => ( 
-                <FeedShareCard feedShare = {feedShareCard}/>
+                <FeedShareCard 
+                feedShare={feedShareCard}
+                afterUpdate={afterUpdate}/>
             ))}
         </div>
     )

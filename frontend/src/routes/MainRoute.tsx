@@ -12,6 +12,7 @@ import WeatherView from '../views/Weather/WeatherView';
 import Donations from '../views/Donations/DonationsView';
 import Login from '../views/LoginPage/login';
 import Register from '../views/RegisterPage/register';
+import UserProfile from '../views/UserProfile/UserProfileView';
 
 // ==============================|| MAIN ROUTING ||============================== //
 
@@ -58,6 +59,10 @@ const MainRoutes = {
         {
             path: '/register',
             element: <Register />
+        },
+        {
+            path: '/userProfile',
+            element: <UserProfile/>
         }
     ]
 };
