@@ -24,6 +24,12 @@ export const getById = async (id) => {
     return donation;
 }
 
+//Get marketplace by providing params
+export const getByParams = async (params = {}) => {
+    const donations = await Donation.find(params).populate('createdUser');
+    return donations;
+  }
+
 //update a donation
 export const update = async (updatedDonations, id) => {
     const updated = await Donation.findByIdAndUpdate(id, updatedDonations, { new: true }).exec();
