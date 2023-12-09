@@ -55,34 +55,34 @@ React.useEffect(() => {
 map.current?.setCenter([loc.longitude, loc.latitude]);
 const pincode = loc.pincode;
 setAdd(pincode);
-let availableEvents: IEvent[] = [];
 if(tab === 0){
 eventsService.getEvents(pincode).then((event)=> {
-    availableEvents = event.filter((e: IEvent) => !!e.endDate && moment(e.endDate) >= moment());})
+   const availableEvents = event.filter((e: IEvent) => !!e.endDate && moment(e.endDate) >= moment());
+setEvents(availableEvents)
+})
     console.log("wduhh")
 }
     else{
         eventsService
         .getEventByParams(pincode, "6573fcd148338641e52772f3")
-        .then((event => {availableEvents = event}));
+        .then((event => {setEvents(event)}));
     }
-    setEvents(availableEvents)
 }, [loc]);
 
 React.useEffect(() => {
 const pincode = loc.pincode;
-let availableEvents: IEvent[] = [];
 if(tab === 0){
 eventsService.getEvents(pincode).then((event)=> {
-    availableEvents = event.filter((e: IEvent) => !!e.endDate && moment(e.endDate) >= moment());})
+    const availableEvents = event.filter((e: IEvent) => !!e.endDate && moment(e.endDate) >= moment());
+setEvents(availableEvents);
+})
     console.log("dhsidj")
 }
     else if (tab === 1){
         eventsService
         .getEventByParams(pincode, "6573fcd148338641e52772f3")
-        .then((event => {availableEvents = event}));
+        .then((event => {setEvents(event)}));
     }
-    setEvents(availableEvents)
     console.log("here")
 }, [user._id, tab]);
 
@@ -316,9 +316,9 @@ function a11yProps(index: number) {
     setShowModal(false);
 };
   const handleTabChange = (event: any, newValue: number) => {
-    eventsService.getEvents(loc.pincode).then((event)=> {
-        const availableEvents = event.filter((e: IEvent) => !!e.endDate && moment(e.endDate) >= moment());
-        setEvents(newValue === 0 ? availableEvents : event)});
+    // eventsService.getEvents(loc.pincode).then((event)=> {
+    //     const availableEvents = event.filter((e: IEvent) => !!e.endDate && moment(e.endDate) >= moment());
+    //     setEvents(newValue === 0 ? availableEvents : event)});
     setTab(newValue);
   };
     return(
