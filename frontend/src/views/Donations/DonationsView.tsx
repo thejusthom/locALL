@@ -2,7 +2,7 @@ import * as React from "react";
 import styled from "styled-components";
 import {loadStripe} from '@stripe/stripe-js';
 import donationServices from "../../services/donationsService";
-import EventsForm, { Button, Form } from "../Events/_EventsForm";
+import EventsForm, { Button, Form as BaseForm } from "../Events/_EventsForm";
 import DonationCard from "./_DonationCard";
 import { Modal } from "../Events/EventsView";
 import { IDonation } from "../../models/donation";
@@ -69,8 +69,9 @@ React.useEffect(() => {
         setShowAmountPopup(true);
       }
 
-    const handleMakePayment = async(id: string)=>{
-       const donation = donations?.find((i) => i._id === id);
+    const handleMakePayment = async(event: any) => {
+        event.preventDefault();
+       const donation = donations?.find((i) => i._id === selectedId);
         if(!!process.env.REACT_APP_STRIPE_PUBLISHING_KEY){
 
         const stripe = await loadStripe(process.env.REACT_APP_STRIPE_PUBLISHING_KEY);
@@ -199,8 +200,12 @@ React.useEffect(() => {
         <label>
         How much would you like to contribute?
         </label>
+        <div style={{ margin: "15px 0 5px 0"}}>
         <input type="number" value={contributionAmount} onChange={onContributionChange} />
-        <Button onClick={() => handleMakePayment(selectedId)}>Donate</Button>
+        </div>
+       <div style={{textAlign: "center"}}>
+        <Button onClick={handleMakePayment}>Donate</Button>
+          </div>
         </Form>
     </FormWrap>
   </Modal>
@@ -218,6 +223,11 @@ React.useEffect(() => {
         </>
     );
 }
+
+const Form = styled(BaseForm)`
+height: 200px;
+    padding: 40px;
+`;
 
 const DonationCardsWrap = styled.article`
 margin: 60px 40px;
