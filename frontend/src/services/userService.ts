@@ -13,6 +13,11 @@ const loginUser = async (user: IUser) => {
   return response.data;
 }
 
-const userService = { createUser, loginUser };
+const updateUser = async (user: IUser) => {
+  const response = await axios.put(baseURL + '/' + user._id, user);
+  return response.data;
+}
+
+const userService = { createUser, loginUser, updateUser };
 
 export default userService;
