@@ -7,6 +7,7 @@ export interface IDonation{
       descriptionInfo: string;
       amountRequired: number;
       amountAchieved?: number;
+      image: string;
       createdUser?: IUser | string;
       locationId?: string;
       category: string;

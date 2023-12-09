@@ -23,6 +23,10 @@ const donationSchema = new Schema({
     type: Number,
     required: false
   },
+  image: {
+    type: String,
+    required: true
+},
   createdUser: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User'
