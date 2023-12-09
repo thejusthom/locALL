@@ -1,4 +1,4 @@
-@import '~bootstrap/scss/bootstrap';
+@import 'bootstrap-iso.scss';
 
 
 $color_prime: #1976d2;
@@ -79,3 +79,25 @@ $color_white: #fff;
         background-color: darken($color_prime, 10%);
       }
 }
+
+.App {
+    height: 100vh;
+    width: 100vw;
+    
+    background-color: #06D6A0;
+    color: #073B4C;
+  }
+  
+  .cfb{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+  }
+  .UpdatePasswordContainer {
+    position: fixed;
+    bottom: 0;
+    right: 15px;
+    border: 3px solid #f1f1f1;
+    z-index: 9;
+  }
