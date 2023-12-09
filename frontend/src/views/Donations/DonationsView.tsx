@@ -39,12 +39,23 @@ const DonationsView = () => {
 
     const selectLocation = (state: any) => state.location;
 const loc = useSelector(selectLocation);
+const user = useSelector((state: any) => state.user);
 
 React.useEffect(() => {
-donationServices.getDonations(loc.pincode).then((donation)=> {
+    const pincode = loc.pincode;
+    if(tab === 0){
+donationServices.getDonations(pincode).then((donation)=> {
     // const availableEvents = event.filter((e: IEvent) => !!e.endDate && moment(e.endDate) >= moment());
     setDonations(donation)});
-}, [loc]);
+    console.log("dsijd")
+}
+    else{
+        donationServices
+        .getDonationByParams(pincode, "6573fcd148338641e52772f3")
+        .then((donation => {setDonations(donation)}));
+        console.log("ij")
+    }
+}, [loc, user._id, tab]);
 
 React.useEffect(() => {
     const newDonationValues = Object.values(newDonation);
@@ -157,7 +168,7 @@ React.useEffect(() => {
    };
     const onSubmit = (event: any) => {
         event.preventDefault();
-        donationServices.createDonation(loc.pincode, {...newDonation, createdUser: "656bbf4a3b7690ac27e2bcfb", locationId: loc.pincode, postedOn: new Date().toLocaleDateString()}).then((donation)=> {
+        donationServices.createDonation(loc.pincode, {...newDonation, createdUser: "6573fcd148338641e52772f3", locationId: loc.pincode, postedOn: new Date().toLocaleDateString()}).then((donation)=> {
             !!donations ? setDonations([...donations, donation]) : setDonations([donation]);
             toast.success("Donation Created Successfully!");
         });
@@ -165,9 +176,9 @@ React.useEffect(() => {
         setNewDonation(initialDonationState);
     };
     const handleTabChange = (event: any, newValue: number) => {
-        donationServices.getDonations(loc.pincode).then((donation)=> {
-            // const availa = donation.filter((e: IEvent) => !!e.endDate && moment(e.endDate) >= moment());
-            setDonations(donation)});
+        // donationServices.getDonations(loc.pincode).then((donation)=> {
+        //     // const availa = donation.filter((e: IEvent) => !!e.endDate && moment(e.endDate) >= moment());
+        //     setDonations(donation)});
         setTab(newValue);
       };
     return(
