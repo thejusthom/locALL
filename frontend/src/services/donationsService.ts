@@ -14,7 +14,8 @@ const getDonationById = async (locationId: string, donationId: string) => {
 };
 
 const getDonationByParams = async (locationId:string,createdUser:string) => {
-    const params = {createdUser};
+    // const params = {createdUser};
+    const params = new URLSearchParams([['createdUser', createdUser]]);
     const response = await axios.get(API_URL + locationId +"/donations/params",{params});
     return response.data;
 };
