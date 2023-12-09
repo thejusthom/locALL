@@ -39,6 +39,20 @@ export const getById = async(request, response) => {
     }
 }
 
+// Method to get users by params
+export const getByParams = async (request, response) => {
+    try {
+        const locationId = request.locationId;
+        const params = { ...request.query, locationId };
+        console.log(params);
+        const donations = await donationService.getByParams(params);
+        setResponse(donations, response, 200);
+    } catch (err) {
+        console.log(err);
+        setErrorResponse(err, response);
+    }
+  }
+
 // method to update a happening
 export const update = async(request, response) => {
     try{
