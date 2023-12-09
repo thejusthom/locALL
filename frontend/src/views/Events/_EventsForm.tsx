@@ -29,7 +29,7 @@ const EventsForm = (props: IEventsForm) => {
         <Form>
             <Heading>
             <h1>
-                {isEdit && !!eventName ? `Edit ${Event} - ${type}` : `Create ${type}`}
+                {isEdit && !!eventName ? `Edit ${eventName}` : `Create ${type}`}
             </h1>
             <img src={CloseIcon} width={25} height={25} onClick={onCloseModal} />
             </Heading>
