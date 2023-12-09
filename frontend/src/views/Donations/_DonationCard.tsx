@@ -1,6 +1,6 @@
 import * as React from "react";
 import styled from "styled-components";
-import Girl from "../../assets/images/girl1.jpg";
+import User from "../../assets/images/userDonation.svg";
 import { Button } from "../Events/_EventsForm";
 import ProgressBar from "./_ProgressBar";
 import { IDonation } from "../../models/donation";
@@ -14,7 +14,7 @@ const DonationCard = (props: IDonationCardProps) => {
     const { donation, handleMakePayment } = props;
     return(
         <Card>
-        <img src={Girl} />
+        <img src={!!donation.image ? donation.image : User} loading="lazy" />
         <div>
         <Top>
             <Title>{donation.donationName}</Title>
