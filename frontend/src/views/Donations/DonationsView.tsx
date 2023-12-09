@@ -2,7 +2,7 @@ import * as React from "react";
 import styled from "styled-components";
 import {loadStripe} from '@stripe/stripe-js';
 import donationServices from "../../services/donationsService";
-import EventsForm, { Button } from "../Events/_EventsForm";
+import EventsForm, { Button, Form } from "../Events/_EventsForm";
 import DonationCard from "./_DonationCard";
 import { Modal } from "../Events/EventsView";
 import { IDonation } from "../../models/donation";
@@ -28,11 +28,14 @@ const initialDonationState = {
 const DonationsView = () => {
     const [donations, setDonations] = React.useState<IDonation[]>();
     const [showModal, setShowModal] = React.useState(false);
+    const [showAmountPopup, setShowAmountPopup] = React.useState(false);
     const [newDonation, setNewDonation] = React.useState<IDonation>(initialDonationState);
     const [isValid, setIsValid] = React.useState(false);
     const [tab, setTab] = React.useState(0);
     const [donationId, setDonationId] = React.useState("");
     const [isEdit, setIsEdit] = React.useState<boolean>(false);
+    const [selectedId, setSelectedId] = React.useState("");
+    const [contributionAmount, setContributionAmount] = React.useState(0);
 
     const selectLocation = (state: any) => state.location;
 const loc = useSelector(selectLocation);
@@ -61,13 +64,19 @@ React.useEffect(() => {
         };
       }
 
-    const handleMakePayment = async()=>{
+      const onChangeDonationAmount = (id: string) => {
+        setSelectedId(id);
+        setShowAmountPopup(true);
+      }
+
+    const handleMakePayment = async(id: string)=>{
+       const donation = donations?.find((i) => i._id === id);
         if(!!process.env.REACT_APP_STRIPE_PUBLISHING_KEY){
 
         const stripe = await loadStripe(process.env.REACT_APP_STRIPE_PUBLISHING_KEY);
   
         const body = {
-            products:[{name:"test", price:12}, {name:"shhd", price: 14}]
+            products:[{name: donation?.donationName, price:contributionAmount}]
         }
         const headers = {
             "Content-Type":"application/json"
@@ -110,6 +119,9 @@ React.useEffect(() => {
     }
     const onAmountChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setNewDonation({...newDonation, amountRequired: parseInt(e.target.value)});
+    }
+    const onContributionChange  = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setContributionAmount(parseInt(e.target.value));
     }
     const onUpdate = () => {
         const updatedEvent = {...newDonation};
@@ -181,6 +193,17 @@ React.useEffect(() => {
             }
     />
   </Modal>
+  <Modal isOpen={showAmountPopup}>
+    <FormWrap>
+        <Form>
+        <label>
+        How much would you like to contribute?
+        </label>
+        <input type="number" value={contributionAmount} onChange={onContributionChange} />
+        <Button onClick={() => handleMakePayment(selectedId)}>Donate</Button>
+        </Form>
+    </FormWrap>
+  </Modal>
         <Button onClick={() => setShowModal(true)}>Create New Donation</Button>
         <Tabs sx={{margin: "15px 0 0 0"}} value={tab} onChange={handleTabChange} aria-label="basic tabs example">
           <Tab sx={{fontSize: "16px", fontWeight: "bold"}} label="All Donations" {...a11yProps(0)} />
@@ -188,7 +211,7 @@ React.useEffect(() => {
         </Tabs>
         {tab === 0 && !!donations ? 
         <DonationCardsWrap>
-        {donations.map((donation) => {return(<DonationCard donation={donation} handleMakePayment={handleMakePayment} />)} )}
+        {donations.map((donation) => {return(<DonationCard donation={donation} handleMakePayment={onChangeDonationAmount} />)} )}
         </DonationCardsWrap> 
         : <MyDonations donations={donations} onEdit={onEdit} onDelete={onDelete} />
         }
@@ -202,5 +225,12 @@ section{
     margin: 20px 0;
 }
 `;
+
+const FormWrap = styled.section`
+height: 100%;
+justify-content: center;
+display: flex;
+`;
+
 
 export default DonationsView;
