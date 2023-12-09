@@ -18,6 +18,7 @@ const initialDonationState = {
       descriptionInfo: "",
       amountRequired: 0,
       category: "medical",
+      image: "",
       receiver: {
         name: "",
         age: 0,
@@ -132,6 +133,23 @@ React.useEffect(() => {
     const onAmountChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setNewDonation({...newDonation, amountRequired: parseInt(e.target.value)});
     }
+    const onImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const file = !!e.target?.files?.length ? e.target.files?.[0] : null;
+        if (file) {
+          const reader = new FileReader();
+          reader.readAsDataURL(file);
+          reader.onloadend = () => {
+            reader.result as string;
+            // updateData[id as keyof typeof updateData] = reader.result as string;
+            // console.log(updateData);
+            // setFormData(updateData);
+            setNewDonation({...newDonation, image: reader.result as string})
+          };
+        }
+      }
+            // console.log(e.target.files[0]);
+            // !!e.target?.files?.length && setNewDonation({...newDonation, image: e.target?.files[0]});
+    // } 
     const onContributionChange  = (e: React.ChangeEvent<HTMLInputElement>) => {
         setContributionAmount(parseInt(e.target.value));
     }
@@ -201,6 +219,7 @@ React.useEffect(() => {
               onReceiverChange={onReceiverChange}
               onAmountChange={onAmountChange}
               isEdit={isEdit}
+              onImageChange={onImageChange}
             />
             }
     />
