@@ -7,7 +7,7 @@ import { IDonation } from "../../models/donation";
 
 interface IDonationCardProps{
     donation: IDonation;
-    handleMakePayment: () => void;
+handleMakePayment: (id: string) => void;
 }
 
 const DonationCard = (props: IDonationCardProps) => {
@@ -25,7 +25,7 @@ const DonationCard = (props: IDonationCardProps) => {
         </Name>
         <p>{donation.descriptionInfo}</p>
         <p className="amount">Required amount: {donation.amountRequired}</p>
-        <Button onClick={handleMakePayment}>Donate Now</Button>
+ <Button onClick={() => !!donation._id && handleMakePayment(donation._id)}>Help Now</Button>
         </div>
     </Card>
     );
