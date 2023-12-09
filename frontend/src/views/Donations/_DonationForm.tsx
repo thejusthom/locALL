@@ -11,6 +11,7 @@ onReceiverChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
 onDescriptionChange: (e: React.ChangeEvent<HTMLTextAreaElement>) => void;
 onCategoryChange: (e: React.ChangeEvent<HTMLSelectElement>) => void;
 onAmountChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+onImageChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
 const DonationForm = (props: IDonationForm) => {
@@ -20,7 +21,8 @@ const DonationForm = (props: IDonationForm) => {
         onReceiverChange,
         onDescriptionChange,
         onCategoryChange,
-        onAmountChange
+        onAmountChange,
+        onImageChange
     } = props;
 
 return(
@@ -36,6 +38,14 @@ return(
     <InputWrap>
     <label>Age: <MandatoryStar>*</MandatoryStar></label>
     <input type="number" id="age" value={newDonation.receiver?.age} onChange={onReceiverChange} />
+    </InputWrap>
+    <InputWrap>
+    <label>Photo: <MandatoryStar>*</MandatoryStar></label>
+    <input
+        type="file"
+        name="photo"
+        onChange={onImageChange}
+      />
     </InputWrap>
     <InputWrap>
     <label>Contact: <MandatoryStar>*</MandatoryStar></label>
