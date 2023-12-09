@@ -8,6 +8,7 @@ export interface IPerson{
 }
 
 export interface IUser{
+    _id?: string;
     person?: IPerson;
     username: string;
     password: string;

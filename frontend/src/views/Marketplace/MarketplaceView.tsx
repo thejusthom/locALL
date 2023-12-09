@@ -14,6 +14,7 @@ type Props = {
 };
 
 const MarketplaceView = (props: Props) => {
+  const user = useSelector((state: any) => state.user);
   const [marketplaceCards, setMarketplaceCards] = useState([] as Marketplace[]);
   const [create, setCreate] = useState(false);
   const [update, setUpdate] = useState(false);
@@ -28,14 +29,14 @@ const MarketplaceView = (props: Props) => {
   useEffect(() => {
     if (props.active === "my-items") {
       marketplaceService
-        .getMarketplaceByParams(locationId, "65682596adef270d5ffe1ff6")
+        .getMarketplaceByParams(locationId, user._id)
         .then((marketplaceCards) => setMarketplaceCards(marketplaceCards));
     } else {
       marketplaceService
         .getMarketplace(locationId)
         .then((marketplaceCards) => setMarketplaceCards(marketplaceCards));
     }
-  }, [locationId, props.active, update]);
+  }, [locationId, props.active, update, user._id]);
   const afterUpdate = () => {
     if (update === false) {
       setUpdate(true);
@@ -85,8 +86,7 @@ const MarketplaceView = (props: Props) => {
     const marketplace: Marketplace = {
       ...formData,
       locationId,
-      //TODO: change this to the user id from state
-      createdUser: "65682596adef270d5ffe1ff6",
+      createdUser: user._id,
       listingDate,
       _id: null,
       comments: [],
@@ -199,6 +199,12 @@ const MarketplaceView = (props: Props) => {
               sx={{ ml: "auto", alignSelf: "center", fontWeight: 600 }}
               onClick={handleSubmit}
               type="submit"
+              disabled={
+                !formData.productName ||
+                !formData.price ||
+                !formData.description ||
+                !formData.image
+              }
             >
               Create
             </Button>
