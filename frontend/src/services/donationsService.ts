@@ -13,6 +13,13 @@ const getDonationById = async (locationId: string, donationId: string) => {
     return response.data;
 };
 
+const getDonationByParams = async (locationId:string,createdUser:string) => {
+    // const params = {createdUser};
+    const params = new URLSearchParams([['createdUser', createdUser]]);
+    const response = await axios.get(API_URL + locationId +"/donations/params",{params});
+    return response.data;
+};
+
 const createDonation = async (locationId: string, newDonation: IDonation) => {
     const response = await axios.post(API_URL + locationId +"/donations", newDonation);
     return response.data;
@@ -28,5 +35,5 @@ const deleteDonation = async (locationId: string, donationId: string) => {
     return response.data;
 };
 
-const donationService = { getDonations, getDonationById, createDonation, updateDonation, deleteDonation };
+const donationService = { getDonations, getDonationById, getDonationByParams, createDonation, updateDonation, deleteDonation };
 export default donationService;

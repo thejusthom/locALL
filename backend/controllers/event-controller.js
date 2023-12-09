@@ -52,6 +52,20 @@ export const create = async (request, response) => {
   }
 };
 
+// Method to get users by params
+export const getByParams = async (request, response) => {
+  try {
+      const locationId = request.locationId;
+      const params = { ...request.query, locationId };
+      console.log(params);
+      const events = await eventService.getByParams(params);
+      setResponse(events, response, 200);
+  } catch (err) {
+      console.log(err);
+      setErrorResponse(err, response);
+  }
+}
+
 //method to update a event by id
 export const updateById = async (request, response) => {
   try

@@ -30,7 +30,10 @@ const initialNewEvent = {
       }
 }
 const EventsView = () => {
+
 const selectLocation = (state: any) => state.location;
+const user = useSelector((state: any) => state.user);
+
 const loc = useSelector(selectLocation);
 const [location, setLocation] = React.useState<{ latitude: number; longitude: number;}>({latitude: loc.latitude, longitude: loc.longitude});
 const [add,setAdd] = React.useState('');
@@ -50,12 +53,39 @@ const [isValid, setIsValid] = React.useState<boolean>(true);
 React.useEffect(() => {
     setLocation({latitude: loc.latitude, longitude: loc.longitude});
 map.current?.setCenter([loc.longitude, loc.latitude]);
-setAdd(loc.pincode);
-eventsService.getEvents(loc.pincode).then((event)=> {
-    const availableEvents = event.filter((e: IEvent) => !!e.endDate && moment(e.endDate) >= moment());
-    setEvents(availableEvents)});
+const pincode = loc.pincode;
+setAdd(pincode);
+if(tab === 0){
+eventsService.getEvents(pincode).then((event)=> {
+   const availableEvents = event.filter((e: IEvent) => !!e.endDate && moment(e.endDate) >= moment());
+setEvents(availableEvents)
+})
+    console.log("wduhh")
+}
+    else{
+        eventsService
+        .getEventByParams(pincode, "6573fcd148338641e52772f3")
+        .then((event => {setEvents(event)}));
+    }
 }, [loc]);
-console.log(loc);
+
+React.useEffect(() => {
+const pincode = loc.pincode;
+if(tab === 0){
+eventsService.getEvents(pincode).then((event)=> {
+    const availableEvents = event.filter((e: IEvent) => !!e.endDate && moment(e.endDate) >= moment());
+setEvents(availableEvents);
+})
+    console.log("dhsidj")
+}
+    else if (tab === 1){
+        eventsService
+        .getEventByParams(pincode, "6573fcd148338641e52772f3")
+        .then((event => {setEvents(event)}));
+    }
+    console.log("here")
+}, [user._id, tab]);
+
   const mapContainer = React.useRef<HTMLDivElement | null>(null);
   const map = React.useRef<mapboxgl.Map | null>(null);
 
@@ -212,7 +242,7 @@ const onSubmit = (event: any) => {
     event.preventDefault();
     const start = startDate?.toLocaleDateString() || "";
     const end = endDate?.toLocaleDateString() || "";
-    eventsService.createEvent(add, {...newEvent, address: {...coordinates}, startDate: start, endDate: end, createdUser: "656bbf4a3b7690ac27e2bcfb", organiser}).then((event)=> {
+    eventsService.createEvent(add, {...newEvent, address: {...coordinates}, startDate: start, endDate: end, createdUser: "6573fcd148338641e52772f3", organiser}).then((event)=> {
         !!events ? setEvents([...events, event]) : setEvents([event]);
         toast.success("Event Created Successfully!");
     });
@@ -286,9 +316,9 @@ function a11yProps(index: number) {
     setShowModal(false);
 };
   const handleTabChange = (event: any, newValue: number) => {
-    eventsService.getEvents(loc.pincode).then((event)=> {
-        const availableEvents = event.filter((e: IEvent) => !!e.endDate && moment(e.endDate) >= moment());
-        setEvents(newValue === 0 ? availableEvents : event)});
+    // eventsService.getEvents(loc.pincode).then((event)=> {
+    //     const availableEvents = event.filter((e: IEvent) => !!e.endDate && moment(e.endDate) >= moment());
+    //     setEvents(newValue === 0 ? availableEvents : event)});
     setTab(newValue);
   };
     return(
