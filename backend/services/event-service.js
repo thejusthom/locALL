@@ -17,6 +17,12 @@ const event = await eventModel.findById(id).populate('createdUser');
 return event;
 };
 
+//Get marketplace by providing params
+export const getByParams = async (params = {}) => {
+  const events = await eventModel.find(params).populate('createdUser');
+  return events;
+}
+
 //POST Create a event
 export const createEvent = async (newEvent) => {
   const event = new eventModel(newEvent);

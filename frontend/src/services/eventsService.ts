@@ -13,6 +13,13 @@ const getEventById = async (locationId: string, eventId: string) => {
     return response.data;
 };
 
+const getEventByParams = async (locationId:string,createdUser:string) => {
+    // const params = {createdUser};
+    const params = new URLSearchParams([['createdUser', createdUser]]);
+    const response = await axios.get(API_URL + locationId +"/events/params",{ params });
+    return response.data;
+};
+
 const createEvent = async (locationId: string, newEvent: IEvent) => {
     const response = await axios.post(API_URL + locationId +"/events", newEvent);
     return response.data;
@@ -28,5 +35,5 @@ const deleteEvent = async (locationId: string, eventId: string) => {
     return response.data;
 };
 
-const eventsService = { getEvents, getEventById, createEvent, updateEvent, deleteEvent };
+const eventsService = { getEvents, getEventById, getEventByParams, createEvent, updateEvent, deleteEvent };
 export default eventsService;
