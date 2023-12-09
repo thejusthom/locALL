@@ -9,7 +9,7 @@ import Tab from '@mui/material/Tab';
 import ReactModal from 'react-modal';
 import 'react-datepicker/dist/react-datepicker.css';
 import moment from "moment";
-import EvenstForm, { Button } from "./_EventsForm";
+import EventsForm, { Button } from "./_EventsForm";
 import { iconList } from "./Constants";
 import MyEvents from "./_MyEvents";
 import EventsMap from "./_EventsMap";
@@ -219,6 +219,7 @@ const onSubmit = (event: any) => {
     setShowModal(false);
     setNewEvent(initialNewEvent);
     setCoordinates({longitude: 0, latitude:0});
+    setSelectedLocation("");
     setStartDate(undefined);
     setEndDate(undefined);
     setOrganiser({name: "", contact: ""});
@@ -260,6 +261,7 @@ const onUpdate = () => {
         setStartDate(undefined);
         setEndDate(undefined);
         setOrganiser({name: "", contact: ""});
+        setSelectedLocation("");
         setIsEdit(false);
         setEventId("");
         setShowModal(false);
@@ -275,6 +277,7 @@ function a11yProps(index: number) {
     setCoordinates({longitude: 0, latitude:0});
     setStartDate(undefined);
     setEndDate(undefined);
+    setSelectedLocation("");
     setOrganiser({name: "", contact: ""});
     if(isEdit){
         setIsEdit(false);
@@ -299,12 +302,13 @@ function a11yProps(index: number) {
           <Tab sx={{fontSize: "16px", fontWeight: "bold"}} label="My Events" {...a11yProps(1)} />
         </Tabs>
 <Modal isOpen={showModal}>
-  <EvenstForm isEdit={isEdit}
+  <EventsForm isEdit={isEdit}
    eventName={newEvent.eventName}
    onCloseModal={onCloseModal} 
    onUpdate={onUpdate} 
    onSubmit={onSubmit}
    isDisabled={!isValid}
+   type="Event"
    children={<FormFieldsComponent
               newEvent={newEvent}
               onCategoryChange={onCategoryChange}
@@ -326,12 +330,11 @@ function a11yProps(index: number) {
    {tab === 0 && !!events ? 
 (<EventsMap
 mapContainer={mapContainer} />)
-    : (
+    : 
         <MyEvents
         events={events}
         onEdit={onEdit}
         onDelete={onDelete} />
-    )
      }
     </EventsContainer>
     // </ToastContainer>
@@ -351,7 +354,7 @@ padding: 7px 17px;
 }
 `;
 
-const Modal = styled(ReactModal)`
+export const Modal = styled(ReactModal)`
 inset: unset;
 width: 100%;
 height: 100%;

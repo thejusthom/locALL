@@ -88,11 +88,11 @@ onRetrieve={onLocationChange}
 )
 };
 
-const InputWrap = styled.div`
+export const InputWrap = styled.div`
     margin-bottom: 20px;
     display: flex;
 `;
-const MandatoryStar = styled.span`
+export const MandatoryStar = styled.span`
 color: #A71313;
 `;
 

@@ -20,10 +20,10 @@ const ProgressBar = (props: IProgressBar) => {
 
 const Parentdiv = styled.div<{height: number}>`
     height: ${(props) => props.height}px;
-    width: 100%;
+    width: 200px;
     background-color: whitesmoke;
     border-radius: 40px;
-    margin: 50;
+    margin: 50px;
     `;
 
 const Childdiv = styled.div<{progress: number, bgColor: string}>`

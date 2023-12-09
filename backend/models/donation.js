@@ -11,10 +11,6 @@ const donationSchema = new Schema({
     type: String,
     required: true
   },
-//   endDate: {
-//     type: String,
-//     required: true
-//   },
   descriptionInfo: {
     type: String,
     required: true
@@ -25,17 +21,8 @@ const donationSchema = new Schema({
   },
   amountAchieved: {
     type: Number,
-    required: true
+    required: false
   },
-//   address: {
-//     type: { longitude: String, latitude: String },
-//     required: true
-//   },
-//   category: {
-//     type: String,
-//     required: true
-//   },
-  //To get user from user schema using the id of that user
   createdUser: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User'
@@ -45,7 +32,11 @@ const donationSchema = new Schema({
     required: true
   },
   receiver: {
-    type: {name: String, contact: String},
+    type: {name: String, age: Number, contact: String},
+    required: true
+  }, 
+  category: {
+    type: String,
     required: true
   }
 },{

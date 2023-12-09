@@ -10,9 +10,10 @@ onSubmit: (event: any) => void;
 eventName?: string;
 isDisabled: boolean;
 children: string | JSX.Element | JSX.Element[];
+type: string;
 }
 
-const EvenstForm = (props: IEventsForm) => {
+const EventsForm = (props: IEventsForm) => {
     const {
         isEdit = false,
         onCloseModal,
@@ -20,14 +21,15 @@ const EvenstForm = (props: IEventsForm) => {
         onSubmit,
         eventName,
         isDisabled,
-        children
+        children,
+        type
     } = props;
     return(
         <FormWrap>
         <Form>
             <Heading>
             <h1>
-                {isEdit && !!eventName ? `Edit Event - ${eventName}` : "Create Event"}
+                {isEdit && !!eventName ? `Edit ${eventName}` : `Create ${type}`}
             </h1>
             <img src={CloseIcon} width={25} height={25} onClick={onCloseModal} />
             </Heading>
@@ -119,4 +121,4 @@ padding: 10px 25px;
 }
 `;
 
-export default EvenstForm;
+export default EventsForm;
