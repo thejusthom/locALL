@@ -5,12 +5,12 @@ export default function UserProfileBlock() {
         <div className="container">
             <div className="main-body">
 
-                <nav aria-label="breadcrumb" className="main-breadcrumb">
+                {/* <nav aria-label="breadcrumb" className="main-breadcrumb">
                     <ul className="breadcrumb">
                         <li className="breadcrumb-item"><a href="index.html">Home</a></li>
                         <li className="breadcrumb-item active" aria-current="page">User Profile</li>
                     </ul>
-                </nav>
+                </nav> */}
 
                 <div className="row gutters-sm">
                     <div className="col-md-4 mb-3">
@@ -36,7 +36,7 @@ export default function UserProfileBlock() {
                                     <span className="text-secondary">1</span>
                                 </li>
                                 <li className="list-group-item d-flex justify-content-between align-items-center flex-wrap">
-                                    <h6 className="mb-0">Market Place</h6>
+                                    <h6 className="mb-0">MarketPlace</h6>
                                     <span className="text-secondary">0</span>
                                 </li>
                                 <li className="list-group-item d-flex justify-content-between align-items-center flex-wrap">
@@ -59,7 +59,16 @@ export default function UserProfileBlock() {
                             <div className="card-body">
                                 <div className="row">
                                     <div className="col-sm-3">
-                                        <h6 className="mb-0">Full Name</h6>
+                                        <h6 className="mb-0">First Name</h6>
+                                    </div>
+                                    <div className="col-sm-9 text-secondary">
+                                        Kenneth Valdez
+                                    </div>
+                                </div>
+                                <hr />
+                                <div className="row">
+                                    <div className="col-sm-3">
+                                        <h6 className="mb-0">Last Name</h6>
                                     </div>
                                     <div className="col-sm-9 text-secondary">
                                         Kenneth Valdez
@@ -103,9 +112,28 @@ export default function UserProfileBlock() {
                                 </div>
                                 <hr />
                                 <div className="row">
-                                    <div className="col-sm-12">
-                                    <button className="btn custom-btn">Edit</button>
+                                    <div className="col-sm-3">
+                                        <h6 className="mb-0">Username</h6>
+                                    </div>
+                                    <div className="col-sm-9 text-secondary">
+                                        thejus
+                                    </div>
                                 </div>
+                                <hr />
+                                <div className="row">
+                                    <div className="col-sm-3">
+                                        <h6 className="mb-0">Password</h6>
+                                    </div>
+                                    <div className="col-sm-9 text-secondary">
+                                        ***********
+                                        <button className="btn password-btn">Change Password</button>
+                                    </div>
+                                </div>
+                                <hr />
+                                <div className="row">
+                                    <div className="col-sm-12">
+                                        <button className="btn edit-btn">Edit</button>
+                                    </div>
                                 </div>
                             </div>
                         </div>

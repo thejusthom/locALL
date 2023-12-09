@@ -2,6 +2,8 @@
 
 
 $color_prime: #1976d2;
+$color_white: #fff;
+
 
 .main-body {
     padding: 15px;
@@ -60,9 +62,19 @@ $color_prime: #1976d2;
 .shadow-none {
     box-shadow: none!important;
 }
-.custom-btn {
+.edit-btn {
     background-color: $color_prime;    
     border-color: none;
+    color: $color_white;
+    &:hover {
+        background-color: darken($color_prime, 10%);
+      }
+}
+
+.password-btn{
+    background-color: $color_prime;   
+    color: $color_white;
+        float: right ;
     &:hover {
         background-color: darken($color_prime, 10%);
       }
