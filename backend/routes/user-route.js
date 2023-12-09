@@ -21,4 +21,10 @@ router.route('/:id')
 router.route('/login')
     .post(userController.loginUser);
 
+router.route('/logout')
+    .post(userController.logout);
+
+router.route('/refresh-token')
+    .post(userController.refreshTokens);
+
 export default router;
