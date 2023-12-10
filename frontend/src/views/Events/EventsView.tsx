@@ -15,6 +15,7 @@ import MyEvents from "./_MyEvents";
 import EventsMap from "./_EventsMap";
 import FormFieldsComponent from "./_FormFields";
 import { ToastContainer, toast } from "react-toastify";
+import NoDataScreen from "../../common/_NoDataScreen";
 import Loading from "../../common/_Loader";
 
 const initialNewEvent = {
@@ -57,45 +58,73 @@ React.useEffect(() => {
 map.current?.setCenter([loc.longitude, loc.latitude]);
 const pincode = loc.pincode;
 setAdd(pincode);
-if(tab === 0){
-    setShowLoader(true);
-eventsService.getEvents(pincode).then((event)=> {
-   const availableEvents = event.filter((e: IEvent) => !!e.endDate && moment(e.endDate) >= moment());
-setEvents(availableEvents);
-setShowLoader(false);
-})
-}
-    else{
-        setShowLoader(true);
-        eventsService
-        .getEventByParams(pincode, "6573fcd148338641e52772f3")
-        .then((event => {
-            setEvents(event);
-            setShowLoader(false);
-        }));
-    }
+// if(!!user._id){
+renderEventsByTab();
+// }
+// if(tab === 0){
+//     setShowLoader(true);
+// eventsService.getEvents(pincode).then((event)=> {
+//    const availableEvents = event.filter((e: IEvent) => !!e.endDate && moment(e.endDate) >= moment());
+// setEvents(availableEvents);
+// setShowLoader(false);
+// })
+// }
+//     else{
+//         setShowLoader(true);
+//         eventsService
+//         .getEventByParams(pincode, "6573fcd148338641e52772f3")
+//         .then((event => {
+//             setEvents(event);
+//             setShowLoader(false);
+//         }));
+//     }
 }, [loc]);
 
 React.useEffect(() => {
-const pincode = loc.pincode;
-if(tab === 0){
-    setShowLoader(true);
-eventsService.getEvents(pincode).then((event)=> {
-    const availableEvents = event.filter((e: IEvent) => !!e.endDate && moment(e.endDate) >= moment());
-setEvents(availableEvents);
-setShowLoader(false);
-})
-}
-    else if (tab === 1){
-        setShowLoader(true);
-        eventsService
-        .getEventByParams(pincode, "6573fcd148338641e52772f3")
-        .then((event => {
-            setEvents(event);
-            setShowLoader(false);
-        }));
-    }
+    // if(!!user._id){
+renderEventsByTab();
+    // }
+
+
+// const pincode = loc.pincode;
+// if(tab === 0){
+//     setShowLoader(true);
+// eventsService.getEvents(pincode).then((event)=> {
+//     const availableEvents = event.filter((e: IEvent) => !!e.endDate && moment(e.endDate) >= moment());
+// setEvents(availableEvents);
+// setShowLoader(false);
+// })
+// }
+//     else if (tab === 1){
+//         setShowLoader(true);
+//         eventsService
+//         .getEventByParams(pincode, "6573fcd148338641e52772f3")
+//         .then((event => {
+//             setEvents(event);
+//             setShowLoader(false);
+//         }));
+//     }
 }, [user._id, tab]);
+
+const renderEventsByTab = () => {
+    if(tab === 0){
+        setShowLoader(true);
+    eventsService.getEvents(loc.pincode).then((event)=> {
+       const availableEvents = event.filter((e: IEvent) => !!e.endDate && moment(e.endDate) >= moment());
+    setEvents(availableEvents);
+    setShowLoader(false);
+    })
+    }
+        else{
+            setShowLoader(true);
+            eventsService
+            .getEventByParams(loc.pincode, "6573fcd148338641e52772f3")
+            .then((event => {
+                setEvents(event);
+                setShowLoader(false);
+            }));
+        }
+};
 
   const mapContainer = React.useRef<HTMLDivElement | null>(null);
   const map = React.useRef<mapboxgl.Map | null>(null);
@@ -108,7 +137,7 @@ setShowLoader(false);
                     container: mapContainer.current,
                     style: 'mapbox://styles/mapbox/streets-v12',
                     center: [location?.longitude, location?.latitude],
-                    zoom: 15
+                    zoom: 13.5
                     });
                 }
     React.useEffect(() => {
@@ -117,7 +146,7 @@ setShowLoader(false);
             container: mapContainer.current,
             style: 'mapbox://styles/mapbox/streets-v12',
             center: [location?.longitude, location?.latitude],
-            zoom: 15.25
+            zoom: 13.5
             });
         
     const url = `https://nominatim.openstreetmap.org/reverse?format=json&lat=${location.latitude}&lon=${location.longitude}`;
@@ -284,11 +313,12 @@ const onEdit = (eventId: string) => {
 const onDelete = (eventId: string) => {
     setShowLoader(true);
     eventsService.deleteEvent(loc.pincode, eventId).then((event)=> {
-        eventsService.getEvents(loc.pincode).then((event)=> {
-            const availableEvents = event.filter((e: IEvent) => !!e.endDate && moment(e.endDate) >= moment());
-            setEvents(availableEvents)
-        });
-        setShowLoader(false);
+        // eventsService.getEvents(loc.pincode).then((event)=> {
+        //     const availableEvents = event.filter((e: IEvent) => !!e.endDate && moment(e.endDate) >= moment());
+        //     setEvents(availableEvents)
+        // });
+        renderEventsByTab();
+        // setShowLoader(false);
             toast.success(`Event Deleted Successfully!`);
     });
 };
@@ -298,12 +328,13 @@ const onUpdate = () => {
     const end = endDate?.toLocaleDateString() || "";
     const updatedEvent = {...newEvent, address: {...coordinates}, organiser, startDate: start, endDate: end};
     eventsService.updateEvent(loc.pincode, eventId, updatedEvent).then((event)=> {
-        eventsService.getEvents(loc.pincode).then((event)=> {
-            const availableEvents = event.filter((e: IEvent) => !!e.endDate && moment(e.endDate) >= moment());
-            setEvents(availableEvents);
-            setShowLoader(false);
-        }
-    );
+    //     eventsService.getEvents(loc.pincode).then((event)=> {
+    //         const availableEvents = event.filter((e: IEvent) => !!e.endDate && moment(e.endDate) >= moment());
+    //         setEvents(availableEvents);
+    //         setShowLoader(false);
+    //     }
+    // );
+    renderEventsByTab();
     toast.success(`${event.eventName} Updated Successfully!`);
 });
         setNewEvent(initialNewEvent);
@@ -380,7 +411,7 @@ function a11yProps(index: number) {
             }
     />
   </Modal>
-   {tab === 0 && !!events ? 
+  {tab === 0 && !!events ? 
 (<EventsMap
 mapContainer={mapContainer} />)
     : 
