@@ -16,6 +16,7 @@ import { saveUser } from '../../store/slices/user-slice';
 import { useDispatch, useSelector } from 'react-redux';
 import { IPerson, IUser } from '../../models/user';
 import userService from '../../services/userService';
+import { useNavigate } from 'react-router-dom';
 
 const Copyright = (props: TypographyProps) => {
   return (
@@ -36,6 +37,7 @@ const initialStateUser = {
 };
 
 const Login: React.FC = () => {
+  const navigate = useNavigate();
   const dispatch = useDispatch();
   const [user, setUser] = useState<IUser>(initialStateUser);
   const [error, setError] = useState<string | null>(null);
@@ -56,7 +58,7 @@ const Login: React.FC = () => {
         console.log(validatedUser);
         setError(null);
         dispatch(saveUser(validatedUser));
-        //window.location.replace('/');
+        navigate('/');
       } 
       catch (error) 
       {
