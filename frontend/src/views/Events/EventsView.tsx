@@ -144,7 +144,7 @@ const renderEventsByTab = () => {
                   ({
                     'type': 'Feature',
                     'properties': {
-                        'description': '<strong class="title">'+event.eventName+'</strong><p>'+event.descriptionInfo+'</p><p>Contact: '+event.organiser?.name+' ('+event.organiser?.contact+')</p><p>Date: '+event.startDate+' - '+event.endDate+'</p><button class="maps-button" onclick="(function(){window.open(\'https://maps.google.com?q='+location.latitude+','+location.longitude+'\');})();">Open in Google Maps</button>',
+                        'description': '<div class="popup"><h2 class="title">'+event.eventName+'</h2><p>'+event.descriptionInfo+'</p><p>Contact: '+event.organiser?.name+' ('+event.organiser?.contact+')</p><p>Date: '+event.startDate+' - '+event.endDate+'</p><button class="maps-button" onclick="(function(){window.open(\'https://maps.google.com?q='+location.latitude+','+location.longitude+'\');})();">Open in Google Maps</button><div>',
                         'icon': event.category,
                     },
                     'geometry': {
