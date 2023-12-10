@@ -50,15 +50,19 @@ const user = useSelector((state: any) => state.user);
 React.useEffect(() => {
     const pincode = loc.pincode;
     if(tab === 0){
+        setShowLoader(true);
 donationServices.getDonations(pincode).then((donation)=> {
     // const availableEvents = event.filter((e: IEvent) => !!e.endDate && moment(e.endDate) >= moment());
     setDonations(donation)});
+    setShowLoader(false);
     console.log("dsijd")
 }
     else{
+        setShowLoader(true);
         donationServices
         .getDonationByParams(pincode, "6573fcd148338641e52772f3")
-        .then((donation => {setDonations(donation)}));
+        .then((donation => {setDonations(donation)
+            setShowLoader(false);}));
         console.log("ij")
     }
 }, [loc, user._id, tab]);
