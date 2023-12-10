@@ -27,7 +27,7 @@ if(!!stripeInstance){
         payment_method_types:["card"],
         line_items:lineItems,
         mode:"payment",
-        success_url:"http://localhost:3000/donations/sucess",
+        success_url:"http://localhost:3000/donations/success",
         cancel_url:"http://localhost:3000/donations",
     });
 
