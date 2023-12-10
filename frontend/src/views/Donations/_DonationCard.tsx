@@ -12,19 +12,35 @@ handleMakePayment: (id: string) => void;
 
 const DonationCard = (props: IDonationCardProps) => {
     const { donation, handleMakePayment } = props;
+    const percentage = !!donation.amountAchieved ? Math.round((donation.amountAchieved/donation.amountRequired)*100) : 0;
+    const progressColor = () => {
+        if(percentage < 50){
+            return "#ff1414";
+        }
+        else if(percentage < 75){
+            return "#fff614";
+        }
+        else if(percentage < 90){
+            return "#a9ff14";
+        }
+        else{
+            return "#5bff14";
+        }
+    };
     return(
+
         <Card>
         <img src={!!donation.image ? donation.image : User} loading="lazy" />
         <div>
         <Top>
             <Title>{donation.donationName}</Title>
-            <ProgressBar bgcolor="blue" height={20} progress={80} />
+            {!!donation._id && <ProgressBar id={donation._id} bgcolor={progressColor()} height={20} progress={percentage} donationRequired={donation.amountRequired} donationAchieved={donation.amountAchieved || 0} />}
         </Top>
         <Name>
         <span>{donation.receiver?.name}</span> | <span>{donation.receiver?.age}</span>
         </Name>
         <p>{donation.descriptionInfo}</p>
-        <p className="amount">Required amount: {donation.amountRequired}</p>
+        <p className="amount">Required amount: <strong>{donation.amountRequired}</strong></p>
  <Button onClick={() => !!donation._id && handleMakePayment(donation._id)}>Help Now</Button>
         </div>
     </Card>
@@ -36,35 +52,43 @@ display: flex;
 background-color: #fbf3f3;
 box-shadow: 0px 0px 15px 5px #b4b1b1;
 &:hover{
-    width: 1050px;
-    height: 325px;
+    width: 1150px;
+    height: 390px;
 }
-width: 1000px;
-    height: 300px;
+width: 1100px;
+    height: 370px;
     padding: 20px;
     place-items: center;
     border-radius: 20px;
     img{
-        width: 30%;
-    height: 80%;
+        width: 240px;
+    height: 270px;
+    margin-right: 25px;
     }
     p{
-        font-size: 16px;
+        width: 800px;
+        font-size: 17px;
+        margin: 10px 0;
     }
     .amount{
-        font-size: 16px;
+        font-size: 18px;
+        margin: 15px 0 20px 0;
     }
+    transition: width 0.5s, height 0.5s;
 `;
 const Title = styled.h2`
 margin: 0;
 `;
 const Name = styled.div`
+margin-top: 2px;
 span{
     font-size: 18px;
 }
 `;
 const Top = styled.div`
 display: flex;
+    align-items: center;
+    justify-content: space-between;
 `;
 
 export default DonationCard;
