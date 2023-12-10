@@ -207,7 +207,7 @@ React.useEffect(() => {
     const onSubmit = (event: any) => {
         event.preventDefault();
         setShowLoader(true);
-        donationServices.createDonation(loc.pincode, {...newDonation, createdUser: "6573fcd148338641e52772f3", locationId: loc.pincode, postedOn: new Date().toLocaleDateString()}).then((donation)=> {
+        donationServices.createDonation(loc.pincode, {...newDonation, createdUser: user?.user._id, locationId: loc.pincode, postedOn: new Date().toLocaleDateString()}).then((donation)=> {
             !!donations ? setDonations([...donations, donation]) : setDonations([donation]);
             setShowLoader(false);
             toast.success("Donation Created Successfully!");
