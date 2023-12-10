@@ -3,13 +3,17 @@ import { SyntheticEvent, useEffect, useState } from "react";
 import FeedShareCard from "./FeedShareCard";
 import { useSelector } from 'react-redux'
 import feedShareService from "../../services/feedshareService";
-import { Form, Modal} from "semantic-ui-react";
+import { Form, Modal } from "semantic-ui-react";
 import React from "react";
 import '../../assets/styles/feedshare.scss';
 import { SearchBox } from '@mapbox/search-js-react';
 import Button from "@mui/joy/Button";
 import moment from "moment";
 import { Tab, Tabs } from "@mui/material";
+import TabList from "@mui/lab/TabList";
+import TabContext from "@mui/lab/TabContext";
+import TabPanel from "@mui/lab/TabPanel";
+import { ToastContainer, toast } from "react-toastify";
 
 const FeedShareView: React.FC = () => {
     // get data from json
@@ -21,12 +25,11 @@ const FeedShareView: React.FC = () => {
     const [coordinates, setCoordinates] = React.useState({ latitude: 0, longitude: 0 });
     const [add, setAdd] = React.useState('');
     const [update, setUpdate] = useState(false);
-    const [tab, setTab] = React.useState(0);
+    const [tab, setTab] = React.useState('0');
     const user = useSelector((state: any) => state.user);
+    const [allFeedshare, setAllFeedshare] = useState([] as FeedShare[]);
+    const [myFeedshare, setMyFeedshare] = useState([] as FeedShare[]);
 
-    console.log(user);
-
-    
     const onLocationChange = (event: any) => {
         const location = event?.features[0]?.geometry?.coordinates;
         setCoordinates({ longitude: location[0], latitude: location[1] });
@@ -51,9 +54,9 @@ const FeedShareView: React.FC = () => {
     };
 
     useEffect(() => {
-        // console.log(locationId);
-        feedShareService.getFeedshare(locationId).then((feedShareCards) => setFeedShareCards(feedShareCards));
-    }, [locationId]);
+        feedShareService.getFeedshare(locationId).then((feedShareCards) => setAllFeedshare(feedShareCards));
+        feedShareService.getFeedshareByUser(locationId, user?.user?._id).then((feedShareCards) => setMyFeedshare(feedShareCards));
+    }, [locationId, update, user?.user?._id]);
 
     const [inputData, setInputData] = React.useState({
         image: '',
@@ -114,17 +117,24 @@ const FeedShareView: React.FC = () => {
             postedDate: moment().format("MMMM Do YYYY, h:mm:ss a"),
             comments: [],
             locationId: add,
-            createdUser: user._id,
+            createdUser: user?.user?._id,
             _id: null,
         }
-        await feedShareService
+        try{ await feedShareService
             .createFeedshare(feedShare.locationId, feedShare)
             .then(() => {
-                feedShareCards.push(feedShare);
+                allFeedshare.push(feedShare);
+                myFeedshare.push(feedShare);
                 setUpdate(true);
                 setFormOpen(false);
                 clearFormData();
+                toast.success("Feedshare added Successfully!");
             });
+        }
+        catch(err){
+            console.log("Error adding feedshare:", err);
+            toast.error("Error occured while adding feedshare!");
+        }
     }
 
     function a11yProps(index: number) {
@@ -134,28 +144,56 @@ const FeedShareView: React.FC = () => {
         };
     }
 
-    const handleTabChange = (event: any, newValue: number) => {
-        feedShareService.getFeedshareByUser(locationId, user._id).then((event) => {
-            setFeedShareCards(event)
-        });
+    const handleTabChange = (event: any, newValue: string) => {
         setTab(newValue);
-        console.log(event);
+        if (newValue === '0') {
+            feedShareService.getFeedshare(locationId).then((event) => {
+                setAllFeedshare(event);
+            });
+        } else if (newValue === '1') {
+            feedShareService.getFeedshareByUser(locationId, user?.user?._id).then((event) => {
+                setMyFeedshare(event);
+            });
+        }
     };
 
     return (
         <div>
-            <div className="new-feedshare">
-                <Button className="new-button" onClick={() => setFormOpen(true)}>New Listing</Button>
-            </div>
-            <Tabs sx={{ margin: "15px 0 0 0" }} value={tab} onChange={handleTabChange} aria-label="basic tabs example">
-                <Tab sx={{ fontSize: "16px", fontWeight: "bold" }} label="All Feedshare" {...a11yProps(0)} />
-                <Tab sx={{ fontSize: "16px", fontWeight: "bold" }} label="My Feedshare" {...a11yProps(1)} />
-            </Tabs>
+            <ToastContainer position="top-center" closeOnClick />
+            <TabContext value={tab}>
+                <TabList sx={{ margin: "15px 0 0 0" }} onChange={handleTabChange} aria-label="basic tabs example">
+                    <Tab sx={{ fontSize: "16px", fontWeight: "bold" }} label="All Feedshare" value="0" {...a11yProps(0)} />
+                    {user?.isLoggedIn && <Tab sx={{ fontSize: "16px", fontWeight: "bold" }} label="My Feedshare" value="1" {...a11yProps(1)} />}
+                </TabList>
+                <TabPanel value="0">
+                    {
+                        allFeedshare.map((feedShareCard: FeedShare) => (
+                            <FeedShareCard
+                                feedShare={feedShareCard}
+                                afterUpdate={afterUpdate} 
+                                type="all"/>
+                        ))}
+
+                </TabPanel>
+                <TabPanel value="1">
+                    <div className="new-feedshare">
+                        <Button className="new-button" onClick={() => setFormOpen(true)}>New Listing</Button>
+                    </div>
+                    {
+                        myFeedshare.map((feedShareCard: FeedShare) => (
+                            <FeedShareCard
+                                feedShare={feedShareCard}
+                                afterUpdate={afterUpdate} 
+                                type="my"/>
+                        ))}
+                </TabPanel>
+            </TabContext>
             <Modal
                 open={formOpen}
                 onClose={() => {
                     setFormOpen(false);
-                    clearFormData();}}
+                    clearFormData();
+                }}
                 onOpen={() => setFormOpen(true)}
             >
                 <Modal.Header>Enter food details</Modal.Header>
@@ -164,11 +202,7 @@ const FeedShareView: React.FC = () => {
                         <Form.Field required label='Food Type' control='input' width={8}
                             value={inputData.foodType}
                             onChange={handleOnChange}
-                            id="foodType" />
-                        {/* <Form.Field label='An HTML <select>' control='select'>
-                        <option value='male'>Male</option>
-                        <option value='female'>Female</option>
-                    </Form.Field> */}
+                            id="foodType" />                        
                         <Form.Field required label='Servings' control='input' width={6}
                             value={inputData.servings}
                             onChange={handleOnChange}
@@ -195,28 +229,23 @@ const FeedShareView: React.FC = () => {
                     </Form.Group>
                     <Button type="submit" onClick={addFeedShare}
                         size="md"
-                        color="primary"
+                        color="success"
                         sx={{ float: "right", ml: 2, mr: 3, mb: 1, fontWeight: 600 }}>
                         Post</Button>
                     <Button
                         variant="solid"
                         size="md"
-                        color="primary"
+                        color="danger"
                         sx={{ float: "left", ml: 2, mr: 3, mb: 1, fontWeight: 600 }}
                         onClick={() => {
                             setFormOpen(false);
-                            clearFormData();}}
+                            clearFormData();
+                        }}
                     >
                         Close
                     </Button>
                 </Form>
-            </Modal>
-            {
-                feedShareCards.map((feedShareCard: FeedShare) => (
-                    <FeedShareCard
-                        feedShare={feedShareCard}
-                        afterUpdate={afterUpdate} />
-                ))}
+            </Modal>        
         </div>
     )
 }

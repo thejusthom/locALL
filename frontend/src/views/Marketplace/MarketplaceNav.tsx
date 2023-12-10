@@ -12,14 +12,14 @@ const MarketplaceNav = () => {
     menu: MenuItemProps
   ) => setActive(menu.name as string);
   return (
-    <Box sx={{ m: 4 ,pl:{md:20,xs:2},pr:{md:20,xs:2}}}>
+    <Box sx={{ m: 4 ,pl:{md:5,xs:2},pr:{md:5,xs:2}}}>
       <Menu attached="top" tabular>
         <Menu.Item
           name="all-items"
           active={active === "all-items"}
           onClick={handleItemClick}
         />
-        {user._id && 
+        {user.isLoggedIn && 
         <Menu.Item
           name="my-items"
           active={active === "my-items"}
@@ -31,7 +31,7 @@ const MarketplaceNav = () => {
           {active === "all-items" ? (
             <MarketplaceView active={active} />
           ) : (
-            user._id! && <MarketplaceView active={active} />
+            user.isLoggedIn && <MarketplaceView active={active} />
           )}
         </Segment>
       </Box>
