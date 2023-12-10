@@ -115,12 +115,6 @@ React.useEffect(() => {
         const session = await response.json();
         console.log(donation)
         !!donation && donationServices.updateDonation(loc.pincode, selectedId, {...donation, amountAchieved: (donation.amountAchieved || 0) + contributionAmount});
-        // .then((d)=> {
-        //     // donationServices.getDonations(loc.pincode).then((d)=> {
-        //         // const availableEvents = event.filter((e: IEvent) => !!e.endDate && moment(e.endDate) >= moment());
-        //         setDonations(d)}
-        // );
-    // });
         console.log(session);
   
         const result = await stripe?.redirectToCheckout({
@@ -161,16 +155,10 @@ React.useEffect(() => {
           reader.readAsDataURL(file);
           reader.onloadend = () => {
             reader.result as string;
-            // updateData[id as keyof typeof updateData] = reader.result as string;
-            // console.log(updateData);
-            // setFormData(updateData);
             setNewDonation({...newDonation, image: reader.result as string})
           };
         }
       }
-            // console.log(e.target.files[0]);
-            // !!e.target?.files?.length && setNewDonation({...newDonation, image: e.target?.files[0]});
-    // } 
     const onContributionChange  = (e: React.ChangeEvent<HTMLInputElement>) => {
         setContributionAmount(parseInt(e.target.value));
     }
@@ -184,7 +172,6 @@ React.useEffect(() => {
         const updatedEvent = {...newDonation};
         donationServices.updateDonation(loc.pincode, donationId, updatedEvent).then((donation)=> {
             donationServices.getDonations(loc.pincode).then((donation)=> {
-                // const availableEvents = event.filter((e: IEvent) => !!e.endDate && moment(e.endDate) >= moment());
                 setDonations(donation);
                 setShowLoader(false);
             }
@@ -210,7 +197,6 @@ React.useEffect(() => {
     setShowLoader(true);
        donationServices.deleteDonation(loc.pincode, donationId).then((donation)=> {
            donationServices.getDonations(loc.pincode).then((donation)=> {
-            //    const availableEvents = donation.filter((e: IDonation) => !!e.endDate && moment(e.endDate) >= moment());
                setDonations(donation);
                setShowLoader(false);
            });
@@ -229,15 +215,11 @@ React.useEffect(() => {
         setNewDonation(initialDonationState);
     };
     const handleTabChange = (event: any, newValue: number) => {
-        // donationServices.getDonations(loc.pincode).then((donation)=> {
-        //     // const availa = donation.filter((e: IEvent) => !!e.endDate && moment(e.endDate) >= moment());
-        //     setDonations(donation)});
         setTab(newValue);
       };
     return(
         <DonationsWrap>
         <ToastContainer position="top-center" closeOnClick />
-        {/* <View style={{ flex: 1, backgroundColor: 'rgba(0,0,0,0.6)', alignItems: "center", justifyContent: "center" }}> */}
         <Modal isOpen={showLoader}>
         <Loading isLoading={showLoader} />
         </Modal>
