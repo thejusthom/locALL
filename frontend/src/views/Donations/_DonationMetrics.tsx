@@ -4,7 +4,7 @@ import {
     Pie,
     Tooltip,
     Cell,
-    Label
+    
 } from "recharts";
 
 const data01 = [
@@ -83,9 +83,7 @@ const renderCustomizedLabel = ({ cx, cy, midAngle, innerRadius, outerRadius, per
           	data01.map((entry, index) => <Cell fill={data01[index].color}/>)
           }
             </Pie>
-        <Pie data={[]} dataKey="value" nameKey="name" cx="50%" cy="50%" innerRadius={60} outerRadius={80} fill="#82ca9d" label>
-            <Label>Categories</Label>
-            </Pie>
+        {/* <Pie data={[]} dataKey="value" nameKey="name" cx="50%" cy="50%" innerRadius={60} outerRadius={80} fill="#82ca9d" label /> */}
       </PieChart>
       </>
     );
