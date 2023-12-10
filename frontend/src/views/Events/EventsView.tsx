@@ -326,9 +326,9 @@ function a11yProps(index: number) {
             <Modal isOpen={showLoader}>
         <Loading isLoading={showLoader} />
         </Modal>
-        <Button 
+        {!!user?.user?._id &&<Button 
         onClick={() => setShowModal(true)}
-        >Create an Event</Button>
+        >Create an Event</Button>}
                <Tabs sx={{margin: "15px 0 0 0", "& button": {color: "#123abc"}, "& button.Mui-selected": {color: "#123abc"}}} value={tab} onChange={handleTabChange} aria-label="basic tabs example"
                TabIndicatorProps={{sx:{backgroundColor: "#123abc"}}}>
           <Tab sx={{fontSize: "16px", fontWeight: "bold"}} label="All Events" {...a11yProps(0)} />
