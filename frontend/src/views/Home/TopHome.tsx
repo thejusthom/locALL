@@ -111,7 +111,7 @@ const TopHome = () => {
                 </Typography>
               </Box>
               <Box sx={{ "& button": { mr: 2 } }}>
-                <Link to="/login">
+                <Link to="/events">
                   <StyledButton
                     color="primary"
                     size="large"

@@ -12,12 +12,11 @@ import Button from "@mui/material/Button";
 import MenuItem from "@mui/material/MenuItem";
 import LocationBar from "../_LocationBar";
 import Footer from "../footer/footer";
-import { IUser } from "../../models/user";
 import { useEffect, useState} from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import userService from "../../services/userService";
-import { saveUser } from "../../store/slices/user-slice";
 import { Avatar, ClickAwayListener, Grow, MenuList, Paper, Popper } from "@mui/material";
+import { deleteUser, saveUser } from "../../store/slices/user-slice";
 
 const pages = [
   { name: "Home", path: "/" },
@@ -36,7 +35,6 @@ const pages = [
 
 function HomeLayout() {
   const user = useSelector((state: any) => state.user);
-  const [currentUser, setCurrentUser] = useState(user);
   const dispatch = useDispatch();
   const [open, setOpen] = useState(false);
   const anchorRef = React.useRef<HTMLButtonElement>(null);
@@ -44,7 +42,6 @@ function HomeLayout() {
   console.log(user);
 
   useEffect(() => {
-    setCurrentUser(user);
     console.log(user);
   }, [user]);
 
@@ -68,8 +65,8 @@ function HomeLayout() {
       const responseJSON = await userService.logoutUser(user, user.refreshToken);
       if(responseJSON === 'Logout successful')
       {
-        setCurrentUser(null);
-        dispatch(saveUser({} as IUser));
+        dispatch(deleteUser()); // Delete user from redux store
+        localStorage.removeItem("user"); // Delete user from local storage
       }
     }   
   };
@@ -228,7 +225,7 @@ function HomeLayout() {
                 />
               )}
               <Box sx={{ flexGrow: 0 }}>
-                {currentUser && currentUser.user && currentUser.user.username ? ( // Check if the user is logged in
+                {user.isLoggedIn ? ( // Check if the user is logged in
                 <>
                   <Button
                     // key="logout"
