@@ -19,7 +19,7 @@ text-align: -webkit-center;
 margin-top: 20px;
 .title{
     font-size: 16px;
-    color: red;
+    color: #123abc;
 }
 .geocoder {
 position: absolute;

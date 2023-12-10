@@ -329,7 +329,8 @@ function a11yProps(index: number) {
         <Button 
         onClick={() => setShowModal(true)}
         >Create an Event</Button>
-               <Tabs sx={{margin: "15px 0 0 0"}} value={tab} onChange={handleTabChange} aria-label="basic tabs example">
+               <Tabs sx={{margin: "15px 0 0 0", "& button": {color: "#123abc"}, "& button.Mui-selected": {color: "#123abc"}}} value={tab} onChange={handleTabChange} aria-label="basic tabs example"
+               TabIndicatorProps={{sx:{backgroundColor: "#123abc"}}}>
           <Tab sx={{fontSize: "16px", fontWeight: "bold"}} label="All Events" {...a11yProps(0)} />
           <Tab sx={{fontSize: "16px", fontWeight: "bold"}} label="My Events" {...a11yProps(1)} />
         </Tabs>
@@ -391,7 +392,7 @@ export const Modal = styled(ReactModal)`
 inset: unset;
 width: 100%;
 height: 100%;
-background-color: rgba(0,0,0,0.1);
+background-color: rgba(231, 231, 231, 0.4)
 `;
 
 export default EventsView;
