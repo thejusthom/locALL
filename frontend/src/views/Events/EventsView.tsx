@@ -60,50 +60,12 @@ const pincode = loc.pincode;
 setAdd(pincode);
 // if(!!user._id){
 renderEventsByTab();
-// }
-// if(tab === 0){
-//     setShowLoader(true);
-// eventsService.getEvents(pincode).then((event)=> {
-//    const availableEvents = event.filter((e: IEvent) => !!e.endDate && moment(e.endDate) >= moment());
-// setEvents(availableEvents);
-// setShowLoader(false);
-// })
-// }
-//     else{
-//         setShowLoader(true);
-//         eventsService
-//         .getEventByParams(pincode, "6573fcd148338641e52772f3")
-//         .then((event => {
-//             setEvents(event);
-//             setShowLoader(false);
-//         }));
-//     }
 }, [loc]);
 
 React.useEffect(() => {
     // if(!!user._id){
 renderEventsByTab();
     // }
-
-
-// const pincode = loc.pincode;
-// if(tab === 0){
-//     setShowLoader(true);
-// eventsService.getEvents(pincode).then((event)=> {
-//     const availableEvents = event.filter((e: IEvent) => !!e.endDate && moment(e.endDate) >= moment());
-// setEvents(availableEvents);
-// setShowLoader(false);
-// })
-// }
-//     else if (tab === 1){
-//         setShowLoader(true);
-//         eventsService
-//         .getEventByParams(pincode, "6573fcd148338641e52772f3")
-//         .then((event => {
-//             setEvents(event);
-//             setShowLoader(false);
-//         }));
-//     }
 }, [user._id, tab]);
 
 const renderEventsByTab = () => {
@@ -313,12 +275,7 @@ const onEdit = (eventId: string) => {
 const onDelete = (eventId: string) => {
     setShowLoader(true);
     eventsService.deleteEvent(loc.pincode, eventId).then((event)=> {
-        // eventsService.getEvents(loc.pincode).then((event)=> {
-        //     const availableEvents = event.filter((e: IEvent) => !!e.endDate && moment(e.endDate) >= moment());
-        //     setEvents(availableEvents)
-        // });
         renderEventsByTab();
-        // setShowLoader(false);
             toast.success(`Event Deleted Successfully!`);
     });
 };
@@ -328,12 +285,6 @@ const onUpdate = () => {
     const end = endDate?.toLocaleDateString() || "";
     const updatedEvent = {...newEvent, address: {...coordinates}, organiser, startDate: start, endDate: end};
     eventsService.updateEvent(loc.pincode, eventId, updatedEvent).then((event)=> {
-    //     eventsService.getEvents(loc.pincode).then((event)=> {
-    //         const availableEvents = event.filter((e: IEvent) => !!e.endDate && moment(e.endDate) >= moment());
-    //         setEvents(availableEvents);
-    //         setShowLoader(false);
-    //     }
-    // );
     renderEventsByTab();
     toast.success(`${event.eventName} Updated Successfully!`);
 });
@@ -367,9 +318,6 @@ function a11yProps(index: number) {
     setShowModal(false);
 };
   const handleTabChange = (event: any, newValue: number) => {
-    // eventsService.getEvents(loc.pincode).then((event)=> {
-    //     const availableEvents = event.filter((e: IEvent) => !!e.endDate && moment(e.endDate) >= moment());
-    //     setEvents(newValue === 0 ? availableEvents : event)});
     setTab(newValue);
   };
     return(
@@ -423,7 +371,6 @@ mapContainer={mapContainer} />)
         : (<NoDataScreen />)
      }
     </EventsContainer>
-    // </ToastContainer>
     );
 }
 
