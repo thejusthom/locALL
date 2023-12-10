@@ -13,6 +13,7 @@ import Donations from '../views/Donations/DonationsView';
 import Login from '../views/LoginPage/login';
 import Register from '../views/RegisterPage/register';
 import UserProfile from '../views/UserProfile/UserProfileView';
+import Success from '../views/Donations/Success';
 
 // ==============================|| MAIN ROUTING ||============================== //
 
@@ -35,6 +36,10 @@ const MainRoutes = {
         {
             path: '/donations',
             element: <Donations />
+        },
+        {
+            path: '/donations/success',
+            element: <Success />
         },
         {
             path: '/feedshare',

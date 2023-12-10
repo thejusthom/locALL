@@ -40,7 +40,7 @@ return(
     <input type="number" id="age" value={newDonation.receiver?.age} onChange={onReceiverChange} />
     </InputWrap>
     <InputWrap>
-    <label>Photo: <MandatoryStar>*</MandatoryStar></label>
+    <label>Photo:</label>
     <input
         type="file"
         name="photo"
