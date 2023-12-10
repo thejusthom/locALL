@@ -8,6 +8,7 @@ import { Modal } from "../Events/EventsView";
 import { IDonation } from "../../models/donation";
 import DonationForm from "./_DonationForm";
 import { useSelector } from 'react-redux';
+import CloseIcon from "../../assets/images/close-black.svg";
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import { ToastContainer, toast } from "react-toastify";
@@ -17,6 +18,7 @@ const initialDonationState = {
     donationName: "",
       descriptionInfo: "",
       amountRequired: 0,
+      amountAchieved: 0,
       category: "medical",
       image: "",
       receiver: {
@@ -84,12 +86,15 @@ React.useEffect(() => {
     const handleMakePayment = async(event: any) => {
         event.preventDefault();
        const donation = donations?.find((i) => i._id === selectedId);
+       console.log(donation)
         if(!!process.env.REACT_APP_STRIPE_PUBLISHING_KEY){
 
         const stripe = await loadStripe(process.env.REACT_APP_STRIPE_PUBLISHING_KEY);
   
         const body = {
-            products:[{name: donation?.donationName, price:contributionAmount}]
+            products:[{name: donation?.donationName, price:contributionAmount}],
+            donation,
+            pincode: loc.pincode
         }
         const headers = {
             "Content-Type":"application/json"
@@ -101,6 +106,15 @@ React.useEffect(() => {
         });
   
         const session = await response.json();
+        console.log(donation)
+        !!donation && donationServices.updateDonation(loc.pincode, selectedId, {...donation, amountAchieved: (donation.amountAchieved || 0) + contributionAmount});
+        // .then((d)=> {
+        //     // donationServices.getDonations(loc.pincode).then((d)=> {
+        //         // const availableEvents = event.filter((e: IEvent) => !!e.endDate && moment(e.endDate) >= moment());
+        //         setDonations(d)}
+        // );
+    // });
+        console.log(session);
   
         const result = await stripe?.redirectToCheckout({
             sessionId:session.id
@@ -153,6 +167,11 @@ React.useEffect(() => {
     const onContributionChange  = (e: React.ChangeEvent<HTMLInputElement>) => {
         setContributionAmount(parseInt(e.target.value));
     }
+    const onCloseAmountModal = () => {
+        setSelectedId("");
+        setShowAmountPopup(false);
+    };
+
     const onUpdate = () => {
         const updatedEvent = {...newDonation};
         donationServices.updateDonation(loc.pincode, donationId, updatedEvent).then((donation)=> {
@@ -200,7 +219,7 @@ React.useEffect(() => {
         setTab(newValue);
       };
     return(
-        <>
+        <DonationsWrap>
         <ToastContainer position="top-center" closeOnClick />
         <Modal isOpen={showModal}>
   <EventsForm 
@@ -227,6 +246,9 @@ React.useEffect(() => {
   <Modal isOpen={showAmountPopup}>
     <FormWrap>
         <Form>
+            <div className="close">
+        <img src={CloseIcon} width={25} height={25} onClick={onCloseAmountModal} />
+        </div>
         <label>
         How much would you like to contribute?
         </label>
@@ -250,16 +272,26 @@ React.useEffect(() => {
         </DonationCardsWrap> 
         : <MyDonations donations={donations} onEdit={onEdit} onDelete={onDelete} />
         }
-        </>
+        </DonationsWrap>
     );
 }
 
+const DonationsWrap = styled.div`
+margin: 25px;
+`;
 const Form = styled(BaseForm)`
-height: 200px;
+height: 235px;
+overflow: hidden;
     padding: 40px;
+    .close{
+        text-align-last: end;
+    }
 `;
 
 const DonationCardsWrap = styled.article`
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 margin: 60px 40px;
 section{
     margin: 20px 0;
