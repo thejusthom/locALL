@@ -20,9 +20,9 @@ const initialDonationState = {
     donationName: "",
       descriptionInfo: "",
       amountRequired: 0,
-      amountAchieved: 0,
+    //   amountAchieved: 0,
       category: "medical",
-      image: "",
+    //   image: "",
       receiver: {
         name: "",
         age: 0,

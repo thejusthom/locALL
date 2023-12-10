@@ -12,7 +12,10 @@ handleMakePayment: (id: string) => void;
 
 const DonationCard = (props: IDonationCardProps) => {
     const { donation, handleMakePayment } = props;
-    const percentage = !!donation.amountAchieved ? Math.round((donation.amountAchieved/donation.amountRequired)*100) : 0;
+    let percentage = !!donation.amountAchieved ? Math.round((donation.amountAchieved/donation.amountRequired)*100) : 0;
+    if(percentage > 100){
+        percentage = 100;
+    }
     const progressColor = () => {
         if(percentage < 50){
             return "#ff1414";
