@@ -53,18 +53,10 @@ const FeedShareView: React.FC = () => {
         }
     };
 
-    const userExists = () => {
-        if (user._id !== undefined) {
-            return true;
-        } else {
-            return false;
-        }
-    }
-
     useEffect(() => {
         feedShareService.getFeedshare(locationId).then((feedShareCards) => setAllFeedshare(feedShareCards));
-        feedShareService.getFeedshareByUser(locationId, user._id).then((feedShareCards) => setMyFeedshare(feedShareCards));
-    }, [locationId, update, user._id]);
+        feedShareService.getFeedshareByUser(locationId, user?.user?._id).then((feedShareCards) => setMyFeedshare(feedShareCards));
+    }, [locationId, update, user?.user?._id]);
 
     const [inputData, setInputData] = React.useState({
         image: '',
@@ -125,7 +117,7 @@ const FeedShareView: React.FC = () => {
             postedDate: moment().format("MMMM Do YYYY, h:mm:ss a"),
             comments: [],
             locationId: add,
-            createdUser: user._id,
+            createdUser: user?.user?._id,
             _id: null,
         }
         try{ await feedShareService
@@ -159,7 +151,7 @@ const FeedShareView: React.FC = () => {
                 setAllFeedshare(event);
             });
         } else if (newValue === '1') {
-            feedShareService.getFeedshareByUser(locationId, user._id).then((event) => {
+            feedShareService.getFeedshareByUser(locationId, user?.user?._id).then((event) => {
                 setMyFeedshare(event);
             });
         }
@@ -171,7 +163,7 @@ const FeedShareView: React.FC = () => {
             <TabContext value={tab}>
                 <TabList sx={{ margin: "15px 0 0 0" }} onChange={handleTabChange} aria-label="basic tabs example">
                     <Tab sx={{ fontSize: "16px", fontWeight: "bold" }} label="All Feedshare" value="0" {...a11yProps(0)} />
-                    {userExists() && <Tab sx={{ fontSize: "16px", fontWeight: "bold" }} label="My Feedshare" value="1" {...a11yProps(1)} />}
+                    {user?.isLoggedIn && <Tab sx={{ fontSize: "16px", fontWeight: "bold" }} label="My Feedshare" value="1" {...a11yProps(1)} />}
                 </TabList>
                 <TabPanel value="0">
                     {

@@ -3,14 +3,15 @@ import { Form, Modal } from "semantic-ui-react";
 import Button from "@mui/joy/Button";
 import React, { useState } from 'react';
 import { Alert } from '@mui/material';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { IUser } from '../../models/user';
 import { SearchBox } from '@mapbox/search-js-react';
 import userService from '../../services/userService';
 import { ToastContainer, toast } from 'react-toastify';
+import { saveUser } from '../../store/slices/user-slice';
 
 export default function UserProfileBlock() {
-
+    const dispatch = useDispatch();
     const user = useSelector((state: any) => state.user);
     const [passwordValid, setPasswordValid] = useState(false);
     const [passwordFormOpen, setPasswordFormOpen] = React.useState(false);
@@ -20,13 +21,13 @@ export default function UserProfileBlock() {
     });
     const [editFormOpen, setEditFormOpen] = React.useState(false);
     const [inputData, setInputData] = React.useState({
-        firstName: user.person.firstName,
-        lastName: user.person.lastName,
-        email: user.person.email,
-        phoneNumber: user.person.phoneNumber,
-        address: user.person.address,
-        zipcode: user.person.zipcode,
-        username: user.username
+        firstName: user?.user?.person?.firstName,
+        lastName: user?.user?.person?.lastName,
+        email: user?.user?.person?.email,
+        phoneNumber: user?.user?.person?.phoneNumber,
+        address: user?.user?.person?.address,
+        zipcode: user?.user?.person?.zipcode,
+        username: user?.user?.username
     });
     const [selectedLocation, setSelectedLocation] = React.useState("");
     const [coordinates, setCoordinates] = React.useState({ latitude: 0, longitude: 0 });
@@ -79,13 +80,14 @@ export default function UserProfileBlock() {
     const fillInputData = () => {
         console.log("fill");
         const filledData = {
-            firstName: user.person.firstName,
-            lastName: user.person.lastName,
-            email: user.person.email,
-            phoneNumber: user.person.phoneNumber,
-            address: user.person.address,
-            zipcode: user.person.zipcode,
-            username: user.username
+            firstName: user?.user?.person?.firstName,
+            lastName: user?.user?.person?.lastName,
+            email: user?.user?.person?.email,
+            phoneNumber: user?.user?.person?.phoneNumber,
+            address: user?.user?.person?.address,
+            zipcode: user?.user?.person?.zipcode,
+            username: user?.user?.username,
+            password: user?.user?.person?.password
         };
         setInputData(filledData);
     }
@@ -120,9 +122,9 @@ export default function UserProfileBlock() {
 
     const handleUpdateUserDataConfirm = async () => {
         const userData: IUser = {
-            _id: user._id,
+            _id: user?.user?._id,
             username: inputData.username,
-            password: user.person.password,
+            password: user?.user?.password,
             person: {
                 firstName: inputData.firstName,
                 lastName: inputData.lastName,
@@ -133,6 +135,10 @@ export default function UserProfileBlock() {
         };
         console.log(userData);
         try {
+            // const validatedUser = await userService.loginUser(user);
+            // console.log(validatedUser);
+            // localStorage.setItem("user", JSON.stringify(validatedUser));
+            // dispatch(saveUser(validatedUser));
             await userService.updateUser(userData).then(() => {
                 if (editFormOpen === false) {
                     setEditFormOpen(true);
@@ -157,15 +163,15 @@ export default function UserProfileBlock() {
     const handlePasswordChangeConfirm = async () => {
         {
             const userData: IUser = {
-                _id: user._id,
-                username: user.username,
+                _id: user?.user?._id,
+                username: user?.user?.username,
                 password: passwords.passwordTwo,
                 person: {
-                    firstName: user.person.firstName,
-                    lastName: user.person.lastName,
-                    phoneNumber: user.person.phoneNumber,
-                    address: user.person.address,
-                    zipcode: user.person.zipcode
+                    firstName: user?.user?.person?.firstName,
+                    lastName: user?.user?.person?.lastName,
+                    phoneNumber: user?.user?.person?.phoneNumber,
+                    address: user?.user?.person?.address,
+                    zipcode: user?.user?.person?.zipcode
                 }
             };
             try {
@@ -207,9 +213,9 @@ export default function UserProfileBlock() {
                                     <div className="bootstrap-iso d-flex flex-column align-items-center text-center">
                                         <img src="https://bootdey.com/img/Content/avatar/avatar7.png" alt="Admin" className="bootstrap-iso rounded-circle" width="150" />
                                         <div className="bootstrap-iso mt-3 text-center">
-                                            <h4>{user.person.firstName}{" "}{user.person.lastName}</h4>
-                                            <p className="bootstrap-iso text-secondary mb-1 text-center">{user.person.zipcode}</p>
-                                            <p className="bootstrap-iso text-muted font-size-sm text-center">{user.person.address}</p>
+                                            <h4>{user?.user?.person?.firstName}{" "}{user?.user?.person?.lastName}</h4>
+                                            <p className="bootstrap-iso text-secondary mb-1 text-center">{user?.user?.person?.zipcode}</p>
+                                            <p className="bootstrap-iso text-muted font-size-sm text-center">{user?.user?.person?.address}</p>
                                             {/* <button className="bootstrap-iso btn btn-primary">Follow</button>
                                         <button className="bootstrap-iso btn btn-outline-primary">Message</button> */}
                                         </div>
@@ -250,7 +256,7 @@ export default function UserProfileBlock() {
                                             <h6 className="bootstrap-iso mb-0">First Name</h6>
                                         </div>
                                         <div className="bootstrap-iso col-sm-9 text-secondary">
-                                            {user.person.firstName}
+                                            {user?.user?.person?.firstName}
                                         </div>
                                     </div>
                                     <hr />
@@ -259,7 +265,7 @@ export default function UserProfileBlock() {
                                             <h6 className="bootstrap-iso mb-0">Last Name</h6>
                                         </div>
                                         <div className="bootstrap-iso col-sm-9 text-secondary">
-                                            {user.person.lastName}
+                                            {user?.user?.person?.lastName}
                                         </div>
                                     </div>
                                     <hr />
@@ -268,7 +274,7 @@ export default function UserProfileBlock() {
                                         <h6 className="bootstrap-iso mb-0">Email</h6>
                                     </div>
                                     <div className="bootstrap-iso col-sm-9 text-secondary">
-                                    {user.person.email}
+                                    {user?.user?.person?.email}
                                     </div>
                                 </div> 
                                 <hr />*/}
@@ -277,7 +283,7 @@ export default function UserProfileBlock() {
                                             <h6 className="bootstrap-iso mb-0">Phone</h6>
                                         </div>
                                         <div className="bootstrap-iso col-sm-9 text-secondary">
-                                            {user.person.phoneNumber}
+                                            {user?.user?.person?.phoneNumber}
                                         </div>
                                     </div>
                                     <hr />
@@ -286,7 +292,7 @@ export default function UserProfileBlock() {
                                             <h6 className="bootstrap-iso mb-0">Address</h6>
                                         </div>
                                         <div className="bootstrap-iso col-sm-9 text-secondary">
-                                            {user.person.address}
+                                            {user?.user?.person?.address}
                                         </div>
                                     </div>
                                     <hr />
@@ -295,7 +301,7 @@ export default function UserProfileBlock() {
                                             <h6 className="bootstrap-iso mb-0">Username</h6>
                                         </div>
                                         <div className="bootstrap-iso col-sm-9 text-secondary">
-                                            {user.username}
+                                            {user?.user?.username}
                                         </div>
                                     </div>
                                     <hr />
@@ -376,15 +382,15 @@ export default function UserProfileBlock() {
                 <Form>
                     <Form.Group grouped>
                         <Form.Field label='First Name' control='input' width={8}
-                            value={user.person.firstName}
+                            value={inputData.firstName}
                             onChange={handleOnChange}
                             id="firstName" />
                         <Form.Field label='Last Name' control='input' width={8}
-                            value={user.person.lastName}
+                            value={inputData.lastName}
                             onChange={handleOnChange}
                             id="lastName" />
                         <Form.Field label='Phone Number' control='input' width={6}
-                            value={user.person.phoneNumber}
+                            value={inputData.phoneNumber}
                             onChange={handleOnChange}
                             id="phoneNumber" />
                         <Form.Field label='Location' />
@@ -403,7 +409,7 @@ export default function UserProfileBlock() {
                         />
                     </Form.Group>
                     <Form.Field label='Username' control='input' width={8}
-                        value={user.username}
+                        value={inputData.username}
                         onChange={handleOnChange}
                         id="username" />
                     <Button type="submit" onClick={() => {

@@ -12,7 +12,7 @@ import Button from "@mui/material/Button";
 import MenuItem from "@mui/material/MenuItem";
 import LocationBar from "../_LocationBar";
 import Footer from "../footer/footer";
-import { useEffect, useState} from 'react';
+import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import userService from "../../services/userService";
 import { Avatar, ClickAwayListener, Grow, MenuList, Paper, Popper } from "@mui/material";
@@ -37,8 +37,9 @@ function HomeLayout() {
   const user = useSelector((state: any) => state.user);
   const dispatch = useDispatch();
   const [open, setOpen] = useState(false);
+  const [openMenu, setOpenMenu] = useState(false);
   const anchorRef = React.useRef<HTMLButtonElement>(null);
-  
+
   console.log(user);
 
   useEffect(() => {
@@ -47,7 +48,7 @@ function HomeLayout() {
 
   // console.log(currentUser);
   // console.log(currentUser.user.username);
-  
+
   const [anchorElNav, setAnchorElNav] = useState<null | HTMLElement>(
     null
   );
@@ -63,17 +64,24 @@ function HomeLayout() {
   const handleLogout = async () => {
     if (user.refreshToken) {
       const responseJSON = await userService.logoutUser(user, user.refreshToken);
-      if(responseJSON === 'Logout successful')
-      {
+      if (responseJSON === 'Logout successful') {
         dispatch(deleteUser()); // Delete user from redux store
         localStorage.removeItem("user"); // Delete user from local storage
       }
-    }   
+    }
   };
 
-  const handleToggle = () => { 
-    setOpen((prevOpen) => !prevOpen);
+  const handleToggle = () => {
+    setOpenMenu((prevOpen) => !prevOpen);
   }
+
+  const prevOpen = React.useRef(openMenu);
+  React.useEffect(() => {
+    if (prevOpen.current === true && openMenu === false) {
+      anchorRef.current!.focus();
+    }
+    prevOpen.current = openMenu;
+  }, [openMenu]);
 
   const handleClose = (event: Event | React.SyntheticEvent) => {
     if (
@@ -85,21 +93,21 @@ function HomeLayout() {
   }
 
 
-    function handleListKeyDown(event: React.KeyboardEvent) {
-      if (event.key === 'Tab') {
-        event.preventDefault();
-        setOpen(false);
-      } else if (event.key === 'Escape') {
-        setOpen(false);
-      }
+  function handleListKeyDown(event: React.KeyboardEvent) {
+    if (event.key === 'Tab') {
+      event.preventDefault();
+      setOpenMenu(false);
+    } else if (event.key === 'Escape') {
+      setOpenMenu(false);
     }
+  }
 
   return (
     <Box sx={{ position: "relative", minHeight: "100vh" }}>
       <Box>
         <AppBar
           position="sticky"
-          sx={{ pr: { md: 2, xs: 2 }, pl: { md: 2, xs: 2 }, backgroundColor:"#123abc" }}
+          sx={{ pr: { md: 2, xs: 2 }, pl: { md: 2, xs: 2 }, backgroundColor: "#123abc" }}
         >
           <Container maxWidth="xl">
             <Toolbar disableGutters>
@@ -226,48 +234,50 @@ function HomeLayout() {
               )}
               <Box sx={{ flexGrow: 0 }}>
                 {user.isLoggedIn ? ( // Check if the user is logged in
-                <>
-                  <Button
-                    // key="logout"
-                    // onClick={handleLogout}
-                    onClick={handleToggle}
-                    ref={anchorRef}
-                  >
-                  <Avatar src="/broken-image.jpg" />
-                  </Button>
-                  <Popper
-                  open={open}
-                  anchorEl={anchorRef.current}
-                  role={undefined}
-                  placement="bottom-start"
-                  transition
-                  disablePortal
-                >
-                  {({ TransitionProps, placement }) => (
-                    <Grow
-                      {...TransitionProps}
-                      style={{
-                        transformOrigin:
-                          placement === 'bottom-start' ? 'left top' : 'left bottom',
-                      }}
+                  <>
+                    <Button
+                      // key="logout"
+                      // onClick={handleLogout}
+                      onClick={handleToggle}
+                      ref={anchorRef}
                     >
-                      <Paper>
-                        <ClickAwayListener onClickAway={handleClose}>
-                          <MenuList
-                            autoFocusItem={open}
-                            id="composition-menu"
-                            aria-labelledby="composition-button"
-                            onKeyDown={handleListKeyDown}
-                          >
-                            <MenuItem  >Profile</MenuItem>
-                            <MenuItem key="logout" onClick={handleLogout}>Logout</MenuItem>
-                          </MenuList>
-                        </ClickAwayListener>
-                      </Paper>
-                    </Grow>
-                  )}
-                </Popper>
-                </>
+                      <Avatar src="/broken-image.jpg" />
+                    </Button>
+                    <Popper
+                      open={openMenu}
+                      anchorEl={anchorRef.current}
+                      role={undefined}
+                      placement="bottom-start"
+                      transition
+                      disablePortal
+                    >
+                      {({ TransitionProps, placement }) => (
+                        <Grow
+                          {...TransitionProps}
+                          style={{
+                            transformOrigin:
+                              placement === 'bottom-start' ? 'left top' : 'left bottom',
+                          }}
+                        >
+                          <Paper>
+                            <ClickAwayListener onClickAway={handleClose}>
+                              <MenuList
+                                autoFocusItem={open}
+                                id="composition-menu"
+                                aria-labelledby="composition-button"
+                                onKeyDown={handleListKeyDown}
+                              >
+                                <MenuItem component={Link}
+                                  to="/userProfile">Profile
+                                </MenuItem>
+                                <MenuItem key="logout" onClick={handleLogout}>Logout</MenuItem>
+                              </MenuList>
+                            </ClickAwayListener>
+                          </Paper>
+                        </Grow>
+                      )}
+                    </Popper>
+                  </>
                 ) : (
                   <Button
                     key="login"
@@ -293,8 +303,8 @@ function HomeLayout() {
             </Toolbar>
           </Container>
         </AppBar>
-        <Box sx={{minHeight:'100vh'}}>
-        <Outlet />
+        <Box sx={{ minHeight: '100vh' }}>
+          <Outlet />
         </Box>
       </Box>
       <Footer />
