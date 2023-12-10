@@ -70,7 +70,7 @@ const ProgressBar = (props: IProgressBar) => {
 const Parentdiv = styled.div<{height: number}>`
     height: ${(props) => props.height}px;
     width: 200px;
-    background-color: #cbc7c7;
+    background-color: #eaeaea;
     border-radius: 40px;
     /* margin: 50px; */
     `;

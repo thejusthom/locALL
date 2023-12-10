@@ -52,7 +52,7 @@ const DonationCard = (props: IDonationCardProps) => {
 
 const Card = styled.section`
 display: flex;
-background-color: #fbf3f3;
+/* background-color: #fbf3f3; */
 box-shadow: 0px 0px 15px 5px #b4b1b1;
 &:hover{
     width: 1150px;
