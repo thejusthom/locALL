@@ -22,7 +22,8 @@ type Props = {
 const FeedShareCard = (props: Props): React.ReactElement => {
 
     const handleSubmit = () => {
-        props.feedShare.comments.push({ author: "You", metaData: "Today", text: text, avatar: "Profile Pic" });
+        props.feedShare.comments.push({ author: user.person.firstName, metaData: moment().format("MMMM Do YYYY, h:mm:ss a")
+        , text: text, avatar: "Profile Pic" });
         feedshareService.updateFeedshare(props.feedShare.locationId, props.feedShare, props.feedShare._id);
         setText('');
     };
@@ -186,7 +187,12 @@ const FeedShareCard = (props: Props): React.ReactElement => {
                 <div className="meta">
                     <img className="photo" src={props.feedShare.image}></img>
                     <ul className="details">
-                        <li className="author"><a href="#">{props.feedShare.organizer}</a></li>
+                        <li className="author"><a href="#">
+                        {typeof props.feedShare.createdUser === "string"
+                                        ? "" : props.feedShare.createdUser?.person?.firstName}{" "}
+                                    {typeof props.feedShare.createdUser === "string"
+                                        ? "" : props.feedShare.createdUser?.person?.lastName}
+                            </a></li>
                         <li className="date">{props.feedShare.postedDate}</li>
                     </ul>
                 </div>
@@ -209,14 +215,18 @@ const FeedShareCard = (props: Props): React.ReactElement => {
                 <Modal.Header>{props.feedShare.foodType}</Modal.Header>
                 <Modal.Content image scrolling>
                     <Image
-                        size="medium"
-                        style={{ position: "sticky", top: 0 }}
-                        src={`data:image/png;base64,${props.feedShare.image}`}
+                        style={{ position: "sticky", top: 0, height: '100%', width: '100%' }}
+                        src={props.feedShare.image}
                         alt={props.feedShare.foodType}
                         wrapped
                     />
                     <Modal.Description style={{ width: "500px" }}>
+                    <Typography fontSize="xl" fontWeight="lg">Organizer</Typography>
+                        <p>{props.feedShare.organizer}</p>
+                    <Typography fontSize="xl" fontWeight="lg">Address</Typography>
                         <p>{props.feedShare.address}</p>
+                        <Typography fontSize="xl" fontWeight="lg">Servings</Typography>
+                        <p>{props.feedShare.servings}</p>
                         <Box sx={{ display: "flex", position: "relative" }}>
                             <Box sx={{ width: "300px", float: "left" }}>
                                 <p style={{ margin: 0 }}>
@@ -229,15 +239,7 @@ const FeedShareCard = (props: Props): React.ReactElement => {
                                 <Typography level="body-sm">
                                     &nbsp; &nbsp; on {props.feedShare.postedDate}
                                 </Typography>
-                            </Box>
-                            <Box sx={{ float: "right", position: "absolute", right: 0 }}>
-                                <Typography level="body-xs" fontSize="xl">
-                                    Servings:
-                                </Typography>
-                                <Typography fontSize="lg" fontWeight="lg">
-                                    {props.feedShare.servings}
-                                </Typography>
-                            </Box>
+                            </Box>                           
                         </Box>
 
                         <Comment.Group>
@@ -325,7 +327,7 @@ const FeedShareCard = (props: Props): React.ReactElement => {
                             label="Upload your images here"
                             type="file"
                             id="image"
-                            // required
+                            required
                             onChange={handleOnChange}
                         />
                     </Form.Group>
