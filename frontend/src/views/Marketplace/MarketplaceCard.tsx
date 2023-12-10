@@ -124,7 +124,7 @@ const MarketplaceCard = (props: Props) => {
 
   const handleCommentsSubmit = () => {
     props.marketplace.comments.push({
-      author: user.person.firstName + " " + user.person.lastName,
+      author: user?.user?.person?.firstName + " " + user?.user?.person?.lastName,
       metaData: moment().format("MMMM Do YYYY, h:mm:ss a"),
       text: text,
       avatar: "Profile Pic",
@@ -246,10 +246,10 @@ const MarketplaceCard = (props: Props) => {
                   Posted by{" "}
                   {typeof props.marketplace.createdUser === "string"
                     ? ""
-                    : props.marketplace.createdUser.person?.firstName}{" "}
-                  {typeof props.marketplace.createdUser === "string"
+                    : props.marketplace.createdUser?.person?.firstName}{" "}
+                  {typeof props.marketplace?.createdUser === "string"
                     ? ""
-                    : props.marketplace.createdUser.person?.lastName}
+                    : props.marketplace.createdUser?.person?.lastName}
                 </p>
                 <Typography level="body-sm">
                   &nbsp; &nbsp; on {props.marketplace.listingDate}
@@ -269,8 +269,8 @@ const MarketplaceCard = (props: Props) => {
               <Header as="h3" dividing>
                 Comments
               </Header>
-              {props.marketplace.comments.map((comment) => (
-                <Comment>
+              {props.marketplace.comments.map((comment, index) => (
+                <Comment  key={String(index)}>
                   <Comment.Avatar
                     src={comment.avatar}
                     srcSet={[comment.avatar, image]}
@@ -285,7 +285,7 @@ const MarketplaceCard = (props: Props) => {
                 </Comment>
               ))}
 
-             {user._id! && <Form onSubmit={handleCommentsSubmit}>
+             {user.isLoggedIn ! && <Form onSubmit={handleCommentsSubmit}>
                 <Form.TextArea
                   placeholder="Write your comments here"
                   name="text"

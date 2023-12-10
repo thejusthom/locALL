@@ -12,7 +12,7 @@ import Grid from '@mui/material/Grid';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography, { TypographyProps }from '@mui/material/Typography';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import { saveUser } from '../../store/slices/user-slice';
+import { saveUser, deleteUser } from '../../store/slices/user-slice';
 import { useDispatch, useSelector } from 'react-redux';
 import { IPerson, IUser } from '../../models/user';
 import userService from '../../services/userService';
@@ -57,11 +57,13 @@ const Login: React.FC = () => {
         const validatedUser = await userService.loginUser(user);
         console.log(validatedUser);
         setError(null);
+        localStorage.setItem("user", JSON.stringify(validatedUser));
         dispatch(saveUser(validatedUser));
         navigate('/');
       } 
       catch (error) 
       {
+        dispatch(deleteUser());
         console.error(`Error logging in: ${error}`);
         setError('Invalid username or password');
       }

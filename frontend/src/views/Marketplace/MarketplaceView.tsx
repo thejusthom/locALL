@@ -29,14 +29,14 @@ const MarketplaceView = (props: Props) => {
   useEffect(() => {
     if (props.active === "my-items") {
       marketplaceService
-        .getMarketplaceByParams(locationId, user._id)
+        .getMarketplaceByParams(locationId, user?.user?._id)
         .then((marketplaceCards) => setMarketplaceCards(marketplaceCards));
     } else {
       marketplaceService
         .getMarketplace(locationId)
         .then((marketplaceCards) => setMarketplaceCards(marketplaceCards));
     }
-  }, [locationId, props.active, update, user._id]);
+  }, [locationId, props.active, update, user.isLoggedIn]);
   const afterUpdate = () => {
     if (update === false) {
       setUpdate(true);
@@ -86,7 +86,7 @@ const MarketplaceView = (props: Props) => {
     const marketplace: Marketplace = {
       ...formData,
       locationId,
-      createdUser: user._id,
+      createdUser: user?.user?._id,
       listingDate,
       _id: null,
       comments: [],
@@ -127,8 +127,9 @@ const MarketplaceView = (props: Props) => {
         </Box>
       )}
       <Box sx={{ display: "flex", m: 1, gap: 2, flexWrap: "wrap" }}>
-        {marketplaceCards.map((marketplaceCard: Marketplace) => (
+        {marketplaceCards.map((marketplaceCard: Marketplace,index) => (
           <MarketplaceCard
+            key={String(index)}
             marketplace={marketplaceCard}
             active={props.active}
             afterUpdate={afterUpdate}
