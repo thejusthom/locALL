@@ -15,6 +15,7 @@ import { ToastContainer, toast } from "react-toastify";
 import MyDonations from "./_MyDonations";
 import NoDataScreen from "../../common/_NoDataScreen";
 import Loading from "../../common/_Loader";
+import DonationMetrics from "./_DonationMetrics";
 
 const initialDonationState = {
     donationName: "",
@@ -268,6 +269,7 @@ React.useEffect(() => {
           <Tab sx={{fontSize: "16px", fontWeight: "bold"}} label="All Donations" {...a11yProps(0)} />
           <Tab sx={{fontSize: "16px", fontWeight: "bold"}} label="My Donations" {...a11yProps(1)} />
         </Tabs>
+        <DonationMetrics />
         {tab === 0 ? !!donations?.length ? 
         (<DonationCardsWrap>
         {donations.map((donation) => {return(<DonationCard donation={donation} handleMakePayment={onChangeDonationAmount} />)} )}
