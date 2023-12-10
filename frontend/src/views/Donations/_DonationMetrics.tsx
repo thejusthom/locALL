@@ -128,6 +128,24 @@ const renderCustomizedLabel = ({ cx, cy, midAngle, innerRadius, outerRadius, per
     </text>
   );
 };
+
+const CustomTooltip = ({ active, payload, label }: any) => {
+    console.log(payload, label)
+    if (active && payload && payload.length) {
+      return (
+        <div className="tooltip-wrap">
+          <p className="label">{`${label} : ${payload[0].value}`}</p>
+          {/* <p className="intro">{getIntroOfPage(label)}</p> */}
+          <p>Amount Required: {payload[0].payload.amountRequired}</p>
+          <p>Amount Achieved: {payload[0].payload.amountAchieved}</p>
+          <p>Amount Required: {payload[0].payload.below50}</p>
+          <p>Amount Required: {payload[0].payload.above50}</p>
+        </div>
+      );
+    }
+    else return null;
+}
+
     return(
         <>
         <PieChart width={730} height={400}>
@@ -154,7 +172,7 @@ const renderCustomizedLabel = ({ cx, cy, midAngle, innerRadius, outerRadius, per
           {/* <CartesianGrid stroke="#f5f5f5" /> */}
           <XAxis dataKey="name" scale="band" />
           <YAxis />
-          <Tooltip />
+          <Tooltip content={<CustomTooltip />} />
           <Legend />
           <Area type="monotone" dataKey="amountAchieved" fill="#9fbddd" stroke="#1976d2" />
           <Bar dataKey="amountRequired" barSize={20} fill="#123abc" />
