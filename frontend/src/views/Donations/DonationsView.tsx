@@ -267,7 +267,7 @@ React.useEffect(() => {
         <Button onClick={() => setShowModal(true)}>Create New Donation</Button>
         <Tabs sx={{margin: "15px 0 0 0", "& button": {color: "#123abc"}, "& button.Mui-selected": {color: "#123abc"}}} value={tab} onChange={handleTabChange} aria-label="basic tabs example"   TabIndicatorProps={{sx:{backgroundColor: "#123abc"}}}>
           <Tab sx={{fontSize: "16px", fontWeight: "bold"}} label="All Donations" {...a11yProps(0)} />
-          {!!user?.user._id && <Tab sx={{fontSize: "16px", fontWeight: "bold"}} label="My Donations" {...a11yProps(1)} />}
+          {!!user?.user?._id && <Tab sx={{fontSize: "16px", fontWeight: "bold"}} label="My Donations" {...a11yProps(1)} />}
         </Tabs>
         <DonationMetrics />
         {tab === 0 ? !!donations?.length ? 
