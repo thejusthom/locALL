@@ -13,6 +13,8 @@ import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import { ToastContainer, toast } from "react-toastify";
 import MyDonations from "./_MyDonations";
+import NoDataScreen from "../../common/_NoDataScreen";
+import Loading from "../../common/_Loader";
 
 const initialDonationState = {
     donationName: "",
@@ -39,6 +41,7 @@ const DonationsView = () => {
     const [isEdit, setIsEdit] = React.useState<boolean>(false);
     const [selectedId, setSelectedId] = React.useState("");
     const [contributionAmount, setContributionAmount] = React.useState(0);
+    const [showLoader, setShowLoader] = React.useState(true);
 
     const selectLocation = (state: any) => state.location;
 const loc = useSelector(selectLocation);
@@ -221,6 +224,10 @@ React.useEffect(() => {
     return(
         <DonationsWrap>
         <ToastContainer position="top-center" closeOnClick />
+        {/* <View style={{ flex: 1, backgroundColor: 'rgba(0,0,0,0.6)', alignItems: "center", justifyContent: "center" }}> */}
+        <Modal isOpen={showLoader}>
+        <Loading isLoading={showLoader} />
+        </Modal>
         <Modal isOpen={showModal}>
   <EventsForm 
   isEdit={isEdit}
@@ -266,11 +273,13 @@ React.useEffect(() => {
           <Tab sx={{fontSize: "16px", fontWeight: "bold"}} label="All Donations" {...a11yProps(0)} />
           <Tab sx={{fontSize: "16px", fontWeight: "bold"}} label="My Donations" {...a11yProps(1)} />
         </Tabs>
-        {tab === 0 && !!donations ? 
-        <DonationCardsWrap>
+        {tab === 0 ? !!donations?.length ? 
+        (<DonationCardsWrap>
         {donations.map((donation) => {return(<DonationCard donation={donation} handleMakePayment={onChangeDonationAmount} />)} )}
-        </DonationCardsWrap> 
-        : <MyDonations donations={donations} onEdit={onEdit} onDelete={onDelete} />
+        </DonationCardsWrap>) 
+        :  (<NoDataScreen />)
+        : !!donations?.length ? (<MyDonations donations={donations} onEdit={onEdit} onDelete={onDelete} />)
+        : <NoDataScreen />
         }
         </DonationsWrap>
     );
