@@ -19,15 +19,18 @@ const initialStateUser = {
 const Posts: React.FC<Props> = (props: Props): ReactElement =>{
   const [user, setUser] = useState<IUser>(initialStateUser);
   const currentUser : IUser = useSelector((state: any) => state.user);
+  const location = useSelector((state: any) => state.location);
+  console.log(location);
+  console.log(currentUser);
  
-  useEffect(() => {
-    setUser(currentUser);
-    console.log(currentUser);
-  }, [currentUser]);
+  // useEffect(() => {
+  //   setUser(currentUser);
+  //   console.log(currentUser);
+  // }, [currentUser]);
 
-  useEffect(() => {
-    console.log(user);
-  },[user]);
+  // useEffect(() => {
+  //   console.log(user);
+  // },[user]);
 
   const happeningsEntrees = props.posts.map(happening => {
     return(

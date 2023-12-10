@@ -12,6 +12,11 @@ import Button from "@mui/material/Button";
 import MenuItem from "@mui/material/MenuItem";
 import LocationBar from "../_LocationBar";
 import Footer from "../footer/footer";
+import { IUser } from "../../models/user";
+import { useEffect, useState} from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import userService from "../../services/userService";
+import { saveUser } from "../../store/slices/user-slice";
 
 const pages = [
   { name: "Home", path: "/" },
@@ -22,8 +27,28 @@ const pages = [
   { name: "Donations", path: "/donations" },
 ];
 
+// const initialStateUser = {
+//   person: {} as IPerson,
+//   username: '',
+//   password: ''
+// };
+
 function HomeLayout() {
-  const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(
+  const user = useSelector((state: any) => state.user);
+  const [currentUser, setCurrentUser] = useState(user);
+  const dispatch = useDispatch();
+  
+  console.log(user);
+
+  useEffect(() => {
+    setCurrentUser(user);
+    console.log(user);
+  }, [user]);
+
+  // console.log(currentUser);
+  // console.log(currentUser.user.username);
+  
+  const [anchorElNav, setAnchorElNav] = useState<null | HTMLElement>(
     null
   );
 
@@ -33,6 +58,17 @@ function HomeLayout() {
 
   const handleCloseNavMenu = () => {
     setAnchorElNav(null);
+  };
+
+  const handleLogout = async () => {
+    if (user.refreshToken) {
+      const responseJSON = await userService.logoutUser(user, user.refreshToken);
+      if(responseJSON === 'Logout successful')
+      {
+        setCurrentUser(null);
+        dispatch(saveUser({} as IUser));
+      }
+    }   
   };
 
   return (
@@ -166,25 +202,45 @@ function HomeLayout() {
                 />
               )}
               <Box sx={{ flexGrow: 0 }}>
-                <Button
-                  key="login"
-                  onClick={handleCloseNavMenu}
-                  component={Link}
-                  to="/login"
-                  sx={{
-                    my: 2,
-                    mx: 1.1,
-                    color: "white",
-                    display: "block",
-                    fontSize: "16px",
-                    fontWeight: 600,
-                    "&:hover": {
-                      color: "#101a45",
-                    },
-                  }}
-                >
-                  LOGIN
-                </Button>
+                {currentUser && currentUser.user && currentUser.user.username ? ( // Check if the user is logged in
+                  <Button
+                    key="logout"
+                    onClick={handleLogout}
+                    sx={{
+                      my: 2,
+                      mx: 1.1,
+                      color: "white",
+                      display: "block",
+                      fontSize: "16px",
+                      fontWeight: 600,
+                      "&:hover": {
+                        color: "#101a45",
+                      },
+                    }}
+                  >
+                    LOGOUT
+                  </Button>
+                ) : (
+                  <Button
+                    key="login"
+                    onClick={handleCloseNavMenu}
+                    component={Link}
+                    to="/login"
+                    sx={{
+                      my: 2,
+                      mx: 1.1,
+                      color: "white",
+                      display: "block",
+                      fontSize: "16px",
+                      fontWeight: 600,
+                      "&:hover": {
+                        color: "#101a45",
+                      },
+                    }}
+                  >
+                    LOGIN
+                  </Button>
+                )}
               </Box>
             </Toolbar>
           </Container>

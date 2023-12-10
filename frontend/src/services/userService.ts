@@ -18,6 +18,26 @@ const updateUser = async (user: IUser) => {
   return response.data;
 }
 
-const userService = { createUser, loginUser, updateUser };
+const refreshTokenGenerate = async (refreshToken: string) => {
+  const response = await axios.post(baseURL + 'refresh-token', {token: refreshToken});
+  return response.data;
+}
+
+const logoutUser = async (user: IUser, refreshToken: string) => {
+  const tokens = await refreshTokenGenerate(refreshToken);
+  // Create a new object by spreading the properties of the existing user object
+  const updatedUser = { ...user, accessToken: tokens.accessToken };
+  console.log(tokens);
+  const response = await axios.post(baseURL + '/logout', {token: tokens.refreshToken},
+  {
+    headers: 
+    {
+      authorization: `Bearer ${updatedUser.accessToken}`
+    }
+  });
+  return response.data;
+}
+
+const userService = { createUser, loginUser, updateUser, refreshTokenGenerate, logoutUser };
 
 export default userService;
