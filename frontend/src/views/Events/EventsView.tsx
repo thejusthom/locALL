@@ -411,14 +411,16 @@ function a11yProps(index: number) {
             }
     />
   </Modal>
-  {tab === 0 && !!events ? 
+   {tab === 0 ? !!events?.length ? 
 (<EventsMap
-mapContainer={mapContainer} />)
-    : 
-        <MyEvents
+mapContainer={mapContainer} />) 
+:  (<NoDataScreen />)
+    : !!events?.length ?
+       (<MyEvents
         events={events}
         onEdit={onEdit}
-        onDelete={onDelete} />
+        onDelete={onDelete} />)
+        : (<NoDataScreen />)
      }
     </EventsContainer>
     // </ToastContainer>
