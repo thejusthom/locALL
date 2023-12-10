@@ -15,6 +15,7 @@ import MyEvents from "./_MyEvents";
 import EventsMap from "./_EventsMap";
 import FormFieldsComponent from "./_FormFields";
 import { ToastContainer, toast } from "react-toastify";
+import Loading from "../../common/_Loader";
 
 const initialNewEvent = {
     eventName: "",
@@ -49,6 +50,7 @@ const [tab, setTab] = React.useState(0);
 const [isEdit, setIsEdit] = React.useState<boolean>(false);
 const [eventId, setEventId] = React.useState<string>("");
 const [isValid, setIsValid] = React.useState<boolean>(true);
+const [showLoader, setShowLoader] = React.useState(true);
 
 React.useEffect(() => {
     setLocation({latitude: loc.latitude, longitude: loc.longitude});
@@ -56,34 +58,43 @@ map.current?.setCenter([loc.longitude, loc.latitude]);
 const pincode = loc.pincode;
 setAdd(pincode);
 if(tab === 0){
+    setShowLoader(true);
 eventsService.getEvents(pincode).then((event)=> {
    const availableEvents = event.filter((e: IEvent) => !!e.endDate && moment(e.endDate) >= moment());
-setEvents(availableEvents)
+setEvents(availableEvents);
+setShowLoader(false);
 })
-    console.log("wduhh")
 }
     else{
+        setShowLoader(true);
         eventsService
         .getEventByParams(pincode, "6573fcd148338641e52772f3")
-        .then((event => {setEvents(event)}));
+        .then((event => {
+            setEvents(event);
+            setShowLoader(false);
+        }));
     }
 }, [loc]);
 
 React.useEffect(() => {
 const pincode = loc.pincode;
 if(tab === 0){
+    setShowLoader(true);
 eventsService.getEvents(pincode).then((event)=> {
     const availableEvents = event.filter((e: IEvent) => !!e.endDate && moment(e.endDate) >= moment());
 setEvents(availableEvents);
+setShowLoader(false);
 })
-    console.log("dhsidj")
 }
     else if (tab === 1){
+        setShowLoader(true);
         eventsService
         .getEventByParams(pincode, "6573fcd148338641e52772f3")
-        .then((event => {setEvents(event)}));
+        .then((event => {
+            setEvents(event);
+            setShowLoader(false);
+        }));
     }
-    console.log("here")
 }, [user._id, tab]);
 
   const mapContainer = React.useRef<HTMLDivElement | null>(null);
@@ -239,11 +250,13 @@ const onOrganiserChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setOrganiser({...organiser, [e.target.id]: e.target.value});
 }
 const onSubmit = (event: any) => {
+    setShowLoader(true);
     event.preventDefault();
     const start = startDate?.toLocaleDateString() || "";
     const end = endDate?.toLocaleDateString() || "";
     eventsService.createEvent(add, {...newEvent, address: {...coordinates}, startDate: start, endDate: end, createdUser: "6573fcd148338641e52772f3", organiser}).then((event)=> {
         !!events ? setEvents([...events, event]) : setEvents([event]);
+        setShowLoader(false);
         toast.success("Event Created Successfully!");
     });
     setShowModal(false);
@@ -255,6 +268,7 @@ const onSubmit = (event: any) => {
     setOrganiser({name: "", contact: ""});
 };
 const onEdit = (eventId: string) => {
+    setShowLoader(true);
      eventsService.getEventById(loc.pincode, eventId).then((event)=> {
         setNewEvent(event);
         setCoordinates({...event.address});
@@ -264,25 +278,31 @@ const onEdit = (eventId: string) => {
         setIsEdit(true);
         setEventId(eventId);
         setShowModal(true);
+        setShowLoader(false);
     });
 };
 const onDelete = (eventId: string) => {
+    setShowLoader(true);
     eventsService.deleteEvent(loc.pincode, eventId).then((event)=> {
         eventsService.getEvents(loc.pincode).then((event)=> {
             const availableEvents = event.filter((e: IEvent) => !!e.endDate && moment(e.endDate) >= moment());
             setEvents(availableEvents)
         });
+        setShowLoader(false);
             toast.success(`Event Deleted Successfully!`);
     });
 };
 const onUpdate = () => {
+    setShowLoader(true);
     const start = startDate?.toLocaleDateString() || "";
     const end = endDate?.toLocaleDateString() || "";
     const updatedEvent = {...newEvent, address: {...coordinates}, organiser, startDate: start, endDate: end};
     eventsService.updateEvent(loc.pincode, eventId, updatedEvent).then((event)=> {
         eventsService.getEvents(loc.pincode).then((event)=> {
             const availableEvents = event.filter((e: IEvent) => !!e.endDate && moment(e.endDate) >= moment());
-            setEvents(availableEvents)}
+            setEvents(availableEvents);
+            setShowLoader(false);
+        }
     );
     toast.success(`${event.eventName} Updated Successfully!`);
 });
@@ -324,6 +344,9 @@ function a11yProps(index: number) {
     return(
         <EventsContainer>
             <ToastContainer position="top-center" closeOnClick />
+            <Modal isOpen={showLoader}>
+        <Loading isLoading={showLoader} />
+        </Modal>
         <Button 
         onClick={() => setShowModal(true)}
         >Create an Event</Button>
@@ -388,7 +411,7 @@ export const Modal = styled(ReactModal)`
 inset: unset;
 width: 100%;
 height: 100%;
-background-color: rgba(0,0,0,0.3);
+background-color: rgba(0,0,0,0.1);
 `;
 
 export default EventsView;
