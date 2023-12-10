@@ -32,6 +32,7 @@ export default function UserProfileBlock() {
     const [coordinates, setCoordinates] = React.useState({ latitude: 0, longitude: 0 });
     const [add, setAdd] = React.useState('');
     const [passwordConfirmForm, setPasswordConfirmForm] = React.useState(false);
+    const [editConfirmForm, setEditConfirmForm] = React.useState(false);
 
     const handlePassOnChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const id = event.target.id;
@@ -117,7 +118,7 @@ export default function UserProfileBlock() {
             })
     };
 
-    const updateUserData = async () => {
+    const handleUpdateUserDataConfirm = async () => {
         const userData: IUser = {
             _id: user._id,
             username: inputData.username,
@@ -140,13 +141,18 @@ export default function UserProfileBlock() {
                 }
                 clearFormData();
                 toast.success("User details Changed Successfully!");
+                setEditConfirmForm(false);
             });
         }
         catch (error) {
             toast.error("User details Change failed!");
             console.error("Error updating user details:", error);
+            setEditConfirmForm(false);
         }
     }
+    const handleUpdateUserDataCancel = () => {
+        setEditConfirmForm(false);
+    };
 
     const handlePasswordChangeConfirm = async () => {
         {
@@ -400,7 +406,9 @@ export default function UserProfileBlock() {
                         value={user.username}
                         onChange={handleOnChange}
                         id="username" />
-                    <Button type="submit" onClick={updateUserData}
+                    <Button type="submit" onClick={() => {
+                        setEditConfirmForm(true);
+                    }}
                         size="md"
                         color="primary"
                         sx={{ float: "right", ml: 2, mr: 3, mb: 1, fontWeight: 600 }}>
@@ -435,6 +443,25 @@ export default function UserProfileBlock() {
                         Yes
                     </Button>
                     <Button color="neutral" onClick={handlePasswordChangeCancel}>
+                        No
+                    </Button>
+                </Modal.Actions>
+            </Modal>
+
+            <Modal
+                dimmer="inverted"
+                open={editConfirmForm}
+                onClose={handleUpdateUserDataCancel}
+            >
+                <Modal.Header>Edit User Profile</Modal.Header>
+                <Modal.Content>
+                    <p>Are you sure you want to edit user profile?</p>
+                </Modal.Content>
+                <Modal.Actions>
+                    <Button color="success" onClick={handleUpdateUserDataConfirm} sx={{ mr: 2 }}>
+                        Yes
+                    </Button>
+                    <Button color="neutral" onClick={handleUpdateUserDataCancel}>
                         No
                     </Button>
                 </Modal.Actions>
