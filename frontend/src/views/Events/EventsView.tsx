@@ -63,10 +63,10 @@ renderEventsByTab();
 }, [loc]);
 
 React.useEffect(() => {
-    // if(!!user._id){
+    // if(!!user?.user?._id){
 renderEventsByTab();
     // }
-}, [user._id, tab]);
+}, [user?.user?._id, tab]);
 
 const renderEventsByTab = () => {
     if(tab === 0){
@@ -80,7 +80,7 @@ const renderEventsByTab = () => {
         else{
             setShowLoader(true);
             eventsService
-            .getEventByParams(loc.pincode, "6573fcd148338641e52772f3")
+            .getEventByParams(loc.pincode, user?.user?._id)
             .then((event => {
                 setEvents(event);
                 setShowLoader(false);
@@ -332,7 +332,7 @@ function a11yProps(index: number) {
                <Tabs sx={{margin: "15px 0 0 0", "& button": {color: "#123abc"}, "& button.Mui-selected": {color: "#123abc"}}} value={tab} onChange={handleTabChange} aria-label="basic tabs example"
                TabIndicatorProps={{sx:{backgroundColor: "#123abc"}}}>
           <Tab sx={{fontSize: "16px", fontWeight: "bold"}} label="All Events" {...a11yProps(0)} />
-          <Tab sx={{fontSize: "16px", fontWeight: "bold"}} label="My Events" {...a11yProps(1)} />
+          {!!user?.user?._id && <Tab sx={{fontSize: "16px", fontWeight: "bold"}} label="My Events" {...a11yProps(1)} />}
         </Tabs>
 <Modal isOpen={showModal}>
   <EventsForm isEdit={isEdit}
