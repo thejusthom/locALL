@@ -22,7 +22,7 @@ type Props = {
 const FeedShareCard = (props: Props): React.ReactElement => {
 
     const handleSubmit = () => {
-        props.feedShare.comments.push({ author: user.person.firstName, metaData: moment().format("MMMM Do YYYY, h:mm:ss a")
+        props.feedShare.comments.push({ author: user?.user?.person?.firstName, metaData: moment().format("MMMM Do YYYY, h:mm:ss a")
         , text: text, avatar: "Profile Pic" });
         feedshareService.updateFeedshare(props.feedShare.locationId, props.feedShare, props.feedShare._id);
         setText('');
@@ -125,7 +125,7 @@ const FeedShareCard = (props: Props): React.ReactElement => {
             comments: [],
             locationId: add,
             _id: props.feedShare._id,
-            createdUser: user._id
+            createdUser: user?.user?._id
         }
         console.log(feedShare);
         try{ await feedshareService
