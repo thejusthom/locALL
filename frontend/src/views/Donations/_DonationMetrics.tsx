@@ -4,7 +4,16 @@ import {
     Pie,
     Tooltip,
     Cell,
-    
+    ComposedChart,
+    Line,
+    Area,
+    Bar,
+    XAxis,
+    YAxis,
+    // CartesianGrid,
+    Legend,
+    Scatter,
+    ResponsiveContainer,  
 } from "recharts";
 
 const data01 = [
@@ -33,6 +42,51 @@ const data01 = [
       "value": 9,
       "color": "#636363"
     }
+  ];
+
+  const data = [
+    {
+      name: 'Page A',
+      below50: 590,
+      amountRequired: 800,
+      amountAchieved: 1400,
+      above50: 490,
+    },
+    {
+      name: 'Page B',
+      below50: 868,
+      amountRequired: 967,
+      amountAchieved: 1506,
+      above50: 590,
+    },
+    {
+      name: 'Page C',
+      below50: 1397,
+      amountRequired: 1098,
+      amountAchieved: 989,
+      above50: 350,
+    },
+    {
+      name: 'Page D',
+      below50: 1480,
+      amountRequired: 1200,
+      amountAchieved: 1228,
+      above50: 480,
+    },
+    {
+      name: 'Page E',
+      below50: 1520,
+      amountRequired: 1108,
+      amountAchieved: 1100,
+      above50: 460,
+    },
+    {
+      name: 'Page F',
+      below50: 1400,
+      amountRequired: 680,
+      amountAchieved: 1700,
+      above50: 380,
+    },
   ];
 //   const data02 = [
 //     {
@@ -85,6 +139,26 @@ const renderCustomizedLabel = ({ cx, cy, midAngle, innerRadius, outerRadius, per
             </Pie>
         {/* <Pie data={[]} dataKey="value" nameKey="name" cx="50%" cy="50%" innerRadius={60} outerRadius={80} fill="#82ca9d" label /> */}
       </PieChart>
+      {/* <ResponsiveContainer width="100%" height="100%"> */}
+        <ComposedChart
+          width={700}
+          height={500}
+          data={data}
+          margin={{
+            top: 20,
+            right: 20,
+            bottom: 20,
+            left: 20,
+          }}
+        >
+          {/* <CartesianGrid stroke="#f5f5f5" /> */}
+          <XAxis dataKey="name" scale="band" />
+          <YAxis />
+          <Tooltip />
+          <Legend />
+          {/* <Scatter dataKey="above50" fill="red" /> */}
+        </ComposedChart>
+      {/* </ResponsiveContainer> */}
       </>
     );
 };
