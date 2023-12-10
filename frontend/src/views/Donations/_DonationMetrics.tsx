@@ -156,6 +156,10 @@ const renderCustomizedLabel = ({ cx, cy, midAngle, innerRadius, outerRadius, per
           <YAxis />
           <Tooltip />
           <Legend />
+          <Area type="monotone" dataKey="amountAchieved" fill="#9fbddd" stroke="#1976d2" />
+          <Bar dataKey="amountRequired" barSize={20} fill="#123abc" />
+          <Line type="monotone" dataKey="below50" stroke="#38d200" />
+          <Line type="monotone" dataKey="above50" stroke="violet" />
           {/* <Scatter dataKey="above50" fill="red" /> */}
         </ComposedChart>
       {/* </ResponsiveContainer> */}
