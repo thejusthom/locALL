@@ -180,11 +180,14 @@ React.useEffect(() => {
     };
 
     const onUpdate = () => {
+        setShowLoader(true);
         const updatedEvent = {...newDonation};
         donationServices.updateDonation(loc.pincode, donationId, updatedEvent).then((donation)=> {
             donationServices.getDonations(loc.pincode).then((donation)=> {
                 // const availableEvents = event.filter((e: IEvent) => !!e.endDate && moment(e.endDate) >= moment());
-                setDonations(donation)}
+                setDonations(donation);
+                setShowLoader(false);
+            }
         );
         toast.success(`${donation.donationName} Updated Successfully!`);
     });
@@ -194,26 +197,32 @@ React.useEffect(() => {
             setShowModal(false);
     };
     const onEdit = (donationId: string) => {
+        setShowLoader(true);
         donationServices.getDonationById(loc.pincode, donationId).then((donation)=> {
            setNewDonation(donation);
            setIsEdit(true);
            setDonationId(donationId);
            setShowModal(true);
+           setShowLoader(false);
        });
    };
    const onDelete = (donationId: string) => {
+    setShowLoader(true);
        donationServices.deleteDonation(loc.pincode, donationId).then((donation)=> {
            donationServices.getDonations(loc.pincode).then((donation)=> {
             //    const availableEvents = donation.filter((e: IDonation) => !!e.endDate && moment(e.endDate) >= moment());
-               setDonations(donation)
+               setDonations(donation);
+               setShowLoader(false);
            });
                toast.success(`Donation Deleted Successfully!`);
        });
    };
     const onSubmit = (event: any) => {
         event.preventDefault();
+        setShowLoader(true);
         donationServices.createDonation(loc.pincode, {...newDonation, createdUser: "6573fcd148338641e52772f3", locationId: loc.pincode, postedOn: new Date().toLocaleDateString()}).then((donation)=> {
             !!donations ? setDonations([...donations, donation]) : setDonations([donation]);
+            setShowLoader(false);
             toast.success("Donation Created Successfully!");
         });
         setShowModal(false);
