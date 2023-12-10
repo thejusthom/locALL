@@ -47,7 +47,7 @@ const EventsForm = (props: IEventsForm) => {
 };
 
 export const Form = styled.form`
-background-color: #eceaea;
+background-color: #ffffff;
 width: 700px;
 height: 75%;
 place-self: center;
@@ -62,10 +62,14 @@ label{
     text-align: left;
 }
 input, textarea, select{
-    border: none;
     width: 440px;
     height: 35px;
     border-radius: 5px;
+    border: 1px solid lightgrey;
+    &:focus{
+        border: none;
+        box-shadow: 0px 0px 7px 0.5px #b4b1b1;
+    }
 }
 input:focus, textarea:focus{
     outline: 0;
@@ -78,7 +82,7 @@ button{
 }
 `;
 export const Heading = styled.section`
-background-color: #1976d2;
+background-color: #123abc;
 position: fixed;
 width: 700px;
 border-radius: 5px 5px 0 0;
@@ -107,7 +111,7 @@ justify-content: center;
 display: flex;
 `;
 export const Button = styled.button`
-background-color: #1976d2;
+background-color: #123abc;
 color: white;
 padding: 7px 20px;
 cursor: pointer;

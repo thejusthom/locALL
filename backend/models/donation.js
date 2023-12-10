@@ -25,7 +25,7 @@ const donationSchema = new Schema({
   },
   image: {
     type: String,
-    required: true
+    // required: true
 },
   createdUser: {
     type: mongoose.Schema.Types.ObjectId,
