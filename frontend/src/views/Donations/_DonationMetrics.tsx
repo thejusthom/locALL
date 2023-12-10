@@ -1,4 +1,5 @@
 import * as React from "react";
+import styled from "styled-components";
 import {
     PieChart,
     Pie,
@@ -12,8 +13,8 @@ import {
     YAxis,
     // CartesianGrid,
     Legend,
-    Scatter,
-    ResponsiveContainer,  
+    // Scatter,
+    // ResponsiveContainer,  
 } from "recharts";
 
 const data01 = [
@@ -134,7 +135,7 @@ const CustomTooltip = ({ active, payload, label }: any) => {
     if (active && payload && payload.length) {
       return (
         <div className="tooltip-wrap">
-          <p className="label">{`${label} : ${payload[0].value}`}</p>
+          <p className="label">{label}</p>
           {/* <p className="intro">{getIntroOfPage(label)}</p> */}
           <p>Amount Required: {payload[0].payload.amountRequired}</p>
           <p>Amount Achieved: {payload[0].payload.amountAchieved}</p>
@@ -147,7 +148,7 @@ const CustomTooltip = ({ active, payload, label }: any) => {
 }
 
     return(
-        <>
+        <MetricsWrap>
         <PieChart width={730} height={400}>
             <Tooltip />
         <Pie data={data01} dataKey="value" nameKey="name" cx="50%" cy="50%" innerRadius={75}  label={renderCustomizedLabel} outerRadius={150} fill="#8884d8">
@@ -181,8 +182,16 @@ const CustomTooltip = ({ active, payload, label }: any) => {
           {/* <Scatter dataKey="above50" fill="red" /> */}
         </ComposedChart>
       {/* </ResponsiveContainer> */}
-      </>
+      </MetricsWrap>
     );
 };
+
+const MetricsWrap = styled.article`
+.tooltip-wrap{
+    background-color: white;
+    padding: 20px;
+    border-radius: 5px;
+}
+`;
 
 export default DonationMetrics;
