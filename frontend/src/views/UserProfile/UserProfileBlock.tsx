@@ -7,6 +7,7 @@ import { useSelector } from 'react-redux';
 import { IUser } from '../../models/user';
 import { SearchBox } from '@mapbox/search-js-react';
 import userService from '../../services/userService';
+import { ToastContainer, toast } from 'react-toastify';
 
 export default function UserProfileBlock() {
 
@@ -30,6 +31,7 @@ export default function UserProfileBlock() {
     const [selectedLocation, setSelectedLocation] = React.useState("");
     const [coordinates, setCoordinates] = React.useState({ latitude: 0, longitude: 0 });
     const [add, setAdd] = React.useState('');
+    const [passwordConfirmForm, setPasswordConfirmForm] = React.useState(false);
 
     const handlePassOnChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const id = event.target.id;
@@ -129,93 +131,133 @@ export default function UserProfileBlock() {
             }
         };
         console.log(userData);
-        await userService.updateUser(userData).then(() => {
-            if (editFormOpen === false) {
-                setEditFormOpen(true);
-            } else {
-                setEditFormOpen(false);
-            }
-            clearFormData();
-        });
+        try {
+            await userService.updateUser(userData).then(() => {
+                if (editFormOpen === false) {
+                    setEditFormOpen(true);
+                } else {
+                    setEditFormOpen(false);
+                }
+                clearFormData();
+                toast.success("User details Changed Successfully!");
+            });
+        }
+        catch (error) {
+            toast.error("User details Change failed!");
+            console.error("Error updating user details:", error);
+        }
     }
 
+    const handlePasswordChangeConfirm = async () => {
+        {
+            const userData: IUser = {
+                _id: user._id,
+                username: user.username,
+                password: passwords.passwordTwo,
+                person: {
+                    firstName: user.person.firstName,
+                    lastName: user.person.lastName,
+                    phoneNumber: user.person.phoneNumber,
+                    address: user.person.address,
+                    zipcode: user.person.zipcode
+                }
+            };
+            try {
+                await userService.updateUser(userData)
+                    .then(() => {
+                        setPasswordConfirmForm(false);
+                        toast.success("Password Changed Successfully!");
+                    });
+            } catch (error) {
+                toast.error("Password Change failed!");
+                console.error("Error changing password:", error);
+                setPasswordConfirmForm(false);
+            }
+        }
+    };
 
-return (
-    <>
-        <div className="bootstrap-iso container">
-            <div className="bootstrap-iso main-body">
+    const handlePasswordChangeCancel = () => {
+        setPasswordConfirmForm(false);
+    };
 
-                {/* <nav aria-label="breadcrumb" className="bootstrap-iso main-breadcrumb">
+    return (
+        <>
+            <ToastContainer position="top-center" closeOnClick />
+
+            <div className="bootstrap-iso container">
+                <div className="bootstrap-iso main-body">
+
+                    {/* <nav aria-label="breadcrumb" className="bootstrap-iso main-breadcrumb">
                     <ul className="bootstrap-iso breadcrumb">
                         <li className="bootstrap-iso breadcrumb-item"><a href="index.html">Home</a></li>
                         <li className="bootstrap-iso breadcrumb-item active" aria-current="page">User Profile</li>
                     </ul>
                 </nav> */}
 
-                <div className="bootstrap-iso row gutters-sm">
-                    <div className="bootstrap-iso col-md-4 mb-3">
-                        <div className="bootstrap-iso card">
-                            <div className="bootstrap-iso card-body">
-                                <div className="bootstrap-iso d-flex flex-column align-items-center text-center">
-                                    <img src="https://bootdey.com/img/Content/avatar/avatar7.png" alt="Admin" className="bootstrap-iso rounded-circle" width="150" />
-                                    <div className="bootstrap-iso mt-3 text-center">
-                                        <h4>{user.person.firstName}{" "}{user.person.lastName}</h4>
-                                        <p className="bootstrap-iso text-secondary mb-1 text-center">{user.person.zipcode}</p>
-                                        <p className="bootstrap-iso text-muted font-size-sm text-center">{user.person.address}</p>
-                                        {/* <button className="bootstrap-iso btn btn-primary">Follow</button>
+                    <div className="bootstrap-iso row gutters-sm">
+                        <div className="bootstrap-iso col-md-4 mb-3">
+                            <div className="bootstrap-iso card">
+                                <div className="bootstrap-iso card-body">
+                                    <div className="bootstrap-iso d-flex flex-column align-items-center text-center">
+                                        <img src="https://bootdey.com/img/Content/avatar/avatar7.png" alt="Admin" className="bootstrap-iso rounded-circle" width="150" />
+                                        <div className="bootstrap-iso mt-3 text-center">
+                                            <h4>{user.person.firstName}{" "}{user.person.lastName}</h4>
+                                            <p className="bootstrap-iso text-secondary mb-1 text-center">{user.person.zipcode}</p>
+                                            <p className="bootstrap-iso text-muted font-size-sm text-center">{user.person.address}</p>
+                                            {/* <button className="bootstrap-iso btn btn-primary">Follow</button>
                                         <button className="bootstrap-iso btn btn-outline-primary">Message</button> */}
+                                        </div>
                                     </div>
                                 </div>
                             </div>
+                            <div className="bootstrap-iso card mt-3">
+                                <p className="bootstrap-iso text-sm mb-0 text-center h4">My Contributions</p>
+                                <ul className="bootstrap-iso list-group list-group-flush">
+                                    <li className="bootstrap-iso list-group-item d-flex justify-content-between align-items-center flex-wrap">
+                                        <h6 className="bootstrap-iso mb-0">Events</h6>
+                                        <span className="bootstrap-iso text-secondary">1</span>
+                                    </li>
+                                    <li className="bootstrap-iso list-group-item d-flex justify-content-between align-items-center flex-wrap">
+                                        <h6 className="bootstrap-iso mb-0">MarketPlace</h6>
+                                        <span className="bootstrap-iso text-secondary">0</span>
+                                    </li>
+                                    <li className="bootstrap-iso list-group-item d-flex justify-content-between align-items-center flex-wrap">
+                                        <h6 className="bootstrap-iso mb-0">FeedShare</h6>
+                                        <span className="bootstrap-iso text-secondary">5</span>
+                                    </li>
+                                    <li className="bootstrap-iso list-group-item d-flex justify-content-between align-items-center flex-wrap">
+                                        <h6 className="bootstrap-iso mb-0">Happenings</h6>
+                                        <span className="bootstrap-iso text-secondary">2</span>
+                                    </li>
+                                    <li className="bootstrap-iso list-group-item d-flex justify-content-between align-items-center flex-wrap">
+                                        <h6 className="bootstrap-iso mb-0">Donations</h6>
+                                        <span className="bootstrap-iso text-secondary">7</span>
+                                    </li>
+                                </ul>
+                            </div>
                         </div>
-                        <div className="bootstrap-iso card mt-3">
-                            <p className="bootstrap-iso text-sm mb-0 text-center h4">My Contributions</p>
-                            <ul className="bootstrap-iso list-group list-group-flush">
-                                <li className="bootstrap-iso list-group-item d-flex justify-content-between align-items-center flex-wrap">
-                                    <h6 className="bootstrap-iso mb-0">Events</h6>
-                                    <span className="bootstrap-iso text-secondary">1</span>
-                                </li>
-                                <li className="bootstrap-iso list-group-item d-flex justify-content-between align-items-center flex-wrap">
-                                    <h6 className="bootstrap-iso mb-0">MarketPlace</h6>
-                                    <span className="bootstrap-iso text-secondary">0</span>
-                                </li>
-                                <li className="bootstrap-iso list-group-item d-flex justify-content-between align-items-center flex-wrap">
-                                    <h6 className="bootstrap-iso mb-0">FeedShare</h6>
-                                    <span className="bootstrap-iso text-secondary">5</span>
-                                </li>
-                                <li className="bootstrap-iso list-group-item d-flex justify-content-between align-items-center flex-wrap">
-                                    <h6 className="bootstrap-iso mb-0">Happenings</h6>
-                                    <span className="bootstrap-iso text-secondary">2</span>
-                                </li>
-                                <li className="bootstrap-iso list-group-item d-flex justify-content-between align-items-center flex-wrap">
-                                    <h6 className="bootstrap-iso mb-0">Donations</h6>
-                                    <span className="bootstrap-iso text-secondary">7</span>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-                    <div className="bootstrap-iso col-md-8">
-                        <div className="bootstrap-iso card mb-3">
-                            <div className="bootstrap-iso card-body">
-                                <div className="bootstrap-iso row">
-                                    <div className="bootstrap-iso col-sm-3">
-                                        <h6 className="bootstrap-iso mb-0">First Name</h6>
+                        <div className="bootstrap-iso col-md-8">
+                            <div className="bootstrap-iso card mb-3">
+                                <div className="bootstrap-iso card-body">
+                                    <div className="bootstrap-iso row">
+                                        <div className="bootstrap-iso col-sm-3">
+                                            <h6 className="bootstrap-iso mb-0">First Name</h6>
+                                        </div>
+                                        <div className="bootstrap-iso col-sm-9 text-secondary">
+                                            {user.person.firstName}
+                                        </div>
                                     </div>
-                                    <div className="bootstrap-iso col-sm-9 text-secondary">
-                                        {user.person.firstName}
+                                    <hr />
+                                    <div className="bootstrap-iso row">
+                                        <div className="bootstrap-iso col-sm-3">
+                                            <h6 className="bootstrap-iso mb-0">Last Name</h6>
+                                        </div>
+                                        <div className="bootstrap-iso col-sm-9 text-secondary">
+                                            {user.person.lastName}
+                                        </div>
                                     </div>
-                                </div>
-                                <hr />
-                                <div className="bootstrap-iso row">
-                                    <div className="bootstrap-iso col-sm-3">
-                                        <h6 className="bootstrap-iso mb-0">Last Name</h6>
-                                    </div>
-                                    <div className="bootstrap-iso col-sm-9 text-secondary">
-                                        {user.person.lastName}
-                                    </div>
-                                </div>
-                                <hr />
-                                {/* <div className="bootstrap-iso row">
+                                    <hr />
+                                    {/* <div className="bootstrap-iso row">
                                     <div className="bootstrap-iso col-sm-3">
                                         <h6 className="bootstrap-iso mb-0">Email</h6>
                                     </div>
@@ -224,46 +266,47 @@ return (
                                     </div>
                                 </div> 
                                 <hr />*/}
-                                <div className="bootstrap-iso row">
-                                    <div className="bootstrap-iso col-sm-3">
-                                        <h6 className="bootstrap-iso mb-0">Phone</h6>
+                                    <div className="bootstrap-iso row">
+                                        <div className="bootstrap-iso col-sm-3">
+                                            <h6 className="bootstrap-iso mb-0">Phone</h6>
+                                        </div>
+                                        <div className="bootstrap-iso col-sm-9 text-secondary">
+                                            {user.person.phoneNumber}
+                                        </div>
                                     </div>
-                                    <div className="bootstrap-iso col-sm-9 text-secondary">
-                                        {user.person.phoneNumber}
+                                    <hr />
+                                    <div className="bootstrap-iso row">
+                                        <div className="bootstrap-iso col-sm-3">
+                                            <h6 className="bootstrap-iso mb-0">Address</h6>
+                                        </div>
+                                        <div className="bootstrap-iso col-sm-9 text-secondary">
+                                            {user.person.address}
+                                        </div>
                                     </div>
-                                </div>
-                                <hr />
-                                <div className="bootstrap-iso row">
-                                    <div className="bootstrap-iso col-sm-3">
-                                        <h6 className="bootstrap-iso mb-0">Address</h6>
+                                    <hr />
+                                    <div className="bootstrap-iso row">
+                                        <div className="bootstrap-iso col-sm-3">
+                                            <h6 className="bootstrap-iso mb-0">Username</h6>
+                                        </div>
+                                        <div className="bootstrap-iso col-sm-9 text-secondary">
+                                            {user.username}
+                                        </div>
                                     </div>
-                                    <div className="bootstrap-iso col-sm-9 text-secondary">
-                                        {user.person.address}
+                                    <hr />
+                                    <div className="bootstrap-iso row">
+                                        <div className="bootstrap-iso col-sm-3">
+                                            <h6 className="bootstrap-iso mb-0">Password</h6>
+                                        </div>
+                                        <div className="bootstrap-iso col-sm-9 text-secondary">
+                                            ***********
+                                            <button className="bootstrap-iso btn password-btn" onClick={() => setPasswordFormOpen(true)} >Change Password</button>
+                                        </div>
                                     </div>
-                                </div>
-                                <hr />
-                                <div className="bootstrap-iso row">
-                                    <div className="bootstrap-iso col-sm-3">
-                                        <h6 className="bootstrap-iso mb-0">Username</h6>
-                                    </div>
-                                    <div className="bootstrap-iso col-sm-9 text-secondary">
-                                        {user.username}
-                                    </div>
-                                </div>
-                                <hr />
-                                <div className="bootstrap-iso row">
-                                    <div className="bootstrap-iso col-sm-3">
-                                        <h6 className="bootstrap-iso mb-0">Password</h6>
-                                    </div>
-                                    <div className="bootstrap-iso col-sm-9 text-secondary">
-                                        ***********
-                                        <button className="bootstrap-iso btn password-btn" onClick={() => setPasswordFormOpen(true)} >Change Password</button>
-                                    </div>
-                                </div>
-                                <hr />
-                                <div className="bootstrap-iso row">
-                                    <div className="bootstrap-iso col-sm-12">
-                                        <button className="bootstrap-iso btn edit-btn" onClick={() => setEditFormOpen(true)}>Edit</button>
+                                    <hr />
+                                    <div className="bootstrap-iso row">
+                                        <div className="bootstrap-iso col-sm-12">
+                                            <button className="bootstrap-iso btn edit-btn" onClick={() => setEditFormOpen(true)}>Edit</button>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -271,114 +314,134 @@ return (
                     </div>
                 </div>
             </div>
-        </div>
-        <Modal
-            open={passwordFormOpen}
-            onClose={() => setPasswordFormOpen(false)}
-            onOpen={() => setPasswordFormOpen(true)}
-        >
-            <Modal.Header>Reset Password</Modal.Header>
-            <Form>
-                <Form.Field required label='Password' control='input' type='password' width={8}
-                    value={passwords.passwordOne}
-                    onChange={handlePassOnChange}
-                    id="passwordOne" />
-                <Form.Field required label='Retype Password' control='input' type='password' width={8} onKeyUp={validatePassword}
-                    value={passwords.passwordTwo}
-                    onChange={handlePassOnChange}
-                    id="passwordTwo"
-                    error={!passwordValid}
-                />
-                <Button type="submit"
-                    size="md"
-                    color="primary"
-                    disabled={!passwordValid}
-                    sx={{ float: "right", ml: 2, mr: 3, mb: 1, fontWeight: 600 }}>
-                    Change</Button>
-                <Button
-                    variant="solid"
-                    size="md"
-                    color="primary"
-                    sx={{ float: "left", ml: 2, mr: 3, mb: 1, fontWeight: 600 }}
-                    onClick={() => setPasswordFormOpen(false)}
-                >Close
-                </Button>
-            </Form>
-        </Modal>
-
-        <Modal
-            dimmer="inverted"
-            open={editFormOpen}
-            onClose={() => {
-                console.log("close");
-                fillInputData();
-                setEditFormOpen(false);
-                clearFormData();
-            }
-            }
-            onOpen={() => {
-                console.log("open");
-                setEditFormOpen(true);
-                fillInputData();
-            }
-            }
-        >
-            <Modal.Header>Edit Personal Details</Modal.Header>
-            <Form>
-                <Form.Group grouped>
-                    <Form.Field label='First Name' control='input' width={8}
-                        value={user.person.firstName}
-                        onChange={handleOnChange}
-                        id="firstName" />
-                    <Form.Field label='Last Name' control='input' width={8}
-                        value={user.person.lastName}
-                        onChange={handleOnChange}
-                        id="lastName" />
-                    <Form.Field label='Phone Number' control='input' width={6}
-                        value={user.person.phoneNumber}
-                        onChange={handleOnChange}
-                        id="phoneNumber" />
-                    <Form.Field label='Location' />
-                    {!!process.env.REACT_APP_MAPBOX_API_KEY &&
-                        <SearchBox
-                            accessToken={'pk.eyJ1IjoiYXNobWl5YS12aWpheWFjaGFuZHJhbiIsImEiOiJjbHBnMXRxc3oxaXd3MmlwcG5zZjBpdXNqIn0.GqCCjkCcmFsgrpMnl7ntzw'}
-                            value={selectedLocation}
-                            onRetrieve={onLocationChange}
-                        />}
-                    <Form.Input
-                        fluid
-                        label="Upload your photo"
-                        type="file"
-                        id="image"
-                        onChange={handleOnChange}
+            <Modal
+                open={passwordFormOpen}
+                onClose={() => setPasswordFormOpen(false)}
+                onOpen={() => setPasswordFormOpen(true)}
+            >
+                <Modal.Header>Reset Password</Modal.Header>
+                <Form>
+                    <Form.Field required label='Password' control='input' type='password' width={8}
+                        value={passwords.passwordOne}
+                        onChange={handlePassOnChange}
+                        id="passwordOne" />
+                    <Form.Field required label='Retype Password' control='input' type='password' width={8} onKeyUp={validatePassword}
+                        value={passwords.passwordTwo}
+                        onChange={handlePassOnChange}
+                        id="passwordTwo"
+                        error={!passwordValid}
                     />
-                </Form.Group>
-                <Form.Field label='Username' control='input' width={8}
+                    <Button type="submit"
+                        size="md"
+                        color="primary"
+                        disabled={!passwordValid}
+                        sx={{ float: "right", ml: 2, mr: 3, mb: 1, fontWeight: 600 }}
+                        onClick={() => setPasswordConfirmForm(true)}>
+                        Change</Button>
+                    <Button
+                        variant="solid"
+                        size="md"
+                        color="primary"
+                        sx={{ float: "left", ml: 2, mr: 3, mb: 1, fontWeight: 600 }}
+                        onClick={() => setPasswordFormOpen(false)}
+                    >Close
+                    </Button>
+                </Form>
+            </Modal>
+
+            <Modal
+                dimmer="inverted"
+                open={editFormOpen}
+                onClose={() => {
+                    console.log("close");
+                    fillInputData();
+                    setEditFormOpen(false);
+                    clearFormData();
+                }
+                }
+                onOpen={() => {
+                    console.log("open");
+                    setEditFormOpen(true);
+                    fillInputData();
+                }
+                }
+            >
+                <Modal.Header>Edit Personal Details</Modal.Header>
+                <Form>
+                    <Form.Group grouped>
+                        <Form.Field label='First Name' control='input' width={8}
+                            value={user.person.firstName}
+                            onChange={handleOnChange}
+                            id="firstName" />
+                        <Form.Field label='Last Name' control='input' width={8}
+                            value={user.person.lastName}
+                            onChange={handleOnChange}
+                            id="lastName" />
+                        <Form.Field label='Phone Number' control='input' width={6}
+                            value={user.person.phoneNumber}
+                            onChange={handleOnChange}
+                            id="phoneNumber" />
+                        <Form.Field label='Location' />
+                        {!!process.env.REACT_APP_MAPBOX_API_KEY &&
+                            <SearchBox
+                                accessToken={'pk.eyJ1IjoiYXNobWl5YS12aWpheWFjaGFuZHJhbiIsImEiOiJjbHBnMXRxc3oxaXd3MmlwcG5zZjBpdXNqIn0.GqCCjkCcmFsgrpMnl7ntzw'}
+                                value={selectedLocation}
+                                onRetrieve={onLocationChange}
+                            />}
+                        <Form.Input
+                            fluid
+                            label="Upload your photo"
+                            type="file"
+                            id="image"
+                            onChange={handleOnChange}
+                        />
+                    </Form.Group>
+                    <Form.Field label='Username' control='input' width={8}
                         value={user.username}
                         onChange={handleOnChange}
                         id="username" />
-                <Button type="submit" onClick={updateUserData}
+                    <Button type="submit" onClick={updateUserData}
                         size="md"
                         color="primary"
                         sx={{ float: "right", ml: 2, mr: 3, mb: 1, fontWeight: 600 }}>
                         Change</Button>
-                <Button
-                    variant="solid"
-                    size="md"
-                    color="primary"
-                    aria-label="Explore Bahamas Islands"
-                    sx={{ float: "left", ml: 2, mr: 3, mb: 1, fontWeight: 600 }}
-                    onClick={() => {
-                        setEditFormOpen(false);
-                        clearFormData();}}
-                >
-                    Close
-                </Button>
-            </Form>
-        </Modal>
+                    <Button
+                        variant="solid"
+                        size="md"
+                        color="primary"
+                        aria-label="Explore Bahamas Islands"
+                        sx={{ float: "left", ml: 2, mr: 3, mb: 1, fontWeight: 600 }}
+                        onClick={() => {
+                            setEditFormOpen(false);
+                            clearFormData();
+                        }}
+                    >
+                        Close
+                    </Button>
+                </Form>
+            </Modal>
+
+            <Modal
+                dimmer="inverted"
+                open={passwordConfirmForm}
+                onClose={handlePasswordChangeCancel}
+            >
+                <Modal.Header>Change Password</Modal.Header>
+                <Modal.Content>
+                    <p>Are you sure you want to change your password?</p>
+                </Modal.Content>
+                <Modal.Actions>
+                    <Button color="success" onClick={handlePasswordChangeConfirm} sx={{ mr: 2 }}>
+                        Yes
+                    </Button>
+                    <Button color="neutral" onClick={handlePasswordChangeCancel}>
+                        No
+                    </Button>
+                </Modal.Actions>
+            </Modal>
 
 
-    </>
-);
+        </>
+    );
 
 }
