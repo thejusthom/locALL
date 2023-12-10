@@ -17,6 +17,7 @@ import { useEffect, useState} from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import userService from "../../services/userService";
 import { saveUser } from "../../store/slices/user-slice";
+import { Avatar, ClickAwayListener, Grow, MenuList, Paper, Popper } from "@mui/material";
 
 const pages = [
   { name: "Home", path: "/" },
@@ -37,6 +38,8 @@ function HomeLayout() {
   const user = useSelector((state: any) => state.user);
   const [currentUser, setCurrentUser] = useState(user);
   const dispatch = useDispatch();
+  const [open, setOpen] = useState(false);
+  const anchorRef = React.useRef<HTMLButtonElement>(null);
   
   console.log(user);
 
@@ -70,6 +73,29 @@ function HomeLayout() {
       }
     }   
   };
+
+  const handleToggle = () => { 
+    setOpen((prevOpen) => !prevOpen);
+  }
+
+  const handleClose = (event: Event | React.SyntheticEvent) => {
+    if (
+      anchorRef.current &&
+      anchorRef.current.contains(event.target as HTMLElement)
+    ) {
+      return;
+    }
+  }
+
+
+    function handleListKeyDown(event: React.KeyboardEvent) {
+      if (event.key === 'Tab') {
+        event.preventDefault();
+        setOpen(false);
+      } else if (event.key === 'Escape') {
+        setOpen(false);
+      }
+    }
 
   return (
     <Box sx={{ position: "relative", minHeight: "100vh" }}>
@@ -203,23 +229,48 @@ function HomeLayout() {
               )}
               <Box sx={{ flexGrow: 0 }}>
                 {currentUser && currentUser.user && currentUser.user.username ? ( // Check if the user is logged in
+                <>
                   <Button
-                    key="logout"
-                    onClick={handleLogout}
-                    sx={{
-                      my: 2,
-                      mx: 1.1,
-                      color: "white",
-                      display: "block",
-                      fontSize: "16px",
-                      fontWeight: 600,
-                      "&:hover": {
-                        color: "#101a45",
-                      },
-                    }}
+                    // key="logout"
+                    // onClick={handleLogout}
+                    onClick={handleToggle}
+                    ref={anchorRef}
                   >
-                    LOGOUT
+                  <Avatar src="/broken-image.jpg" />
                   </Button>
+                  <Popper
+                  open={open}
+                  anchorEl={anchorRef.current}
+                  role={undefined}
+                  placement="bottom-start"
+                  transition
+                  disablePortal
+                >
+                  {({ TransitionProps, placement }) => (
+                    <Grow
+                      {...TransitionProps}
+                      style={{
+                        transformOrigin:
+                          placement === 'bottom-start' ? 'left top' : 'left bottom',
+                      }}
+                    >
+                      <Paper>
+                        <ClickAwayListener onClickAway={handleClose}>
+                          <MenuList
+                            autoFocusItem={open}
+                            id="composition-menu"
+                            aria-labelledby="composition-button"
+                            onKeyDown={handleListKeyDown}
+                          >
+                            <MenuItem  >Profile</MenuItem>
+                            <MenuItem key="logout" onClick={handleLogout}>Logout</MenuItem>
+                          </MenuList>
+                        </ClickAwayListener>
+                      </Paper>
+                    </Grow>
+                  )}
+                </Popper>
+                </>
                 ) : (
                   <Button
                     key="login"
