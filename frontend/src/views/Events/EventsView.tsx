@@ -17,6 +17,7 @@ import FormFieldsComponent from "./_FormFields";
 import { ToastContainer, toast } from "react-toastify";
 import NoDataScreen from "../../common/_NoDataScreen";
 import Loading from "../../common/_Loader";
+import { useTranslation } from "react-i18next";
 
 const initialNewEvent = {
     eventName: "",
@@ -35,6 +36,8 @@ const EventsView = () => {
 
 const selectLocation = (state: any) => state.location;
 const user = useSelector((state: any) => state.user);
+
+const { t } = useTranslation('common');
 
 const loc = useSelector(selectLocation);
 const [location, setLocation] = React.useState<{ latitude: number; longitude: number;}>({latitude: loc.latitude, longitude: loc.longitude});
@@ -328,11 +331,11 @@ function a11yProps(index: number) {
         </Modal>
         {!!user?.user?._id &&<Button 
         onClick={() => setShowModal(true)}
-        >Create an Event</Button>}
+        >{t('create_event')}</Button>}
                <Tabs sx={{margin: "15px 0 0 0", "& button": {color: "#123abc"}, "& button.Mui-selected": {color: "#123abc"}}} value={tab} onChange={handleTabChange} aria-label="basic tabs example"
                TabIndicatorProps={{sx:{backgroundColor: "#123abc"}}}>
-          <Tab sx={{fontSize: "16px", fontWeight: "bold"}} label="All Events" {...a11yProps(0)} />
-          {!!user?.user?._id && <Tab sx={{fontSize: "16px", fontWeight: "bold"}} label="My Events" {...a11yProps(1)} />}
+          <Tab sx={{fontSize: "16px", fontWeight: "bold"}} label={t('all_events')} {...a11yProps(0)} />
+          {!!user?.user?._id && <Tab sx={{fontSize: "16px", fontWeight: "bold"}} label={t('my_events')} {...a11yProps(1)} />}
         </Tabs>
 <Modal isOpen={showModal}>
   <EventsForm isEdit={isEdit}
