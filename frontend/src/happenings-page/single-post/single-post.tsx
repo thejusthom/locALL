@@ -4,19 +4,13 @@ import { useLocation } from 'react-router-dom';
 import happeningsService from '../../services/happeningsService';
 import Happenings from '../../models/happenings';
 import { useSelector } from 'react-redux';
-import { Modal, Form, Button, TextArea, Image } from 'semantic-ui-react';
+import { Modal, Form, Button, Image } from 'semantic-ui-react';
 import {
   Button as Buttons,
   Card,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogTitle,
-  Grid,
-  Paper,
-  Typography,
-  TextField,
+  Typography
 } from '@mui/material';
+import { IUser } from '../../models/user';
 
 const SinglePost: React.FC = () => {
   const [happening, setHappening] = useState({} as Happenings);
@@ -25,8 +19,10 @@ const SinglePost: React.FC = () => {
     title: '',
     content: '',
     image: '',
-    createdUser: ''
+    createdUser: {} as IUser
   });
+  const currentUser = useSelector((state: any) => state.user);
+  console.log(currentUser);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const locationId = useSelector((state: any) => state.location.pincode);
   const happeningPathObj = useLocation();
@@ -37,7 +33,7 @@ const SinglePost: React.FC = () => {
 
   useEffect(() => {
     console.log(locationId);
-    happeningsService.getHappeningById('02119', happeningId).then((happening) => setHappening(happening));
+    happeningsService.getHappeningById(locationId, happeningId).then((happening) => setHappening(happening));
   }, [happeningId]);
 
   const handleEditClick = () => {
@@ -46,8 +42,7 @@ const SinglePost: React.FC = () => {
       title: happening.title,
       content: happening.content,
       image: happening.image,
-      // TODO : populate user from state
-      createdUser: '656a4c392ffccb0858ad498a'
+      createdUser: currentUser.user._id
     });
     setIsEditing(true);
   };
@@ -75,9 +70,10 @@ const SinglePost: React.FC = () => {
   const handleEditSubmit = async () => {
     try {
       // Send a PUT request to update the happening
-      await happeningsService.updateHappening('02119', happeningId, editedData);
+      await happeningsService.updateHappening(locationId, happeningId, editedData);
       // Refresh the happening data after a successful update
-      const updatedHappening = await happeningsService.getHappeningById('02119', happeningId);
+      const updatedHappening = await happeningsService.getHappeningById(locationId, happeningId);
+      console.log(updatedHappening);
       setHappening(updatedHappening);
       setIsEditing(false);
     } catch (error) {
@@ -92,7 +88,7 @@ const SinglePost: React.FC = () => {
   const handleDeleteConfirm = async () => {
     try {
       // Send a DELETE request to delete the happening
-      await happeningsService.deleteHappening('02119', happeningId);
+      await happeningsService.deleteHappening(locationId, happeningId);
       // Close the delete confirmation modal
       setIsDeleteModalOpen(false);
       window.location.replace('/happenings');
@@ -107,33 +103,6 @@ const SinglePost: React.FC = () => {
 
   return (
     <div className="singlePost">
-      {/* <div className="singlePostWrapper">
-        <img className="singlePostImg" src={happening.image} alt="" />
-        <h1 className="singlePostTitle">
-          {happening.title}
-          <div className="singlePostEdit">
-            <i className="singlePostIcon far fa-edit" onClick={handleEditClick}></i>
-            <i className="singlePostIcon far fa-trash-alt" onClick={handleDeleteClick}></i>
-          </div>
-        </h1>
-
-        <div className="singlePostInfo">
-          <span className="singlePostAuthor">
-            Author:
-            <b>
-              {typeof happening.createdUser === 'string'
-                ? 'Shashikar'
-                : happening.createdUser?.person?.firstName}
-              {typeof happening.createdUser === 'string'
-                ? 'A'
-                : happening.createdUser?.person?.lastName}
-            </b>{' '}
-          </span>
-          <span className="singlePostDate">{happening.postedDate}</span>
-        </div>
-
-        <p className="singlePostDesc">{happening.content}</p>
-      </div> */}
 
       <Card sx={{ width: '100%', margin: '0 auto', padding: '20px' }}>
         <img className="singlePostImg" src={happening.image} alt="" style={{ width: '100%', marginBottom: '20px' }} />
@@ -142,14 +111,14 @@ const SinglePost: React.FC = () => {
           <h1 className="singlePostTitle">
             {happening.title}
 
-            <div className="singlePostEdit" style={{ marginTop: '10px', textAlign: 'center' }}>
+            { currentUser.isLoggedIn && currentUser.user._id === happening.createdUser?._id && <div className="singlePostEdit" style={{ marginTop: '10px', textAlign: 'center' }}>
               <Button onClick={handleEditClick} variant="outlined" style={{ marginRight: '10px' }}>
                 Edit
               </Button>
               <Button onClick={handleDeleteClick} variant="outlined">
                 Delete
               </Button>
-            </div>
+            </div> }
           </h1>
             
           </Typography>
