@@ -26,6 +26,8 @@ import {
 import { IDonation } from "../../models/donation";
 import PieChartComp, { IPieData } from "../Charts/_PieChart";
 import BarChartstackedComp from "../Charts/_BarChart";
+import RadarChartComp from "../Charts/_RadarChart";
+import AreaChartComp from "../Charts/_AreaChart";
 
 interface IDonationMetrics{
 donation: IDonation[];
@@ -241,7 +243,7 @@ return(<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 15 15" width="15" he
 
         <BarChartstackedComp barChartData={compositeChartData} bar1Key="amountRequired" bar2Key="amountAchieved" yAxisKey="name" layout="vertical" />
 
-        <RadarChart outerRadius={90} width={730} height={250} data={compositeChartData}>
+        {/* <RadarChart outerRadius={90} width={730} height={250} data={compositeChartData}>
   <PolarGrid />
   <PolarAngleAxis dataKey="name" />
   <PolarRadiusAxis angle={30} />
@@ -249,9 +251,11 @@ return(<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 15 15" width="15" he
   <Radar name="Below 50" dataKey="below50" stroke="#8884d8" fill="#8884d8" fillOpacity={0.6} />
   <Radar name="Above 50" dataKey="above50" stroke="#82ca9d" fill="#82ca9d" fillOpacity={0.6} />
   <Legend />
-</RadarChart>
+</RadarChart> */}
 
-      <AreaChart
+<RadarChartComp radarChartData={compositeChartData} dataKey="name" radar1Name="Below 50" radar1Key="below50" radar2Name="Above 50" radar2Key="above50" />
+
+      {/* <AreaChart
           width={500}
           height={400}
           data={compositeChartData}
@@ -259,7 +263,7 @@ return(<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 15 15" width="15" he
             top: 10,
             right: 30,
             left: 0,
-            bottom: 0,
+            bottom: 
           }}
         >
           <CartesianGrid strokeDasharray="3 3" />
@@ -268,8 +272,9 @@ return(<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 15 15" width="15" he
           <Tooltip />
           <Area type="monotone" dataKey="amountRequired" stackId="1" stroke="#8884d8" fill="#123abc" />
           <Area type="monotone" dataKey="amountAchieved" stackId="1" stroke="#82ca9d" fill="#8cd1b9" />
-          {/* <Area type="monotone" dataKey="amt" stackId="1" stroke="#ffc658" fill="#ffc658" /> */}
-        </AreaChart>
+          {/* <Area type="monotone" dataKey="amt" stackId="1" stroke="#ffc658" fill="#ffc658" />
+        </AreaChart> */}
+<AreaChartComp areaChartData={compositeChartData} dataKey="name" area1Key="amountRequired" area2Key="amountAchieved" />
 
       {/* <ResponsiveContainer width="100%" height="100%"> */}
        <ComposedChart
