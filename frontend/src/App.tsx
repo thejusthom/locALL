@@ -1,9 +1,5 @@
 import React from 'react';
-import logo from './logo.svg';
 import './App.css';
-import HappeningsView from './views/HappeningsView';
-import EventsView from './views/Events/EventsView';
-import FeedShare from './views/FeedShare/FeedShareView';
 import Routes from './routes';
 import 'slick-carousel/slick/slick.css'
 import 'react-toastify/dist/ReactToastify.css';

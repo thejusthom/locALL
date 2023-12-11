@@ -4,6 +4,7 @@ import EditIcon from "../../assets/images/edit-icon.svg";
 import DeleteIcon from "../../assets/images/delete-icon.svg";
 import moment from "moment";
 import { IEvent } from "../../models/events";
+import { useTranslation } from "react-i18next";
 
 interface IMyEvents{
     events?: IEvent[];
@@ -12,16 +13,17 @@ interface IMyEvents{
 }
 
 const MyEvents = (props: IMyEvents) => {
+    const { t } = useTranslation('common');
     const { events, onEdit, onDelete } = props;
     
     return(
         <Table>
         <thead>
-            <th>Name</th>
-            <th>Category</th>
-            <th>Start Date</th>
-            <th>End Date</th>
-            <th>Actions</th>
+            <th>{t('name')}</th>
+            <th>{t('category')}</th>
+            <th>{t('start_date')}</th>
+            <th>{t('end_date')}</th>
+            <th>{t('actions')}</th>
         </thead>
         <tbody>
             {events?.map((event) => 

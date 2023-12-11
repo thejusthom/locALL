@@ -24,16 +24,8 @@ import {
   Popper,
 } from "@mui/material";
 import { deleteUser, saveUser } from "../../store/slices/user-slice";
+import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
-
-const pages = [
-  { name: "Home", path: "/" },
-  { name: "Events", path: "/events" },
-  { name: "Marketplace", path: "/marketplace" },
-  { name: "Feed Share", path: "/feedshare" },
-  { name: "Happenings", path: "/happenings" },
-  { name: "Donations", path: "/donations" },
-];
 
 // const initialStateUser = {
 //   person: {} as IPerson,
@@ -48,6 +40,17 @@ function HomeLayout() {
   const [openMenu, setOpenMenu] = useState(false);
   const anchorRef = React.useRef<HTMLButtonElement>(null);
   const navigate = useNavigate();
+
+  const { t } = useTranslation('common');
+
+  const pages = [
+    { name: t('home'), path: "/" },
+    { name: t('events'), path: "/events" },
+    { name: t('marketplace'), path: "/marketplace" },
+    { name: t('feedshare'), path: "/feedshare" },
+    { name: t('happenings'), path: "/happenings" },
+    { name: t('donations'), path: "/donations" },
+  ];
 
   console.log(user);
 

@@ -81,6 +81,7 @@ width: 1100px;
 `;
 const Title = styled.h2`
 margin: 0;
+font-family: "Roboto","Helvetica","Arial",sans-serif
 `;
 const Name = styled.div`
 margin-top: 2px;

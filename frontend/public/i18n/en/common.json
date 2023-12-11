@@ -1,0 +1,16 @@
+{
+    "all_events": "All Events",
+    "my_events": "My Events",
+    "create_event": "Create an Event",
+    "home": "Home",
+    "events": "Events",
+    "marketplace": "Marketplace",
+    "feedshare": "Feed Share",
+    "happenings": "Happenings",
+    "donations": "Donations",
+    "name": "Name",
+    "category": "Category",
+    "start_date": "Start Date",
+    "end_date": "End Date",
+    "actions": "Actions"
+}

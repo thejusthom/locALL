@@ -17,6 +17,7 @@ import FormFieldsComponent from "./_FormFields";
 import { ToastContainer, toast } from "react-toastify";
 import NoDataScreen from "../../common/_NoDataScreen";
 import Loading from "../../common/_Loader";
+import { useTranslation } from "react-i18next";
 
 const initialNewEvent = {
     eventName: "",
@@ -35,6 +36,8 @@ const EventsView = () => {
 
 const selectLocation = (state: any) => state.location;
 const user = useSelector((state: any) => state.user);
+
+const { t } = useTranslation('common');
 
 const loc = useSelector(selectLocation);
 const [location, setLocation] = React.useState<{ latitude: number; longitude: number;}>({latitude: loc.latitude, longitude: loc.longitude});
@@ -63,10 +66,10 @@ renderEventsByTab();
 }, [loc]);
 
 React.useEffect(() => {
-    // if(!!user._id){
+    // if(!!user?.user?._id){
 renderEventsByTab();
     // }
-}, [user._id, tab]);
+}, [user?.user?._id, tab]);
 
 const renderEventsByTab = () => {
     if(tab === 0){
@@ -80,7 +83,7 @@ const renderEventsByTab = () => {
         else{
             setShowLoader(true);
             eventsService
-            .getEventByParams(loc.pincode, "6573fcd148338641e52772f3")
+            .getEventByParams(loc.pincode, user?.user?._id)
             .then((event => {
                 setEvents(event);
                 setShowLoader(false);
@@ -144,7 +147,7 @@ const renderEventsByTab = () => {
                   ({
                     'type': 'Feature',
                     'properties': {
-                        'description': '<strong class="title">'+event.eventName+'</strong><p>'+event.descriptionInfo+'</p><p>Contact: '+event.organiser?.name+' ('+event.organiser?.contact+')</p><p>Date: '+event.startDate+' - '+event.endDate+'</p><button class="maps-button" onclick="(function(){window.open(\'https://maps.google.com?q='+location.latitude+','+location.longitude+'\');})();">Open in Google Maps</button>',
+                        'description': '<div class="popup"><h2 class="title">'+event.eventName+'</h2><p>'+event.descriptionInfo+'</p><p>Contact: '+event.organiser?.name+' ('+event.organiser?.contact+')</p><p>Date: '+event.startDate+' - '+event.endDate+'</p><button class="maps-button" onclick="(function(){window.open(\'https://maps.google.com?q='+location.latitude+','+location.longitude+'\');})();">Open in Google Maps</button><div>',
                         'icon': event.category,
                     },
                     'geometry': {
@@ -326,13 +329,13 @@ function a11yProps(index: number) {
             <Modal isOpen={showLoader}>
         <Loading isLoading={showLoader} />
         </Modal>
-        <Button 
+        {!!user?.user?._id &&<Button 
         onClick={() => setShowModal(true)}
-        >Create an Event</Button>
+        >{t('create_event')}</Button>}
                <Tabs sx={{margin: "15px 0 0 0", "& button": {color: "#123abc"}, "& button.Mui-selected": {color: "#123abc"}}} value={tab} onChange={handleTabChange} aria-label="basic tabs example"
                TabIndicatorProps={{sx:{backgroundColor: "#123abc"}}}>
-          <Tab sx={{fontSize: "16px", fontWeight: "bold"}} label="All Events" {...a11yProps(0)} />
-          <Tab sx={{fontSize: "16px", fontWeight: "bold"}} label="My Events" {...a11yProps(1)} />
+          <Tab sx={{fontSize: "16px", fontWeight: "bold"}} label={t('all_events')} {...a11yProps(0)} />
+          {!!user?.user?._id && <Tab sx={{fontSize: "16px", fontWeight: "bold"}} label={t('my_events')} {...a11yProps(1)} />}
         </Tabs>
 <Modal isOpen={showModal}>
   <EventsForm isEdit={isEdit}
