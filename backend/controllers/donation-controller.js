@@ -17,7 +17,7 @@ export const get = async(request, response) => {
 // method to post a happening in a location
 export const post = async(request, response) => {
     try{
-        const newDonation = {...request.body, locationId: request.locationId, postedOn: Date.now()};
+        const newDonation = {...request.body, locationId: request.locationId, postedOn: new Date};
         console.log(newDonation);
         const donation = await donationService.save(newDonation);
         setResponse(donation, response, 200);

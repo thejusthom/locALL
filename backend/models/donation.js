@@ -8,7 +8,7 @@ const donationSchema = new Schema({
     required: true
   },
   postedOn: {
-    type: String,
+    type: Date,
     required: true
   },
   descriptionInfo: {
