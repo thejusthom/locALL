@@ -11,7 +11,14 @@ import {
     Bar,
     XAxis,
     YAxis,
-    // CartesianGrid,
+    BarChart,
+    AreaChart,
+    RadarChart,
+    PolarGrid,
+    PolarAngleAxis,
+    PolarRadiusAxis,
+    Radar,
+    CartesianGrid,
     Legend,
     // Scatter,
     // ResponsiveContainer,  
@@ -206,9 +213,31 @@ return(<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 15 15" width="15" he
           }
             </Pie>
       </PieChart>
+
+
+      <AreaChart
+          width={500}
+          height={400}
+          data={compositeChartData}
+          margin={{
+            top: 10,
+            right: 30,
+            left: 0,
+            bottom: 0,
+          }}
+        >
+          <CartesianGrid strokeDasharray="3 3" />
+          <XAxis dataKey="name" />
+          <YAxis />
+          <Tooltip />
+          <Area type="monotone" dataKey="amountRequired" stackId="1" stroke="#8884d8" fill="#123abc" />
+          <Area type="monotone" dataKey="amountAchieved" stackId="1" stroke="#82ca9d" fill="#8cd1b9" />
+          {/* <Area type="monotone" dataKey="amt" stackId="1" stroke="#ffc658" fill="#ffc658" /> */}
+        </AreaChart>
+
       {/* <ResponsiveContainer width="100%" height="100%"> */}
        <ComposedChart
-          width={700}
+          width={1000}
           height={500}
           data={compositeChartData}
           margin={{
