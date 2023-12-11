@@ -154,16 +154,7 @@ const data01: any = {
   const donations = [...props.donation];
   donations?.forEach((d) => data01[d.category].value += 1);
   const pieChartData = Object.values(data01);
-  console.log(pieChartData)
 
-  // props.donation.forEach(donation => {
-  //   const category = donation.category;
-  //   if (data01.hasOwnProperty(category)) {
-  //     data01[category].value += 1;
-  //   }
-  // });
-  //   console.log(data01);
-  // const metricsData = data01.map((i))
     const RADIAN = Math.PI / 180;
 const renderCustomizedLabel = ({ cx, cy, midAngle, innerRadius, outerRadius, percent, index }: any) => {
   const radius = innerRadius + (outerRadius - innerRadius) * 0.5;
@@ -211,7 +202,6 @@ return(<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 15 15" width="15" he
           	pieChartData?.map((entry: any, index: number) => <Cell fill={entry.color}/>)
           }
             </Pie>
-        {/* <Pie data={[]} dataKey="value" nameKey="name" cx="50%" cy="50%" innerRadius={60} outerRadius={80} fill="#82ca9d" label /> */}
       </PieChart>
       {/* <ResponsiveContainer width="100%" height="100%"> */}
         <ComposedChart
