@@ -52,7 +52,7 @@ const footer = () => {
                   <SocialIcon url="https://linkedin.com/" />
                 </a></li>
               </ul>
-              <ul className="menu">
+              <ul className="menuu">
                 <li className="menu__item"><a className="menu__link" href="#">Home</a></li>
                 <li className="menu__item"><a className="menu__link" href="#">About</a></li>
                 <li className="menu__item"><a className="menu__link" href="#">Services</a></li>
