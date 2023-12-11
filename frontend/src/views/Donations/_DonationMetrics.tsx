@@ -50,51 +50,6 @@ const data02: any = [
   }
 ];
 
-  const data = [
-    {
-      name: 'Page A',
-      below50: 590,
-      amountRequired: 800,
-      amountAchieved: 1400,
-      above50: 490,
-    },
-    {
-      name: 'Page B',
-      below50: 868,
-      amountRequired: 967,
-      amountAchieved: 1506,
-      above50: 590,
-    },
-    {
-      name: 'Page C',
-      below50: 1397,
-      amountRequired: 1098,
-      amountAchieved: 989,
-      above50: 350,
-    },
-    {
-      name: 'Page D',
-      below50: 1480,
-      amountRequired: 1200,
-      amountAchieved: 1228,
-      above50: 480,
-    },
-    {
-      name: 'Page E',
-      below50: 1520,
-      amountRequired: 1108,
-      amountAchieved: 1100,
-      above50: 460,
-    },
-    {
-      name: 'Page F',
-      below50: 1400,
-      amountRequired: 680,
-      amountAchieved: 1700,
-      above50: 380,
-    },
-  ];
-
 //   const data02 = [
 //     {
 //       "name": "Group A",
@@ -151,10 +106,57 @@ const data01: any = {
     "color": "#636363"
   }
 };
+
+const data: any = {
+  "school": {
+    name: 'School',
+    below50: 0,
+    amountRequired: 0,
+    amountAchieved: 0,
+    above50: 0,
+  },
+  "university": {
+    name: 'University',
+    below50: 0,
+    amountRequired: 0,
+    amountAchieved: 0,
+    above50: 0,
+  },
+  "medical": {
+    name: 'Medical',
+    below50: 0,
+    amountRequired: 0,
+    amountAchieved: 0,
+    above50: 0,
+  },
+  "shelter": {
+    name: 'Shelter',
+    below50: 0,
+    amountRequired: 0,
+    amountAchieved: 0,
+    above50: 0,
+  },
+  "other": {
+    name: 'Other',
+    below50: 0,
+    amountRequired: 0,
+    amountAchieved: 0,
+    above50: 0,
+  },
+};
+
   const donations = [...props.donation];
   donations?.forEach((d) => data01[d.category].value += 1);
   const pieChartData = Object.values(data01);
-
+donations?.forEach((d) => {
+  data[d.category].amountRequired += d.amountRequired;
+  if(!!d.amountAchieved){
+    data[d.category].amountAchieved += d.amountAchieved;
+  }
+ data[d.category][ d.receiver.age < 50 ? "below50" : "above50"] += d.amountRequired
+});
+console.log(donations)
+console.log(data);
     const RADIAN = Math.PI / 180;
 const renderCustomizedLabel = ({ cx, cy, midAngle, innerRadius, outerRadius, percent, index }: any) => {
   const radius = innerRadius + (outerRadius - innerRadius) * 0.5;
@@ -204,7 +206,7 @@ return(<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 15 15" width="15" he
             </Pie>
       </PieChart>
       {/* <ResponsiveContainer width="100%" height="100%"> */}
-        <ComposedChart
+        {/* <ComposedChart
           width={700}
           height={500}
           data={data}
@@ -224,8 +226,8 @@ return(<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 15 15" width="15" he
           <Bar dataKey="amountRequired" barSize={20} fill="#123abc" />
           <Line type="monotone" dataKey="below50" stroke="#38d200" />
           <Line type="monotone" dataKey="above50" stroke="violet" />
-          {/* <Scatter dataKey="above50" fill="red" /> */}
-        </ComposedChart>
+          {/* <Scatter dataKey="above50" fill="red" />
+        </ComposedChart> */}
       {/* </ResponsiveContainer> */}
       </MetricsWrap>
     );
