@@ -7,5 +7,10 @@
     "marketplace": "Marketplace",
     "feedshare": "Feed Share",
     "happenings": "Happenings",
-    "donations": "Donations"
+    "donations": "Donations",
+    "name": "Name",
+    "category": "Category",
+    "start_date": "Start Date",
+    "end_date": "End Date",
+    "actions": "Actions"
 }
