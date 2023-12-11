@@ -17,15 +17,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import userService from "../../services/userService";
 import { Avatar, ClickAwayListener, Grow, MenuList, Paper, Popper } from "@mui/material";
 import { deleteUser, saveUser } from "../../store/slices/user-slice";
-
-const pages = [
-  { name: "Home", path: "/" },
-  { name: "Events", path: "/events" },
-  { name: "Marketplace", path: "/marketplace" },
-  { name: "Feed Share", path: "/feedshare" },
-  { name: "Happenings", path: "/happenings" },
-  { name: "Donations", path: "/donations" },
-];
+import { useTranslation } from "react-i18next";
 
 // const initialStateUser = {
 //   person: {} as IPerson,
@@ -39,6 +31,17 @@ function HomeLayout() {
   const [open, setOpen] = useState(false);
   const [openMenu, setOpenMenu] = useState(false);
   const anchorRef = React.useRef<HTMLButtonElement>(null);
+
+  const { t } = useTranslation('common');
+
+  const pages = [
+    { name: "Home", path: "/" },
+    { name: "Events", path: "/events" },
+    { name: "Marketplace", path: "/marketplace" },
+    { name: "Feed Share", path: "/feedshare" },
+    { name: "Happenings", path: "/happenings" },
+    { name: "Donations", path: "/donations" },
+  ];
 
   console.log(user);
 
