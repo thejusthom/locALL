@@ -24,6 +24,7 @@ import {
     // ResponsiveContainer,  
 } from "recharts";
 import { IDonation } from "../../models/donation";
+import PieChartComp, { IPieData } from "../Charts/_PieChart";
 
 interface IDonationMetrics{
 donation: IDonation[];
@@ -154,7 +155,7 @@ const data: any = {
 
   const donations = [...props.donation];
   donations?.forEach((d) => data01[d.category].value += 1);
-  const pieChartData = Object.values(data01);
+  const pieChartData: IPieData[] = Object.values(data01);
 donations?.forEach((d) => {
   data[d.category].amountRequired += d.amountRequired;
   if(!!d.amountAchieved){
@@ -202,7 +203,7 @@ return(<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 15 15" width="15" he
 
     return(
         <MetricsWrap>
-        <PieChart width={730} height={400}>
+        {/* <PieChart width={730} height={400}>
             <Tooltip />
             <text x={365} y={200} textAnchor="middle" dominantBaseline="middle">
     Categories
@@ -212,7 +213,8 @@ return(<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 15 15" width="15" he
           	pieChartData?.map((entry: any, index: number) => <Cell fill={entry.color}/>)
           }
             </Pie>
-      </PieChart>
+      </PieChart> */}
+      <PieChartComp pieChartData={pieChartData} dataKey="value" nameKey="name" />
 
       <BarChart
           width={500}
