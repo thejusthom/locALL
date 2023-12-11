@@ -28,6 +28,7 @@ import PieChartComp, { IPieData } from "../Charts/_PieChart";
 import BarChartstackedComp from "../Charts/_BarChart";
 import RadarChartComp from "../Charts/_RadarChart";
 import AreaChartComp from "../Charts/_AreaChart";
+import CompositeChartComp from "../Charts/_CompositeChart";
 
 interface IDonationMetrics{
 donation: IDonation[];
@@ -277,7 +278,7 @@ return(<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 15 15" width="15" he
 <AreaChartComp areaChartData={compositeChartData} dataKey="name" area1Key="amountRequired" area2Key="amountAchieved" />
 
       {/* <ResponsiveContainer width="100%" height="100%"> */}
-       <ComposedChart
+       {/* <ComposedChart
           width={1000}
           height={500}
           data={compositeChartData}
@@ -288,7 +289,7 @@ return(<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 15 15" width="15" he
             left: 20,
           }}
         >
-          {/* <CartesianGrid stroke="#f5f5f5" /> */}
+          {/* <CartesianGrid stroke="#f5f5f5" />
           <XAxis dataKey="name" scale="band" />
           <YAxis />
           <Tooltip content={<CustomTooltip />} />
@@ -297,8 +298,9 @@ return(<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 15 15" width="15" he
           <Bar dataKey="amountRequired" barSize={20} fill="#123abc" />
           <Line type="monotone" dataKey="below50" stroke="#38d200" />
           <Line type="monotone" dataKey="above50" stroke="violet" />
-           {/* <Scatter dataKey="above50" fill="red" /> */}
-        </ComposedChart> 
+           {/* <Scatter dataKey="above50" fill="red" />
+        </ComposedChart>  */}
+        <CompositeChartComp compositeChartData={compositeChartData} dataKey="name" areaKey="amountAchieved" barKey="AmountRequired" line1Key="below50" line2Key="above50" />
       {/* </ResponsiveContainer> */}
       </MetricsWrap>
     );
