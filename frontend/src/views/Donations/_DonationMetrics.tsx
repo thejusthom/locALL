@@ -16,34 +16,39 @@ import {
     // Scatter,
     // ResponsiveContainer,  
 } from "recharts";
+import { IDonation } from "../../models/donation";
 
-const data01 = [
-    {
-      "name": "School",
-      "value": 20,
-      "color": "#264478"
-    },
-    {
-      "name": "University",
-      "value": 10,
-      "color": "#4472c4"
-    },
-    {
-      "name": "Medical",
-      "value": 18,
-      "color": "#12283d"
-    },
-    {
-      "name": "Shelter",
-      "value": 5,
-      "color": "#5ba3e7"
-    },
-    {
-      "name": "Other",
-      "value": 9,
-      "color": "#636363"
-    }
-  ];
+interface IDonationMetrics{
+donation: IDonation[];
+}
+
+const data02: any = [
+{
+    "name": "School",
+    "value": 0,
+    "color": "#264478"
+  },
+{
+    "name": "University",
+    "value": 0,
+    "color": "#4472c4"
+  },
+ {
+    "name": "Medical",
+    "value": 0,
+    "color": "#12283d"
+  },
+{
+    "name": "Shelter",
+    "value": 0,
+    "color": "#5ba3e7"
+  },
+ {
+    "name": "Other",
+    "value": 0,
+    "color": "#636363"
+  }
+];
 
   const data = [
     {
@@ -89,6 +94,7 @@ const data01 = [
       above50: 380,
     },
   ];
+
 //   const data02 = [
 //     {
 //       "name": "Group A",
@@ -116,7 +122,45 @@ const data01 = [
 //     }
 //   ];
 
-const DonationMetrics = () => {
+const DonationMetrics = (props: IDonationMetrics) => {
+  
+const data01: any = {
+  "school": {
+    "name": "School",
+    "value": 0,
+    "color": "#264478"
+  },
+ "university": {
+    "name": "University",
+    "value": 0,
+    "color": "#4472c4"
+  },
+  "medical":{
+    "name": "Medical",
+    "value": 0,
+    "color": "#12283d"
+  },
+  "shelter":{
+    "name": "Shelter",
+    "value": 0,
+    "color": "#5ba3e7"
+  },
+  "other": {
+    "name": "Other",
+    "value": 0,
+    "color": "#636363"
+  }
+};
+
+
+  // props.donation.forEach(donation => {
+  //   const category = donation.category;
+  //   if (data01.hasOwnProperty(category)) {
+  //     data01[category].value += 1;
+  //   }
+  // });
+  //   console.log(data01);
+  // const metricsData = data01.map((i))
     const RADIAN = Math.PI / 180;
 const renderCustomizedLabel = ({ cx, cy, midAngle, innerRadius, outerRadius, percent, index }: any) => {
   const radius = innerRadius + (outerRadius - innerRadius) * 0.5;
@@ -124,7 +168,7 @@ const renderCustomizedLabel = ({ cx, cy, midAngle, innerRadius, outerRadius, per
   const y = cy + radius * Math.sin(-midAngle * RADIAN);
 
   return (
-    <text x={x} y={y} fill="white" textAnchor={x > cx ? 'start' : 'end'} dominantBaseline="central">
+    <text x={x} y={y} fill="white" textAnchor={x > cx ? 'start' : 'end'}>
       {`${(percent * 100).toFixed(0)}%`}
     </text>
   );
@@ -133,14 +177,19 @@ const renderCustomizedLabel = ({ cx, cy, midAngle, innerRadius, outerRadius, per
 const CustomTooltip = ({ active, payload, label }: any) => {
     console.log(payload, label)
     if (active && payload && payload.length) {
+        const Circle = (props: {fill: string}) => {
+return(<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 15 15" width="15" height="15">
+<circle cx="7.5" cy="7.5" r="3" fill={props.fill} />
+</svg>);
+        }
       return (
         <div className="tooltip-wrap">
           <p className="label">{label}</p>
           {/* <p className="intro">{getIntroOfPage(label)}</p> */}
-          <p>Amount Required: {payload[0].payload.amountRequired}</p>
-          <p>Amount Achieved: {payload[0].payload.amountAchieved}</p>
-          <p>Amount Required: {payload[0].payload.below50}</p>
-          <p>Amount Required: {payload[0].payload.above50}</p>
+          <p><span><Circle fill="#123abc" /></span>Amount Required: {payload[0].payload.amountRequired}</p>
+          <p><span><Circle fill="#1976d2" /></span>Amount Achieved: {payload[0].payload.amountAchieved}</p>
+          <p><span><Circle fill="#38d200" /></span>Below 50 Age: {payload[0].payload.below50}</p>
+          <p><span><Circle fill="violet" /></span>Above 50 Age: {payload[0].payload.above50}</p>
         </div>
       );
     }
@@ -151,9 +200,10 @@ const CustomTooltip = ({ active, payload, label }: any) => {
         <MetricsWrap>
         <PieChart width={730} height={400}>
             <Tooltip />
-        <Pie data={data01} dataKey="value" nameKey="name" cx="50%" cy="50%" innerRadius={75}  label={renderCustomizedLabel} outerRadius={150} fill="#8884d8">
+            
+        <Pie data={pieChartData} dataKey="value" nameKey="name" cx="50%" cy="50%" innerRadius={75}  label={renderCustomizedLabel} outerRadius={150} fill="#8884d8">
         {
-          	data01.map((entry, index) => <Cell fill={data01[index].color}/>)
+          	pieChartData?.map((entry: any, index: number) => <Cell fill={entry.color}/>)
           }
             </Pie>
         {/* <Pie data={[]} dataKey="value" nameKey="name" cx="50%" cy="50%" innerRadius={60} outerRadius={80} fill="#82ca9d" label /> */}
@@ -191,6 +241,9 @@ const MetricsWrap = styled.article`
     background-color: white;
     padding: 20px;
     border-radius: 5px;
+    p{
+      align-items: center;
+    }
 }
 `;
 
