@@ -12,11 +12,19 @@ import Button from "@mui/material/Button";
 import MenuItem from "@mui/material/MenuItem";
 import LocationBar from "../_LocationBar";
 import Footer from "../footer/footer";
-import { useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import userService from "../../services/userService";
-import { Avatar, ClickAwayListener, Grow, MenuList, Paper, Popper } from "@mui/material";
+import {
+  Avatar,
+  ClickAwayListener,
+  Grow,
+  MenuList,
+  Paper,
+  Popper,
+} from "@mui/material";
 import { deleteUser, saveUser } from "../../store/slices/user-slice";
+import { useNavigate } from "react-router-dom";
 
 const pages = [
   { name: "Home", path: "/" },
@@ -39,6 +47,7 @@ function HomeLayout() {
   const [open, setOpen] = useState(false);
   const [openMenu, setOpenMenu] = useState(false);
   const anchorRef = React.useRef<HTMLButtonElement>(null);
+  const navigate = useNavigate();
 
   console.log(user);
 
@@ -49,7 +58,8 @@ function HomeLayout() {
   // console.log(currentUser);
   // console.log(currentUser.user.username);
 
-  const [anchorElNav, setAnchorElNav] = useState<null | HTMLElement>(
+  const [anchorElNav, setAnchorElNav] = useState<null | HTMLElement>(null);
+  const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(
     null
   );
 
@@ -61,19 +71,30 @@ function HomeLayout() {
     setAnchorElNav(null);
   };
 
+  const handleOpenUserMenu = (event: React.MouseEvent<HTMLElement>) => {
+    setAnchorElUser(event.currentTarget);
+  };
+  const handleCloseUserMenu = () => {
+    setAnchorElUser(null);
+  };
+
   const handleLogout = async () => {
     if (user.refreshToken) {
-      const responseJSON = await userService.logoutUser(user, user.refreshToken);
-      if (responseJSON === 'Logout successful') {
+      const responseJSON = await userService.logoutUser(
+        user,
+        user.refreshToken
+      );
+      if (responseJSON === "Logout successful") {
         dispatch(deleteUser()); // Delete user from redux store
         localStorage.removeItem("user"); // Delete user from local storage
+        navigate("/");
       }
     }
   };
 
   const handleToggle = () => {
     setOpenMenu((prevOpen) => !prevOpen);
-  }
+  };
 
   const prevOpen = React.useRef(openMenu);
   React.useEffect(() => {
@@ -90,14 +111,13 @@ function HomeLayout() {
     ) {
       return;
     }
-  }
-
+  };
 
   function handleListKeyDown(event: React.KeyboardEvent) {
-    if (event.key === 'Tab') {
+    if (event.key === "Tab") {
       event.preventDefault();
       setOpenMenu(false);
-    } else if (event.key === 'Escape') {
+    } else if (event.key === "Escape") {
       setOpenMenu(false);
     }
   }
@@ -107,7 +127,11 @@ function HomeLayout() {
       <Box>
         <AppBar
           position="sticky"
-          sx={{ pr: { md: 2, xs: 2 }, pl: { md: 2, xs: 2 }, backgroundColor: "#123abc" }}
+          sx={{
+            pr: { md: 2, xs: 2 },
+            pl: { md: 2, xs: 2 },
+            backgroundColor: "#123abc",
+          }}
         >
           <Container maxWidth="xl">
             <Toolbar disableGutters>
@@ -233,51 +257,43 @@ function HomeLayout() {
                 />
               )}
               <Box sx={{ flexGrow: 0 }}>
-                {user.isLoggedIn ? ( // Check if the user is logged in
-                  <>
-                    <Button
-                      // key="logout"
-                      // onClick={handleLogout}
-                      onClick={handleToggle}
-                      ref={anchorRef}
+                {user.isLoggedIn ? (
+                  <Box>
+                    <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
+                      <Avatar src={user.user?.userImage} />
+                    </IconButton>
+                    <Menu
+                      sx={{ mt: "45px" }}
+                      id="menu-appbar"
+                      anchorEl={anchorElUser}
+                      anchorOrigin={{
+                        vertical: "top",
+                        horizontal: "right",
+                      }}
+                      keepMounted
+                      transformOrigin={{
+                        vertical: "top",
+                        horizontal: "right",
+                      }}
+                      open={Boolean(anchorElUser)}
+                      onClose={handleCloseUserMenu}
                     >
-                      <Avatar src="/broken-image.jpg" />
-                    </Button>
-                    <Popper
-                      open={openMenu}
-                      anchorEl={anchorRef.current}
-                      role={undefined}
-                      placement="bottom-start"
-                      transition
-                      disablePortal
-                    >
-                      {({ TransitionProps, placement }) => (
-                        <Grow
-                          {...TransitionProps}
-                          style={{
-                            transformOrigin:
-                              placement === 'bottom-start' ? 'left top' : 'left bottom',
-                          }}
+                      <MenuItem key="userProfile" onClick={handleCloseUserMenu}>
+                        <Button
+                          component={Link}
+                          to="/userProfile"
+                          sx={{ fontSize: 15 }}
                         >
-                          <Paper>
-                            <ClickAwayListener onClickAway={handleClose}>
-                              <MenuList
-                                autoFocusItem={open}
-                                id="composition-menu"
-                                aria-labelledby="composition-button"
-                                onKeyDown={handleListKeyDown}
-                              >
-                                <MenuItem component={Link}
-                                  to="/userProfile">Profile
-                                </MenuItem>
-                                <MenuItem key="logout" onClick={handleLogout}>Logout</MenuItem>
-                              </MenuList>
-                            </ClickAwayListener>
-                          </Paper>
-                        </Grow>
-                      )}
-                    </Popper>
-                  </>
+                          Profile
+                        </Button>
+                      </MenuItem>
+                      <MenuItem key="logout" onClick={handleCloseUserMenu}>
+                        <Typography component={Button} onClick={handleLogout}>
+                          Logout
+                        </Typography>
+                      </MenuItem>
+                    </Menu>
+                  </Box>
                 ) : (
                   <Button
                     key="login"
@@ -303,7 +319,7 @@ function HomeLayout() {
             </Toolbar>
           </Container>
         </AppBar>
-        <Box sx={{ minHeight: '100vh' }}>
+        <Box sx={{ minHeight: "100vh" }}>
           <Outlet />
         </Box>
       </Box>
