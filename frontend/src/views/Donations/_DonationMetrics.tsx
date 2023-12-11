@@ -203,8 +203,10 @@ return(<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 15 15" width="15" he
         <MetricsWrap>
         <PieChart width={730} height={400}>
             <Tooltip />
-            
-        <Pie data={pieChartData} dataKey="value" nameKey="name" cx="50%" cy="50%" innerRadius={75}  label={renderCustomizedLabel} outerRadius={150} fill="#8884d8">
+            <text x={365} y={200} textAnchor="middle" dominantBaseline="middle">
+    Categories
+   </text>
+        <Pie data={pieChartData} dataKey="value" nameKey="name" cx="50%" cy="50%" innerRadius={75}  label={renderCustomizedLabel} outerRadius={150} fill="#8884d8" labelLine={false}>
         {
           	pieChartData?.map((entry: any, index: number) => <Cell fill={entry.color}/>)
           }
