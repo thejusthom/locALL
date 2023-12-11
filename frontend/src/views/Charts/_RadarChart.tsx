@@ -10,7 +10,7 @@ import {
 } from "recharts";
 
 interface IRadarChartProps{
-radarCharData: any[];
+radarChartData: any[];
 dataKey: string;
 radar1Name: string;
 radar2Name: string;
@@ -19,10 +19,10 @@ radar2Key: string;
 }
 
 const RadarChartComp = (props: IRadarChartProps) => {
-    const { radar1Key, radar1Name, radar2Key, radar2Name, radarCharData, dataKey } = props;
+    const { radar1Key, radar1Name, radar2Key, radar2Name, radarChartData, dataKey } = props;
 
     return(
-        <RadarChart outerRadius={90} width={730} height={250} data={radarCharData}>
+        <RadarChart outerRadius={90} width={730} height={250} data={radarChartData}>
   <PolarGrid />
   <PolarAngleAxis dataKey={dataKey} />
   <PolarRadiusAxis angle={30} />
