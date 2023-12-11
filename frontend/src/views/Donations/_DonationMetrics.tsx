@@ -155,6 +155,7 @@ donations?.forEach((d) => {
   }
  data[d.category][ d.receiver.age < 50 ? "below50" : "above50"] += d.amountRequired
 });
+const compositeChartData = Object.values(data);
 console.log(donations)
 console.log(data);
     const RADIAN = Math.PI / 180;
@@ -206,10 +207,10 @@ return(<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 15 15" width="15" he
             </Pie>
       </PieChart>
       {/* <ResponsiveContainer width="100%" height="100%"> */}
-        {/* <ComposedChart
+       <ComposedChart
           width={700}
           height={500}
-          data={data}
+          data={compositeChartData}
           margin={{
             top: 20,
             right: 20,
@@ -226,8 +227,8 @@ return(<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 15 15" width="15" he
           <Bar dataKey="amountRequired" barSize={20} fill="#123abc" />
           <Line type="monotone" dataKey="below50" stroke="#38d200" />
           <Line type="monotone" dataKey="above50" stroke="violet" />
-          {/* <Scatter dataKey="above50" fill="red" />
-        </ComposedChart> */}
+           {/* <Scatter dataKey="above50" fill="red" /> */}
+        </ComposedChart> 
       {/* </ResponsiveContainer> */}
       </MetricsWrap>
     );
