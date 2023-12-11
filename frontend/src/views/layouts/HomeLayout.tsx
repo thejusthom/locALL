@@ -35,12 +35,12 @@ function HomeLayout() {
   const { t } = useTranslation('common');
 
   const pages = [
-    { name: "Home", path: "/" },
-    { name: "Events", path: "/events" },
-    { name: "Marketplace", path: "/marketplace" },
-    { name: "Feed Share", path: "/feedshare" },
-    { name: "Happenings", path: "/happenings" },
-    { name: "Donations", path: "/donations" },
+    { name: t('home'), path: "/" },
+    { name: t('events'), path: "/events" },
+    { name: t('marketplace'), path: "/marketplace" },
+    { name: t('feedshare'), path: "/feedshare" },
+    { name: t('happenings'), path: "/happenings" },
+    { name: t('donations'), path: "/donations" },
   ];
 
   console.log(user);
