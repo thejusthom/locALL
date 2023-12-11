@@ -10,12 +10,11 @@ import TabContext from "@mui/lab/TabContext";
 import TabPanel from "@mui/lab/TabPanel";
 import { Link } from "react-router-dom";
 import Button from '@mui/material/Button';
+import NoDataScreen from '../common/_NoDataScreen';
 
 const HappeningsView: React.FC = () =>{
   const [allHappenings, setAllHappenings] = useState([] as Happenings[]);
   const [myHappenings, setMyHappenings] = useState([] as Happenings[]);
-  const [loadingAllHappenings, setLoadingAllHappenings] = useState(false);
-  const [loadingMyHappenings, setLoadingMyHappenings] = useState(false);
   const locationId = useSelector((state: any) => state.location.pincode);
   const currentUser = useSelector((state: any) => state.user);
   const [tab, setTab] = React.useState('0');
@@ -24,24 +23,26 @@ const HappeningsView: React.FC = () =>{
  
   useEffect(() => {
     const fetchAllHappenings = async () => {
-      try {
-        setLoadingAllHappenings(true);
+      try
+      {
         const happenings = await happeningsService.getAllHappenings(locationId);
         setAllHappenings(happenings);
         console.log(happenings);
-      } finally {
-        setLoadingAllHappenings(false);
+      }
+      catch(err)
+      {
+        console.log(err);
       }
     };
 
     const fetchMyHappenings = async () => {
-      try {
-        setLoadingMyHappenings(true);
-        // Fetch my happenings based on currentUser
+      try
+      {
         const happenings = await happeningsService.getHappeningsByParams(locationId, currentUser?.user?._id);
         setMyHappenings(happenings);
-      } finally {
-        setLoadingMyHappenings(false);
+      }
+      catch(err){
+        console.log(err);
       }
     };
 
@@ -71,27 +72,27 @@ const HappeningsView: React.FC = () =>{
           },
         }}
         onChange={(_, newValue) => setTab(newValue)}
-        aria-label="basic tabs example"
+        aria-label="happenings tabs"
       >
         <Tab label="All Happenings" value="0" {...a11yProps(0)} />
         {currentUser.isLoggedIn && <Tab label="My Happenings" value="1" {...a11yProps(1)} />}
       </TabList>
       <TabPanel value="0">
-        {loadingAllHappenings ? (
-          <p>Loading all happenings...</p>
+        {allHappenings.length === 0 ? (
+          <NoDataScreen />
         ) : (
           <Posts posts={allHappenings} />
         )}
       </TabPanel>
-      {currentUser.isLoggedIn && (
+      {currentUser?.isLoggedIn && (
         <TabPanel value="1">
           <Link to={'/happenings/createPost'} className="link" >
             <Button sx={{ mt: 5, ml : 7, mb : 3, mr: 8, width: 193}}  variant="contained">
               Create New Happening
             </Button>
           </Link>
-          {loadingMyHappenings ? (
-            <p>Loading my happenings...</p>
+          {myHappenings.length === 0 ? (
+            <NoDataScreen />
           ) : (
             <Posts posts={myHappenings} />
           )}
