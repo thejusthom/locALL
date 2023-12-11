@@ -214,6 +214,29 @@ return(<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 15 15" width="15" he
             </Pie>
       </PieChart>
 
+      <BarChart
+          width={500}
+          height={300}
+          data={compositeChartData}
+          layout="vertical"
+          margin={{
+            top: 20,
+            right: 30,
+            left: 20,
+            bottom: 5,
+          }}
+        >
+
+          {/* <CartesianGrid strokeDasharray="3 3" /> */}
+          <XAxis type="number" />
+          <YAxis type="category" dataKey="name" />
+          <Tooltip />
+          <Legend />
+          <Bar dataKey="amountRequired" stackId="a" fill="#123abc" />
+          <Bar dataKey="amountAchieved" stackId="a" fill="#82ca9d" />
+        </BarChart>
+
+   
 
       <AreaChart
           width={500}
