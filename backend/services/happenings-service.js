@@ -34,3 +34,10 @@ export const update = async (updatedHappening, id) => {
 export const remove = async (id) => {
     return await Happening.findByIdAndDelete(id).exec();
 }
+
+//Get happenings by params
+export const getHappeningsByParams = async (params) => {
+    console.log(params);
+    const happenings = await Happening.find(params).populate('createdUser').exec();
+    return happenings;
+}

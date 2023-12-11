@@ -7,6 +7,9 @@ const router = express.Router();
 router.route('/')
     .get(happeningController.get)
     .post(happeningController.post);
+
+router.route('/params')
+    .get(happeningController.getHappeningsByParams);
     
 //get, update and delete a happening
 router.route('/:happeningId')

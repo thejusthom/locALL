@@ -8,13 +8,14 @@ import happeningsService from '../../services/happeningsService';
 const initialState = {
   title: '',
   content: '',
-  createdUser: '',
+  createdUser: {} as IUser,
   image: '',
 };
 
 const CreatePost: React.FC = () => {
   const [user, setUser] = useState({} as IUser);
   const locationId = useSelector((state: any) => state.location.pincode);
+  const currentUser = useSelector((state: any) => state.user);
   const [newHappening, setNewHappening] = useState<Happenings>(initialState);
   const [imagePreview, setImagePreview] = useState<string | null>('https://images.pexels.com/photos/1167355/pexels-photo-1167355.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940');
 
@@ -41,7 +42,7 @@ const CreatePost: React.FC = () => {
 
   const createHappening = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    happeningsService.createHappening("02119", { ...newHappening, createdUser: '656c36ac5a586d16ebae1886' });
+    happeningsService.createHappening(locationId, { ...newHappening, createdUser: currentUser?.user?._id });
     window.location.replace('/happenings');
   };
 
