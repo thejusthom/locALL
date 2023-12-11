@@ -28,5 +28,11 @@ const deleteHappening = async (locationId: string, happeningId: string) => {
   return response.data;
 }
 
-const happeningsService = { getAllHappenings, getHappeningById, createHappening, updateHappening, deleteHappening };
+const getHappeningsByParams = async (locationId: string, createdUser: string) => {
+  const params = {createdUser};
+  const response = await axios.get(baseURL + locationId + '/happenings/params', {params});
+  return response.data;
+}
+
+const happeningsService = { getAllHappenings, getHappeningById, createHappening, updateHappening, deleteHappening, getHappeningsByParams };
 export default happeningsService;
