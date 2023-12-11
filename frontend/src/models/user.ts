@@ -12,6 +12,7 @@ export interface IUser{
     person?: IPerson;
     username: string;
     password: string;
+    userImage?: string;
     refreshToken?: string;
     accessToken?: string;
 }

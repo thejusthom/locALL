@@ -21,6 +21,7 @@ import IconButton from "@mui/joy/IconButton";
 import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
 import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
 import { useSelector } from "react-redux";
+import { Avatar } from "@mui/material";
 
 type Props = {
   marketplace: Marketplace;
@@ -124,10 +125,11 @@ const MarketplaceCard = (props: Props) => {
 
   const handleCommentsSubmit = () => {
     props.marketplace.comments.push({
-      author: user?.user?.person?.firstName + " " + user?.user?.person?.lastName,
+      author:
+        user?.user?.person?.firstName + " " + user?.user?.person?.lastName,
       metaData: moment().format("MMMM Do YYYY, h:mm:ss a"),
       text: text,
-      avatar: "Profile Pic",
+      avatar: user?.user?.userImage,
     });
     marketplaceService.updateMarketplace(
       props.marketplace.locationId,
@@ -231,7 +233,7 @@ const MarketplaceCard = (props: Props) => {
         <Modal.Content image scrolling>
           <Image
             size="medium"
-            style={{ position: {md:"sticky",xs:"block"}, top: 0 }}
+            style={{ position: { md: "sticky", xs: "block" }, top: 0 }}
             src={props.marketplace.image}
             srcSet={props.marketplace.image}
             alt={props.marketplace.productName}
@@ -270,11 +272,24 @@ const MarketplaceCard = (props: Props) => {
                 Comments
               </Header>
               {props.marketplace.comments.map((comment, index) => (
-                <Comment  key={String(index)}>
-                  <Comment.Avatar
-                    src={comment.avatar}
-                    srcSet={[comment.avatar, image]}
-                  />
+                <Comment key={String(index)}>
+                  {comment.avatar ? (
+                    <Avatar
+                      alt={comment.author.toUpperCase()}
+                      src={comment.avatar}
+                      sx={{ float: "left",mr:1 }}
+                    />
+                  ) : (
+                    <Avatar
+                      alt={comment?.author?.charAt(0).toUpperCase()}
+                      src="/broken-image.jpg"
+                      sx={{ float: "left", mr: 1 }}
+                    />
+                    // <Comment.Avatar
+                    //   alt={comment.author.toUpperCase()}
+                    //   src="/broken-image.jpg"
+                    // />
+                  )}
                   <Comment.Content>
                     <Comment.Author as="span">{comment.author}</Comment.Author>
                     <Comment.Metadata>
@@ -285,15 +300,17 @@ const MarketplaceCard = (props: Props) => {
                 </Comment>
               ))}
 
-             {user.isLoggedIn ! && <Form onSubmit={handleCommentsSubmit}>
-                <Form.TextArea
-                  placeholder="Write your comments here"
-                  name="text"
-                  value={text}
-                  onChange={handleChange}
-                />
-                <Button type="submit">Post</Button>
-              </Form>}
+              {user.isLoggedIn && (
+                <Form onSubmit={handleCommentsSubmit}>
+                  <Form.TextArea
+                    placeholder="Write your comments here"
+                    name="text"
+                    value={text}
+                    onChange={handleChange}
+                  />
+                  <Button type="submit" disabled={!text}>Post</Button>
+                </Form>
+              )}
             </Comment.Group>
           </Modal.Description>
         </Modal.Content>
