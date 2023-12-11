@@ -53,7 +53,7 @@ export const update = async(request, response) => {
 }
 
 // method to delete a happening
-export const remove = async(request, response) => {
+export const remove = async (request, response) => {
     try{
         const id = request.params.happeningId;
         const removedHappening = await happeningService.remove(id);
@@ -63,4 +63,21 @@ export const remove = async(request, response) => {
         setErrorResponse(err, response);
     }
 }
+
+// method to get happenings by params
+export const getHappeningsByParams = async (request, response) => {
+    try
+    {
+        const locationId = request.locationId;
+        const params = {...request.query, locationId};
+        console.log(params);
+        const happeningsByParams = await happeningService.getHappeningsByParams(params);
+        setResponse(happeningsByParams, response, 200);
+    }
+    catch(err)
+    {
+        console.log(err);
+        setErrorResponse(err, response);
+    }
+};
 
