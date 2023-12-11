@@ -25,6 +25,7 @@ import {
 } from "recharts";
 import { IDonation } from "../../models/donation";
 import PieChartComp, { IPieData } from "../Charts/_PieChart";
+import BarChartstackedComp from "../Charts/_BarChart";
 
 interface IDonationMetrics{
 donation: IDonation[];
@@ -216,7 +217,7 @@ return(<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 15 15" width="15" he
       </PieChart> */}
       <PieChartComp pieChartData={pieChartData} dataKey="value" nameKey="name" />
 
-      <BarChart
+      {/* <BarChart
           width={500}
           height={300}
           data={compositeChartData}
@@ -229,14 +230,16 @@ return(<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 15 15" width="15" he
           }}
         >
 
-          {/* <CartesianGrid strokeDasharray="3 3" /> */}
+          {/* <CartesianGrid strokeDasharray="3 3" />
           <XAxis type="number" />
           <YAxis type="category" dataKey="name" />
           <Tooltip />
           <Legend />
           <Bar dataKey="amountRequired" stackId="a" fill="#123abc" />
           <Bar dataKey="amountAchieved" stackId="a" fill="#82ca9d" />
-        </BarChart>
+        </BarChart> */}
+
+        <BarChartstackedComp barChartData={compositeChartData} bar1Key="amountRequired" bar2Key="amountAchieved" yAxisKey="name" layout="vertical" />
 
         <RadarChart outerRadius={90} width={730} height={250} data={compositeChartData}>
   <PolarGrid />
