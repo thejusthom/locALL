@@ -22,6 +22,7 @@ import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
 import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
 import { useSelector } from "react-redux";
 import { Avatar } from "@mui/material";
+import { ToastContainer, toast } from "react-toastify";
 
 type Props = {
   marketplace: Marketplace;
@@ -100,17 +101,22 @@ const MarketplaceCard = (props: Props) => {
     props.marketplace.description = formData.description;
     props.marketplace.price = formData.price;
     props.marketplace.image = formData.image;
-    marketplaceService
-      .updateMarketplace(
-        props.marketplace.locationId,
-        props.marketplace,
-        props.marketplace._id
-      )
-      .then(() => {
-        setUpdate(false);
-        clearFormData();
-        props.afterUpdate();
-      });
+    try {
+      await marketplaceService
+        .updateMarketplace(
+          props.marketplace.locationId,
+          props.marketplace,
+          props.marketplace._id
+        )
+        .then(() => {
+          setUpdate(false);
+          clearFormData();
+          props.afterUpdate();
+          toast.success("Listing updated successfully");
+        });
+    } catch (error) {
+      toast.error("Error updating listing");
+    }
   };
   const fillFormData = () => {
     props.afterUpdate();
@@ -123,7 +129,7 @@ const MarketplaceCard = (props: Props) => {
     setFormData(clData);
   };
 
-  const handleCommentsSubmit = () => {
+  const handleCommentsSubmit = async () => {
     props.marketplace.comments.push({
       author:
         user?.user?.person?.firstName + " " + user?.user?.person?.lastName,
@@ -131,12 +137,16 @@ const MarketplaceCard = (props: Props) => {
       text: text,
       avatar: user?.user?.userImage,
     });
-    marketplaceService.updateMarketplace(
-      props.marketplace.locationId,
-      props.marketplace,
-      props.marketplace._id
-    );
-    setText("");
+    try {
+      await marketplaceService.updateMarketplace(
+        props.marketplace.locationId,
+        props.marketplace,
+        props.marketplace._id
+      );
+      setText("");
+    } catch (error) {
+      toast.error("Error posting comment");
+    }
   };
 
   const handleDeleteConfirm = async () => {
@@ -148,8 +158,10 @@ const MarketplaceCard = (props: Props) => {
           // Close the delete confirmation modal
           setIsDeleteModalOpen(false);
           props.afterUpdate();
+          toast.success("Listing deleted successfully");
         });
     } catch (error) {
+      toast.error("Error deleting listing");
       console.error("Error deleting listing:", error);
     }
   };
@@ -160,6 +172,7 @@ const MarketplaceCard = (props: Props) => {
 
   return (
     <Box>
+      <ToastContainer position="top-center" closeOnClick />
       <Card sx={{ width: 320, height: 310 }}>
         <div>
           <Typography level="title-lg">
@@ -277,7 +290,7 @@ const MarketplaceCard = (props: Props) => {
                     <Avatar
                       alt={comment.author.toUpperCase()}
                       src={comment.avatar}
-                      sx={{ float: "left",mr:1 }}
+                      sx={{ float: "left", mr: 1 }}
                     />
                   ) : (
                     <Avatar
@@ -308,7 +321,9 @@ const MarketplaceCard = (props: Props) => {
                     value={text}
                     onChange={handleChange}
                   />
-                  <Button type="submit" disabled={!text}>Post</Button>
+                  <Button type="submit" disabled={!text}>
+                    Post
+                  </Button>
                 </Form>
               )}
             </Comment.Group>
