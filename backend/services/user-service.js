@@ -68,20 +68,20 @@ export const remove = async (id) => {
 
 //Validating login
 export const login = async (user) => {
-    const foundUser = await User.findOne(user).exec();
+  const foundUser = await User.findOne(user).exec();
 
-    if (!foundUser) {
-        throw new Error('User not found');
-    }
-    
-    const refreshToken = generateRefreshToken(foundUser);
-    activeRefreshTokens.push(refreshToken);
-    // console.log(activeRefreshTokens);
-    foundUser.refreshToken = refreshToken;
-    await foundUser.save();
+  if (!foundUser) {
+      throw new Error('User not found');
+  }
   
-    const accessToken = generateAccessToken(foundUser);
-    return { user: foundUser, accessToken, refreshToken };
+  const refreshToken = generateRefreshToken(foundUser);
+  activeRefreshTokens.push(refreshToken);
+  console.log(activeRefreshTokens);
+  foundUser.refreshToken = refreshToken;
+  await foundUser.save();
+
+  const accessToken = generateAccessToken(foundUser);
+  return { user: foundUser, accessToken, refreshToken };
 }
 
 //Logout
@@ -91,7 +91,7 @@ export const logout = async (userId) => {
       activeRefreshTokens = activeRefreshTokens.filter((token) => token !== user.refreshToken);
       await user.save();
     }
-  };
+};
 
 // Refreshing the access token
 export const refreshTokens = async (refreshToken) => {
@@ -99,9 +99,9 @@ export const refreshTokens = async (refreshToken) => {
       throw new Error('Refresh token is required');
     }
   
-    if (!activeRefreshTokens.includes(refreshToken)) {
-      throw new Error('Refresh token is not valid');
-    }
+    // if (!activeRefreshTokens.includes(refreshToken)) {
+    //   throw new Error('Refresh token is not valid');
+    // }
   
     try {
       const user = jwt.verify(refreshToken, 'myRefreshSecretKey');
