@@ -236,7 +236,15 @@ return(<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 15 15" width="15" he
           <Bar dataKey="amountAchieved" stackId="a" fill="#82ca9d" />
         </BarChart>
 
-   
+        <RadarChart outerRadius={90} width={730} height={250} data={compositeChartData}>
+  <PolarGrid />
+  <PolarAngleAxis dataKey="name" />
+  <PolarRadiusAxis angle={30} />
+  <Tooltip />
+  <Radar name="Below 50" dataKey="below50" stroke="#8884d8" fill="#8884d8" fillOpacity={0.6} />
+  <Radar name="Above 50" dataKey="above50" stroke="#82ca9d" fill="#82ca9d" fillOpacity={0.6} />
+  <Legend />
+</RadarChart>
 
       <AreaChart
           width={500}
