@@ -204,10 +204,14 @@ React.useEffect(() => {
                toast.success(`Donation Deleted Successfully!`);
        });
    };
+   console.log(new Date())
     const onSubmit = (event: any) => {
         event.preventDefault();
         setShowLoader(true);
-        donationServices.createDonation(loc.pincode, {...newDonation, createdUser: user?.user._id, locationId: loc.pincode, postedOn: new Date().toLocaleDateString()}).then((donation)=> {
+        // const date = new Date().toLocaleDateString;
+        // console.log(new Date(date.toISOString()))
+        // console.log(date)
+        donationServices.createDonation(loc.pincode, {...newDonation, createdUser: user?.user._id, locationId: loc.pincode}).then((donation)=> {
             !!donations ? setDonations([...donations, donation]) : setDonations([donation]);
             setShowLoader(false);
             toast.success("Donation Created Successfully!");
@@ -268,16 +272,16 @@ React.useEffect(() => {
         <Tabs sx={{margin: "15px 0 0 0", "& button": {color: "#123abc"}, "& button.Mui-selected": {color: "#123abc"}}} value={tab} onChange={handleTabChange} aria-label="basic tabs example"   TabIndicatorProps={{sx:{backgroundColor: "#123abc"}}}>
           <Tab sx={{fontSize: "16px", fontWeight: "bold"}} label="All Donations" {...a11yProps(0)} />
           {!!user?.user?._id && <Tab sx={{fontSize: "16px", fontWeight: "bold"}} label="My Donations" {...a11yProps(1)} />}
+          <Tab sx={{fontSize: "16px", fontWeight: "bold"}} label="Donation Metrics" {...a11yProps(2)} />
         </Tabs>
-        <DonationMetrics />
         {tab === 0 ? !!donations?.length ? 
         (<DonationCardsWrap>
         {donations.map((donation) => {return(<DonationCard donation={donation} handleMakePayment={onChangeDonationAmount} />)} )}
         </DonationCardsWrap>) 
         :  (<NoDataScreen />)
-        : !!donations?.length ? (<MyDonations donations={donations} onEdit={onEdit} onDelete={onDelete} />)
+        : tab === 1 ? !!donations?.length ? (<MyDonations donations={donations} onEdit={onEdit} onDelete={onDelete} />)
         : <NoDataScreen />
-        }
+        : tab === 2 && donations && <DonationMetrics donation={donations} />}
         </DonationsWrap>
     );
 }
