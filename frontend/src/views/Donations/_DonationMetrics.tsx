@@ -1,28 +1,5 @@
 import * as React from "react";
 import styled from "styled-components";
-import {
-    PieChart,
-    Pie,
-    Tooltip,
-    Cell,
-    ComposedChart,
-    Line,
-    Area,
-    Bar,
-    XAxis,
-    YAxis,
-    BarChart,
-    AreaChart,
-    RadarChart,
-    PolarGrid,
-    PolarAngleAxis,
-    PolarRadiusAxis,
-    Radar,
-    CartesianGrid,
-    Legend,
-    // Scatter,
-    // ResponsiveContainer,  
-} from "recharts";
 import { IDonation } from "../../models/donation";
 import PieChartComp, { IPieData } from "../Charts/_PieChart";
 import BarChartstackedComp from "../Charts/_BarChart";
@@ -61,33 +38,6 @@ const data02: any = [
     "color": "#636363"
   }
 ];
-
-//   const data02 = [
-//     {
-//       "name": "Group A",
-//       "value": 2400
-//     },
-//     {
-//       "name": "Group B",
-//       "value": 4567
-//     },
-//     {
-//       "name": "Group C",
-//       "value": 1398
-//     },
-//     {
-//       "name": "Group D",
-//       "value": 9800
-//     },
-//     {
-//       "name": "Group E",
-//       "value": 3908
-//     },
-//     {
-//       "name": "Group F",
-//       "value": 4800
-//     }
-//   ];
 
 const DonationMetrics = (props: IDonationMetrics) => {
   
@@ -194,7 +144,6 @@ return(<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 15 15" width="15" he
       return (
         <div className="tooltip-wrap">
           <p className="label">{label}</p>
-          {/* <p className="intro">{getIntroOfPage(label)}</p> */}
           <p><span><Circle fill="#123abc" /></span>Amount Required: {payload[0].payload.amountRequired}</p>
           <p><span><Circle fill="#1976d2" /></span>Amount Achieved: {payload[0].payload.amountAchieved}</p>
           <p><span><Circle fill="#38d200" /></span>Below 50 Age: {payload[0].payload.below50}</p>
@@ -207,101 +156,11 @@ return(<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 15 15" width="15" he
 
     return(
         <MetricsWrap>
-        {/* <PieChart width={730} height={400}>
-            <Tooltip />
-            <text x={365} y={200} textAnchor="middle" dominantBaseline="middle">
-    Categories
-   </text>
-        <Pie data={pieChartData} dataKey="value" nameKey="name" cx="50%" cy="50%" innerRadius={75}  label={renderCustomizedLabel} outerRadius={150} fill="#8884d8" labelLine={false}>
-        {
-          	pieChartData?.map((entry: any, index: number) => <Cell fill={entry.color}/>)
-          }
-            </Pie>
-      </PieChart> */}
       <PieChartComp pieChartData={pieChartData} dataKey="value" nameKey="name" />
-
-      {/* <BarChart
-          width={500}
-          height={300}
-          data={compositeChartData}
-          layout="vertical"
-          margin={{
-            top: 20,
-            right: 30,
-            left: 20,
-            bottom: 5,
-          }}
-        >
-
-          {/* <CartesianGrid strokeDasharray="3 3" />
-          <XAxis type="number" />
-          <YAxis type="category" dataKey="name" />
-          <Tooltip />
-          <Legend />
-          <Bar dataKey="amountRequired" stackId="a" fill="#123abc" />
-          <Bar dataKey="amountAchieved" stackId="a" fill="#82ca9d" />
-        </BarChart> */}
-
         <BarChartstackedComp barChartData={compositeChartData} bar1Key="amountRequired" bar2Key="amountAchieved" yAxisKey="name" layout="vertical" />
-
-        {/* <RadarChart outerRadius={90} width={730} height={250} data={compositeChartData}>
-  <PolarGrid />
-  <PolarAngleAxis dataKey="name" />
-  <PolarRadiusAxis angle={30} />
-  <Tooltip />
-  <Radar name="Below 50" dataKey="below50" stroke="#8884d8" fill="#8884d8" fillOpacity={0.6} />
-  <Radar name="Above 50" dataKey="above50" stroke="#82ca9d" fill="#82ca9d" fillOpacity={0.6} />
-  <Legend />
-</RadarChart> */}
-
 <RadarChartComp radarChartData={compositeChartData} dataKey="name" radar1Name="Below 50" radar1Key="below50" radar2Name="Above 50" radar2Key="above50" />
-
-      {/* <AreaChart
-          width={500}
-          height={400}
-          data={compositeChartData}
-          margin={{
-            top: 10,
-            right: 30,
-            left: 0,
-            bottom: 
-          }}
-        >
-          <CartesianGrid strokeDasharray="3 3" />
-          <XAxis dataKey="name" />
-          <YAxis />
-          <Tooltip />
-          <Area type="monotone" dataKey="amountRequired" stackId="1" stroke="#8884d8" fill="#123abc" />
-          <Area type="monotone" dataKey="amountAchieved" stackId="1" stroke="#82ca9d" fill="#8cd1b9" />
-          {/* <Area type="monotone" dataKey="amt" stackId="1" stroke="#ffc658" fill="#ffc658" />
-        </AreaChart> */}
 <AreaChartComp areaChartData={compositeChartData} dataKey="name" area1Key="amountRequired" area2Key="amountAchieved" />
-
-      {/* <ResponsiveContainer width="100%" height="100%"> */}
-       {/* <ComposedChart
-          width={1000}
-          height={500}
-          data={compositeChartData}
-          margin={{
-            top: 20,
-            right: 20,
-            bottom: 20,
-            left: 20,
-          }}
-        >
-          {/* <CartesianGrid stroke="#f5f5f5" />
-          <XAxis dataKey="name" scale="band" />
-          <YAxis />
-          <Tooltip content={<CustomTooltip />} />
-          <Legend />
-          <Area type="monotone" dataKey="amountAchieved" fill="#9fbddd" stroke="#1976d2" />
-          <Bar dataKey="amountRequired" barSize={20} fill="#123abc" />
-          <Line type="monotone" dataKey="below50" stroke="#38d200" />
-          <Line type="monotone" dataKey="above50" stroke="violet" />
-           {/* <Scatter dataKey="above50" fill="red" />
-        </ComposedChart>  */}
         <CompositeChartComp compositeChartData={compositeChartData} dataKey="name" areaKey="amountAchieved" barKey="AmountRequired" line1Key="below50" line2Key="above50" />
-      {/* </ResponsiveContainer> */}
       </MetricsWrap>
     );
 };
