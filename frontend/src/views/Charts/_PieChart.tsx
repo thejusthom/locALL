@@ -7,7 +7,7 @@ import {
     Cell 
 } from "recharts";
 
-interface IPieData{
+export interface IPieData{
 name: string;
 value: number;
 color: string;
