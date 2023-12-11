@@ -14,6 +14,7 @@ import TabList from "@mui/lab/TabList";
 import TabContext from "@mui/lab/TabContext";
 import TabPanel from "@mui/lab/TabPanel";
 import { ToastContainer, toast } from "react-toastify";
+import NoDataScreen from "../../common/_NoDataScreen";
 
 const FeedShareView: React.FC = () => {
     // get data from json
@@ -167,12 +168,14 @@ const FeedShareView: React.FC = () => {
                 </TabList>
                 <TabPanel value="0">
                     {
+                        allFeedshare.length === 0 ? <NoDataScreen /> :
                         allFeedshare.map((feedShareCard: FeedShare) => (
                             <FeedShareCard
                                 feedShare={feedShareCard}
                                 afterUpdate={afterUpdate} 
                                 type="all"/>
-                        ))}
+                        ))
+                        }
 
                 </TabPanel>
                 <TabPanel value="1">
@@ -180,6 +183,7 @@ const FeedShareView: React.FC = () => {
                         <Button className="new-button" onClick={() => setFormOpen(true)}>New Listing</Button>
                     </div>
                     {
+                        myFeedshare.length === 0 ? <NoDataScreen /> :
                         myFeedshare.map((feedShareCard: FeedShare) => (
                             <FeedShareCard
                                 feedShare={feedShareCard}
