@@ -151,7 +151,10 @@ const data01: any = {
     "color": "#636363"
   }
 };
-
+  const donations = [...props.donation];
+  donations?.forEach((d) => data01[d.category].value += 1);
+  const pieChartData = Object.values(data01);
+  console.log(pieChartData)
 
   // props.donation.forEach(donation => {
   //   const category = donation.category;
