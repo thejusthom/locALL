@@ -5,7 +5,7 @@ interface Happenings {
   title: string;
   content: string;
   postedDate?: string;
-  createdUser?: IUser | string;
+  createdUser?: IUser;
   image: string;
   locationId?: string;
 }
