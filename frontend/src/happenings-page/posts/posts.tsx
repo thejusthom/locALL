@@ -5,16 +5,28 @@ import { Link } from "react-router-dom";
 import { useSelector } from 'react-redux';
 import { IPerson, IUser } from '../../models/user';
 
+/**
+ * Props for the Posts component.
+ */
 type Props = {
   posts: Happenings[]
 }
 
+/**
+ * Initial state for the user.
+ */
 const initialStateUser = {
   person: {} as IPerson,
   username: '',
   password: ''
 };
 
+/**
+ * Posts component.
+ * 
+ * @param {Props} props - The component props.
+ * @returns {ReactElement} The rendered component.
+ */
 const Posts: React.FC<Props> = (props: Props): ReactElement =>{
   const [user, setUser] = useState<IUser>(initialStateUser);
   const currentUser : IUser = useSelector((state: any) => state.user);
@@ -26,6 +38,12 @@ const Posts: React.FC<Props> = (props: Props): ReactElement =>{
     setUser(currentUser);
   },[currentUser]);
 
+  /**
+   * Formats the given timestamp into a readable date and time string.
+   * 
+   * @param {string | undefined} timestamp - The timestamp to format.
+   * @returns {string} The formatted date and time string.
+   */
   function formatTimestamp(timestamp?: string): string {
     if (!timestamp) {
       return 'Timestamp is undefined';
