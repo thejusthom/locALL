@@ -379,7 +379,7 @@ mapContainer={mapContainer} />)
 }
 
 const EventsContainer = styled.article`
-margin: 25px;
+margin: 10px 25px 25px 25px;
 .maps-button{
     background-color: #1976d2;
 color: white;
