@@ -2,6 +2,7 @@ import mongoose from 'mongoose';
 
 const Schema = mongoose.Schema;
 
+//events schema 
 const eventSchema = new Schema({
   eventName: {
     type: String,
