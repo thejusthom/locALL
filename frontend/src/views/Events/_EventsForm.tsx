@@ -5,7 +5,7 @@ import CloseIcon from "../../assets/images/close-white.svg";
 interface IEventsForm{
 isEdit?: boolean;
 onCloseModal: () => void;
-onUpdate: () => void;
+onUpdate: (event: any) => void;
 onSubmit: (event: any) => void;
 eventName?: string;
 isDisabled: boolean;

@@ -243,16 +243,22 @@ setSelectedLocation(!!address ? address : res.address.postcode);
 const onOrganiserChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setOrganiser({...organiser, [e.target.id]: e.target.value});
 }
-const onSubmit = (event: any) => {
+const onSubmit = async(event: any) => {
     setShowLoader(true);
     event.preventDefault();
     const start = startDate?.toLocaleDateString() || "";
     const end = endDate?.toLocaleDateString() || "";
-    eventsService.createEvent(add, {...newEvent, address: {...coordinates}, startDate: start, endDate: end, createdUser: "6573fcd148338641e52772f3", organiser}).then((event)=> {
+    try{ 
+        await eventsService.createEvent(add, {...newEvent, address: {...coordinates}, startDate: start, endDate: end, createdUser: "6573fcd148338641e52772f3", organiser}).then((event)=> {
         !!events ? setEvents([...events, event]) : setEvents([event]);
         setShowLoader(false);
         toast.success("Event Created Successfully!");
     });
+}
+catch(err){
+    console.log("Error submitting event:", err);
+    toast.error("Error occured while submitting event!");
+    }
     setShowModal(false);
     setNewEvent(initialNewEvent);
     setCoordinates({longitude: 0, latitude:0});
@@ -275,22 +281,34 @@ const onEdit = (eventId: string) => {
         setShowLoader(false);
     });
 };
-const onDelete = (eventId: string) => {
+const onDelete = async(eventId: string) => {
     setShowLoader(true);
-    eventsService.deleteEvent(loc.pincode, eventId).then((event)=> {
+    try{ 
+        await eventsService.deleteEvent(loc.pincode, eventId).then((event)=> {
         renderEventsByTab();
             toast.success(`Event Deleted Successfully!`);
     });
+}
+    catch(err){
+        console.log("Error deleting event:", err);
+        toast.error("Error occured while deleting event!");
+        }
 };
-const onUpdate = () => {
+const onUpdate = async() => {
     setShowLoader(true);
     const start = startDate?.toLocaleDateString() || "";
     const end = endDate?.toLocaleDateString() || "";
     const updatedEvent = {...newEvent, address: {...coordinates}, organiser, startDate: start, endDate: end};
-    eventsService.updateEvent(loc.pincode, eventId, updatedEvent).then((event)=> {
+    try{ 
+        await eventsService.updateEvent(loc.pincode, eventId, updatedEvent).then((event)=> {
     renderEventsByTab();
     toast.success(`${event.eventName} Updated Successfully!`);
 });
+    }
+    catch(err){
+        console.log("Error updating event:", err);
+        toast.error("Error occured while updating event!");
+        }
         setNewEvent(initialNewEvent);
         setCoordinates({longitude: 0, latitude:0});
         setStartDate(undefined);
