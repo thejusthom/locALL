@@ -1,13 +1,11 @@
-import { response } from "express";
 import * as marketplaceService from "../services/marketplace-service.js";
 import { setResponse, setErrorResponse } from "./response-handler.js";
 
+// Method to get all marketplaces
 export const find = async (request, response) => {
   try {
     const locationId = request.locationId;
-    console.log(locationId);
     const marketplaces = await marketplaceService.getAll(locationId);
-    console.log(marketplaces);
     setResponse(marketplaces, response, 200);
   } catch (err) {
     console.log(err);
@@ -15,12 +13,11 @@ export const find = async (request, response) => {
   }
 };
 
-// Method to get users by params
+// Method to get marketplace by params
 export const getByParams = async (request, response) => {
   try {
     const locationId = request.locationId;
     const params = { ...request.query, locationId };
-    console.log(params);
     const marketplaces = await marketplaceService.getByParams(params);
     setResponse(marketplaces, response, 200);
   } catch (err) {
@@ -29,11 +26,10 @@ export const getByParams = async (request, response) => {
   }
 };
 
+// Method to create marketplace
 export const post = async (request, response) => {
   try {
-    console.log(request.locationId);
     const newMarketplace = { ...request.body, locationId: request.locationId };
-    // console.log(newMarketplace);
     const marketplace = await marketplaceService.save(newMarketplace);
     setResponse(marketplace, response, 200);
   } catch (err) {
@@ -46,6 +42,7 @@ export const post = async (request, response) => {
   }
 };
 
+// Method to get marketplace by id
 export const get = async (request, response) => {
   try {
     const id = request.params.id;
@@ -61,6 +58,7 @@ export const get = async (request, response) => {
   }
 };
 
+// Method to update marketplace by id
 export const put = async (request, response) => {
   try {
     const id = request.params.id;
@@ -83,6 +81,7 @@ export const put = async (request, response) => {
   }
 };
 
+// Method to delete marketplace by id
 export const remove = async (request, response) => {
   try {
     const id = request.params.id;

@@ -14,6 +14,7 @@ import NoDataScreen from '../common/_NoDataScreen';
 import { useTranslation } from "react-i18next";
 
 const HappeningsView: React.FC = () =>{
+
   const { t } = useTranslation('common');
 
   const [allHappenings, setAllHappenings] = useState([] as Happenings[]);
@@ -21,8 +22,6 @@ const HappeningsView: React.FC = () =>{
   const locationId = useSelector((state: any) => state.location.pincode);
   const currentUser = useSelector((state: any) => state.user);
   const [tab, setTab] = React.useState('0');
-
-  console.log(currentUser);
  
   useEffect(() => {
     const fetchAllHappenings = async () => {
@@ -65,7 +64,9 @@ const HappeningsView: React.FC = () =>{
 
   return (
   <div className="happenings">
+    {/* Tab context for managing tabs */}
     <TabContext value={tab}>
+      {/* Tab list */}
       <TabList
         sx={{
           margin: "15px 0 0 0",
@@ -77,23 +78,30 @@ const HappeningsView: React.FC = () =>{
         onChange={(_, newValue) => setTab(newValue)}
         aria-label="happenings tabs"
       >
+        {/* All happenings tab */}
         <Tab label={t("all_happenings")} value="0" {...a11yProps(0)} />
+        {/* My happenings tab, only shown if user is logged in */}
         {currentUser.isLoggedIn && <Tab label={t("my_happenings")} value="1" {...a11yProps(1)} />}
       </TabList>
+      {/* Tab panels */}
       <TabPanel value="0">
+        {/* Show no data screen if there are no happenings */}
         {allHappenings.length === 0 ? (
           <NoDataScreen />
         ) : (
           <Posts posts={allHappenings} />
         )}
       </TabPanel>
+      {/* Show my happenings tab if user is logged in */}
       {currentUser?.isLoggedIn && (
         <TabPanel value="1">
+          {/* Link to create a new happening */}
           <Link to={'/happenings/createPost'} className="link" >
             <Button sx={{ mt: 5, ml : 7, mb : 3, mr: 8, width: 193}}  variant="contained">
               {t("create_happening")}
             </Button>
           </Link>
+          {/* Show no data screen if there are no user happenings */}
           {myHappenings.length === 0 ? (
             <NoDataScreen />
           ) : (
