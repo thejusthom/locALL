@@ -176,7 +176,7 @@ function HomeLayout() {
                   },
                 }}
               >
-                locALL
+                {t("locall")}
               </Typography>
 
               <Box sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }}>
@@ -346,7 +346,7 @@ function HomeLayout() {
           <LanguageSelectWrap>
             <div>
       <Grid component="label" container alignItems="center" spacing={1}>
-      <Grid item>Tamil</Grid>
+      <Grid item>தமிழ்</Grid>
       <Grid item>
         <Switch
         sx={{"& .MuiSwitch-track": {backgroundColor: "#1976d2"}, "& .MuiSwitch-thumb": {backgroundColor: "#1976d2"}}}
