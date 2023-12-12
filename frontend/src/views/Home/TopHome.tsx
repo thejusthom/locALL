@@ -1,18 +1,23 @@
+// Import from react
+import { Link as ScrollLink } from "react-scroll";
+import { Link } from "react-router-dom";
+// Imports from semantic ui
+import { Image } from "semantic-ui-react";
+// Imports from project files
+import { StyledButton } from "./styled-button";
+// Imports from mui
 import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
 import Container from "@mui/material/Container";
 import Typography from "@mui/material/Typography";
-import { Link as ScrollLink } from "react-scroll";
-import { StyledButton } from "./styled-button";
-import { Image } from "semantic-ui-react";
 import locality from "../../assets/images/locality.avif";
 import IconButton from "@mui/joy/IconButton";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
 import CloudOutlinedIcon from "@mui/icons-material/CloudOutlined";
 import FoodBankOutlinedIcon from "@mui/icons-material/FoodBankOutlined";
 import CelebrationOutlinedIcon from "@mui/icons-material/CelebrationOutlined";
-import { Link } from "react-router-dom";
 
+// Top section of Home page
 const TopHome = () => {
   return (
     <Box

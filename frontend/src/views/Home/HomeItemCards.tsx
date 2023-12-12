@@ -1,26 +1,32 @@
+// Imports from react
 import { FC, useRef } from "react";
+import Slider, { Settings } from "react-slick";
+// Imports from mui
 import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
-import Slider, { Settings } from "react-slick";
 import Container from "@mui/material/Container";
 import Typography from "@mui/material/Typography";
 import IconButton from "@mui/material/IconButton";
 import { styled } from "@mui/material/styles";
 import IconArrowBack from "@mui/icons-material/ArrowBack";
 import IconArrowForward from "@mui/icons-material/ArrowForward";
+// Imports from project files
+import "../../assets/styles/react-slick.scss";
 import localEvents from "../../assets/images/localEvents.jpg";
 import weatherCard from "../../assets/images/weatherCard.avif";
 import marketplaceCard from "../../assets/images/marketplaceCard.png";
 import locationCard from "../../assets/images/locationCard.png";
 import happeningsCard from "../../assets/images/happeningsCard.jpg";
 import HomeItemCard from "./HomeItemCard";
-import "../../assets/styles/react-slick.scss";
 
+// Model of sliderArrow
 interface SliderArrowArrow {
   onClick?: () => void;
   type: "next" | "prev";
   className?: "string";
 }
+
+// Model of itemCard
 export interface ItemCard {
   id: number | string;
   title: string;
@@ -28,6 +34,7 @@ export interface ItemCard {
   image: string;
 }
 
+//Static data given to ItemCard
 const data: Array<ItemCard> = [
   {
     id: 1,
@@ -66,6 +73,7 @@ const data: Array<ItemCard> = [
   },
 ];
 
+// Component of SliderArrow
 const SliderArrow: FC<SliderArrowArrow> = (props) => {
   const { onClick, type, className } = props;
   return (
@@ -100,15 +108,18 @@ const SliderArrow: FC<SliderArrowArrow> = (props) => {
   );
 };
 
+// Style given to Slick Container
 const StyledSlickContainer = styled("div")(() => ({
   position: "relative",
 
   "& .slick-list": { marginLeft: "-30px", marginBottom: "24px" },
 }));
 
+//Main component of HomeItemCards
 const HomeItemCards = () => {
   const sliderRef = useRef(null);
 
+  //Settings of slider
   const sliderConfig: Settings = {
     infinite: true,
     autoplay: true,
