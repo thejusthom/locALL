@@ -2,6 +2,7 @@ import * as React from "react";
 import styled from "styled-components";
 import NoData from ".././assets/images/NoData.jpg";
 
+//No Data Screen to be shown when no data is found
 const NoDataScreen = () => {
     return(
         <NoDataWrap>
