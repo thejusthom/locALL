@@ -68,7 +68,7 @@ function HomeLayout() {
   ];
 
   console.log(user);
-
+  const pathname = window.location.pathname;
   useEffect(() => {
     console.log(user);
   }, [user]);
@@ -80,10 +80,6 @@ function HomeLayout() {
   const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(
     null
   );
-
-  const changeLanguage = (lng: string) => {
-    i18n.changeLanguage(lng);
-  }
 
   const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorElNav(event.currentTarget);
@@ -346,6 +342,7 @@ function HomeLayout() {
           </Container>
         </AppBar>
         <Box sx={{ minHeight: "100vh" }}>
+          {pathname !== "/login" && (
           <LanguageSelectWrap>
             <div>
       <Grid component="label" container alignItems="center" spacing={1}>
@@ -361,6 +358,7 @@ function HomeLayout() {
 </Grid>
 </div>
 </LanguageSelectWrap>
+)}
           <Outlet />
         </Box>
       </Box>
