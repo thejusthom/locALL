@@ -7,17 +7,10 @@ export const get = async (request, response) => {
     //getting the locationId from request
     const locationId = request.locationId;
     const happenings = await happeningService.getAll(locationId);
-    if (happenings.length == 0) {
-      throw new Error("Happenings not found");
-    }
     setResponse(happenings, response, 200);
   } catch (err) {
-    if (err.message === "Happenings not found") {
-      response.status(404).json({ error: "Happenings not found" });
-    } else {
-      console.log(err);
-      setErrorResponse(err, response);
-    }
+    console.log(err);
+    setErrorResponse(err, response);
   }
 };
 
@@ -47,14 +40,9 @@ export const getById = async (request, response) => {
   try {
     const id = request.params.happeningId;
     const happening = await happeningService.getById(id);
-    if (!happening) {
-      throw new Error("Happening not found");
-    }
     setResponse(happening, response, 200);
   } catch (err) {
-    if (err.message === "Happening not found") {
-      response.status(404).json({ error: "Happening not found" });
-    } else if (err.name === "CastError") {
+    if (err.name === "CastError") {
       response.status(400).json({ error: "Wrong variable Type" });
     } else {
       console.log(err);
@@ -79,7 +67,7 @@ export const update = async (request, response) => {
     } else if (err.name === "CastError") {
       response.status(400).json({ error: "Wrong variable Type" });
     } else if (err._message === "Happening validation failed") {
-        response.status(400).json({ error: `${err.message}` });
+      response.status(400).json({ error: `${err.message}` });
     } else {
       console.log(err);
       setErrorResponse(err, response);
@@ -117,16 +105,9 @@ export const getHappeningsByParams = async (request, response) => {
     const happeningsByParams = await happeningService.getHappeningsByParams(
       params
     );
-    if (happeningsByParams.length == 0) {
-      throw new Error("Happenings not found");
-    }
     setResponse(happeningsByParams, response, 200);
   } catch (err) {
-    if (err.message === "Happenings not found") {
-      response.status(404).json({ error: "Happenings not found" });
-    } else {
-      console.log(err);
-      setErrorResponse(err, response);
-    }
+    console.log(err);
+    setErrorResponse(err, response);
   }
 };
