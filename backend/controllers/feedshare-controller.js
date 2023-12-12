@@ -2,6 +2,13 @@ import e, { response } from "express";
 import * as feedshareService from "../services/feedshare-service.js";
 import { setResponse, setErrorResponse } from "./response-handler.js";
 
+/**
+ * Find feedshares based on locationId.
+ * 
+ * @param {Object} request - The request object.
+ * @param {Object} response - The response object.
+ * @returns {Promise<void>} - A promise that resolves when the operation is complete.
+ */
 export const find = async (request, response) => {
   try {
     const locationId = request.locationId;
@@ -15,6 +22,12 @@ export const find = async (request, response) => {
   }
 };
 
+/**
+ * Handles the POST request for creating a new feedshare.
+ * @param {Object} request - The request object.
+ * @param {Object} response - The response object.
+ * @returns {Promise<void>} - A promise that resolves when the response is sent.
+ */
 export const post = async (request, response) => {
   try {
     console.log(request.locationId);
@@ -43,6 +56,13 @@ export const post = async (request, response) => {
   }
 };
 
+/**
+ * Retrieves a feedshare by its ID.
+ * 
+ * @param {Object} request - The request object.
+ * @param {Object} response - The response object.
+ * @returns {Promise<void>} - A promise that resolves when the feedshare is retrieved.
+ */
 export const get = async (request, response) => {
   try {
     const id = request.params.id;
@@ -58,6 +78,13 @@ export const get = async (request, response) => {
   }
 };
 
+/**
+ * Updates a feedshare by its ID.
+ * @param {Object} request - The request object.
+ * @param {Object} response - The response object.
+ * @returns {Promise<void>} - A promise that resolves when the feedshare is updated.
+ * @throws {Error} - If the feedshare is not found or if there is a validation error.
+ */
 export const put = async (request, response) => {
   try {
     const id = request.params.id;
@@ -81,6 +108,14 @@ export const put = async (request, response) => {
   }
 };
 
+/**
+ * Removes a feedshare by its ID.
+ * 
+ * @param {Object} request - The request object.
+ * @param {Object} response - The response object.
+ * @returns {Promise<void>} - A promise that resolves when the feedshare is removed.
+ * @throws {Error} - If the feedshare is not removed.
+ */
 export const remove = async (request, response) => {
   try {
     const id = request.params.id;
@@ -101,6 +136,12 @@ export const remove = async (request, response) => {
   }
 };
 
+/**
+ * Searches for feedshare based on the provided parameters.
+ * @param {Object} request - The request object.
+ * @param {Object} response - The response object.
+ * @returns {Promise<void>} - A promise that resolves when the search is complete.
+ */
 export const search = async (request, response) => {
   try {
     const params = request.query;
@@ -112,6 +153,12 @@ export const search = async (request, response) => {
   }
 };
 
+/**
+ * Retrieves feedshare data based on the provided parameters.
+ * @param {Object} request - The request object.
+ * @param {Object} response - The response object.
+ * @returns {Promise<void>} - A promise that resolves when the feedshare data is retrieved.
+ */
 export const getByParams = async (request, response) => {
   try {
     const locationId = request.locationId;
