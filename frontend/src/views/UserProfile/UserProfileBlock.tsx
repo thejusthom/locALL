@@ -35,19 +35,19 @@ export default function UserProfileBlock() {
 
   useEffect(() => {
     // Fetch and set data for donations
-    fetchAndSetData('donations', setDonations, () => donationService.getDonations(locationId));
+    fetchAndSetData('donations', setDonations, () => donationService.getDonationByParams(locationId,user?.user?._id));
 
     // Fetch and set data for happenings
-    fetchAndSetData('happenings', setHappenings, () => happeningsService.getAllHappenings(locationId));
+    fetchAndSetData('happenings', setHappenings, () => happeningsService.getHappeningsByParams(locationId,user?.user?._id));
 
     // Fetch and set data for feedShare
-    fetchAndSetData('feedShare', setFeedShare, () => feedShareService.getFeedshare(locationId));
+    fetchAndSetData('feedShare', setFeedShare, () => feedShareService.getFeedshareByUser(locationId,user?.user?._id));
 
     // Fetch and set data for events
-    fetchAndSetData('events', setEvents, () => eventsService.getEvents(locationId));
+    fetchAndSetData('events', setEvents, () => eventsService.getEventByParams(locationId,user?.user?._id));
 
     // Fetch and set data for marketplace
-    fetchAndSetData('marketplace', setMarketplace, () => marketplaceService.getMarketplace(locationId));
+    fetchAndSetData('marketplace', setMarketplace, () => marketplaceService.getMarketplaceByParams(locationId,user?.user?._id));
   }, [locationId]);
 
   /**
