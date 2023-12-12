@@ -1,4 +1,5 @@
 {
+    "locall": "லொக்கால்",
     "all_events": "அனைத்து நிகழ்வுகள்",
     "my_events": "எனது நிகழ்வுகள்",
     "create_event": "ஒரு நிகழ்வை உருவாக்கவும்",
@@ -12,5 +13,25 @@
     "category": "வகை",
     "start_date": "தொடக்க தேதி",
     "end_date": "கடைசி தேதி",
-    "actions": "செயல்கள்"
+    "actions": "செயல்கள்",
+    "create_donation": "நன்கொடையை உருவாக்கவும்",
+    "all_donations": "அனைத்து நன்கொடைகள்",
+    "my_donations": "எனது நன்கொடைகள்",
+    "donation_metrics": "நன்கொடை அளவீடுகள்",
+    "receiver_name": "பெறுநரின் பெயர்",
+    "receiver_age": "பெறுபவரின் வயது",
+    "posted_on": "வெளியிடப்பட்டது",
+    "all_feedshare": "அனைத்து ஊட்ட பங்கு",
+    "my_feedshare": "எனது ஊட்டப் பங்கு",
+    "new_listing": "புதிய பட்டியல்",
+    "read_more": "மேலும் படிக்க",
+    "all_items": "அனைத்து பொருட்கள்",
+    "my_items": "என் பொருட்கள்",
+    "create_post": "இடுகையை உருவாக்கவும்",
+    "no_posts": "இன்னும் இடுகைகள் இல்லை",
+    "create_listing": "பட்டியலை உருவாக்கவும்",
+    "explore": "ஆராயுங்கள்",
+    "all_happenings": "எல்லா நிகழ்வுகளும்",
+    "my_happenings": "என் நிகழ்வுகள்",
+    "create_happening": "புதிய நிகழ்வை உருவாக்கவும்"
 }
