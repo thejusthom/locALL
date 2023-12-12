@@ -4,14 +4,15 @@ import stripe from 'stripe';
 
 dotenv.config();
 
+//stripe instance
 const stripeInstance = stripe(process.env.REACT_APP_STRIPE_SECRET_KEY);
 
+//payment router to process the donation payment
 const paymentRouter = express.Router();
-console.log(process.env.REACT_APP_STRIPE_SECRET_KEY)
 if(!!stripeInstance){
     paymentRouter.route("/payment/create-checkout-session").post(async(req,res) => {
-    const {products, donation, pincode} = req.body;
-
+    const {products} = req.body;
+//line items
     const lineItems = products.map((product)=>({
         price_data:{
             currency:"usd",
@@ -30,16 +31,6 @@ if(!!stripeInstance){
         success_url:"http://localhost:3000/donations/success",
         cancel_url:"http://localhost:3000/donations",
     });
-
-//     !!donation && await donationServices.updateDonation(pincode, donation._id, {...donation, amountAchieved: session.amountAchieved}).then((d)=> {
-//         // donationServices.getDonations(pincode).then((d)=> {
-//             // const availableEvents = event.filter((e: IEvent) => !!e.endDate && moment(e.endDate) >= moment());
-//             // setDonations(d)
-//             console.log(d);
-//         // }
-//     // );
-// });
-// await callAnotherAPI(session.id, products.price);
 
     res.json({id:session.id, amountAchieved: products.price})
  
