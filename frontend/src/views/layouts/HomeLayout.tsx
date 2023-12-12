@@ -26,6 +26,7 @@ import {
 import { deleteUser, saveUser } from "../../store/slices/user-slice";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
+import i18n from '../../i18n';
 
 // const initialStateUser = {
 //   person: {} as IPerson,
@@ -65,6 +66,10 @@ function HomeLayout() {
   const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(
     null
   );
+
+  const changeLanguage = (lng: string) => {
+    i18n.changeLanguage(lng);
+  }
 
   const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorElNav(event.currentTarget);
@@ -323,6 +328,8 @@ function HomeLayout() {
           </Container>
         </AppBar>
         <Box sx={{ minHeight: "100vh" }}>
+        <button onClick={() => changeLanguage('ta')}>ta</button>
+      <button onClick={() => changeLanguage('en')}>en</button>
           <Outlet />
         </Box>
       </Box>
