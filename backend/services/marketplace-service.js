@@ -20,7 +20,6 @@ export const getByParams = async (params = {}) => {
 
 export const save = async (newMarketplace) => {
     const marketplace = new Marketplace(newMarketplace);
-    // console.log(marketplace);
     return marketplace.save();
 }
 
