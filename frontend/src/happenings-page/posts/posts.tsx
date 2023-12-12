@@ -26,6 +26,29 @@ const Posts: React.FC<Props> = (props: Props): ReactElement =>{
     setUser(currentUser);
   },[currentUser]);
 
+  function formatTimestamp(timestamp?: string): string {
+    if (!timestamp) {
+      return 'Timestamp is undefined';
+    }
+  
+    const timestampValue = parseInt(timestamp, 10);
+    if (isNaN(timestampValue)) {
+      return 'Invalid timestamp';
+    }
+  
+    const options: Intl.DateTimeFormatOptions = {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric',
+      hour: 'numeric',
+      minute: 'numeric',
+      hour12: true,
+    };
+  
+    const formattedDate = new Date(timestampValue).toLocaleString('en-US', options);
+    return formattedDate;
+  }
+
   const happeningsEntrees = props.posts.map(happening => {
     return(
       <div key={happening._id} className="post">
@@ -42,7 +65,7 @@ const Posts: React.FC<Props> = (props: Props): ReactElement =>{
             </Link>
           </div>
           <hr />
-          <div className="postDate">{happening.postedDate}</div>
+          <div className="postDate">{formatTimestamp(happening.postedDate)}</div>
         </div>
         <p className="postDesc">
           {happening.content}
