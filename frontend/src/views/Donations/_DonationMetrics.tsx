@@ -120,60 +120,77 @@ donations?.forEach((d) => {
 const compositeChartData = Object.values(data);
 console.log(donations)
 console.log(data);
-    const RADIAN = Math.PI / 180;
-const renderCustomizedLabel = ({ cx, cy, midAngle, innerRadius, outerRadius, percent, index }: any) => {
-  const radius = innerRadius + (outerRadius - innerRadius) * 0.5;
-  const x = cx + radius * Math.cos(-midAngle * RADIAN);
-  const y = cy + radius * Math.sin(-midAngle * RADIAN);
+//     const RADIAN = Math.PI / 180;
+// const renderCustomizedLabel = ({ cx, cy, midAngle, innerRadius, outerRadius, percent, index }: any) => {
+//   const radius = innerRadius + (outerRadius - innerRadius) * 0.5;
+//   const x = cx + radius * Math.cos(-midAngle * RADIAN);
+//   const y = cy + radius * Math.sin(-midAngle * RADIAN);
 
-  return (
-    <text x={x} y={y} fill="white" textAnchor={x > cx ? 'start' : 'end'}>
-      {`${(percent * 100).toFixed(0)}%`}
-    </text>
-  );
-};
+//   return (
+//     <text x={x} y={y} fill="white" textAnchor={x > cx ? 'start' : 'end'}>
+//       {`${(percent * 100).toFixed(0)}%`}
+//     </text>
+//   );
+// };
 
-const CustomTooltip = ({ active, payload, label }: any) => {
-    console.log(payload, label)
-    if (active && payload && payload.length) {
-        const Circle = (props: {fill: string}) => {
-return(<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 15 15" width="15" height="15">
-<circle cx="7.5" cy="7.5" r="3" fill={props.fill} />
-</svg>);
-        }
-      return (
-        <div className="tooltip-wrap">
-          <p className="label">{label}</p>
-          <p><span><Circle fill="#123abc" /></span>Amount Required: {payload[0].payload.amountRequired}</p>
-          <p><span><Circle fill="#1976d2" /></span>Amount Achieved: {payload[0].payload.amountAchieved}</p>
-          <p><span><Circle fill="#38d200" /></span>Below 50 Age: {payload[0].payload.below50}</p>
-          <p><span><Circle fill="violet" /></span>Above 50 Age: {payload[0].payload.above50}</p>
-        </div>
-      );
-    }
-    else return null;
-}
+// const CustomTooltip = ({ active, payload, label }: any) => {
+//     console.log(payload, label)
+//     if (active && payload && payload.length) {
+//         const Circle = (props: {fill: string}) => {
+// return(<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 15 15" width="15" height="15">
+// <circle cx="7.5" cy="7.5" r="3" fill={props.fill} />
+// </svg>);
+//         }
+//       return (
+//         <div className="tooltip-wrap">
+//           <p className="label">{label}</p>
+//           <p><span><Circle fill="#123abc" /></span>Amount Required: {payload[0].payload.amountRequired}</p>
+//           <p><span><Circle fill="#1976d2" /></span>Amount Achieved: {payload[0].payload.amountAchieved}</p>
+//           <p><span><Circle fill="#38d200" /></span>Below 50 Age: {payload[0].payload.below50}</p>
+//           <p><span><Circle fill="violet" /></span>Above 50 Age: {payload[0].payload.above50}</p>
+//         </div>
+//       );
+//     }
+//     else return null;
+// }
 
     return(
         <MetricsWrap>
+          <DivWrap>
+          <ChartWrap>
+          <InnerWrap>
       <PieChartComp pieChartData={pieChartData} dataKey="value" nameKey="name" />
+      </InnerWrap>
+      </ChartWrap>
+      <ChartWrap>
+        <InnerWrap>
         <BarChartstackedComp barChartData={compositeChartData} bar1Key="amountRequired" bar2Key="amountAchieved" yAxisKey="name" layout="vertical" />
+        </InnerWrap>
+        </ChartWrap>
+        </DivWrap>
+        <DivWrap>
+          <ChartWrap>
+          <InnerWrap>
 <RadarChartComp radarChartData={compositeChartData} dataKey="name" radar1Name="Below 50" radar1Key="below50" radar2Name="Above 50" radar2Key="above50" />
+</InnerWrap>
+        </ChartWrap>
+        <ChartWrap>
+          <InnerWrap>
 <AreaChartComp areaChartData={compositeChartData} dataKey="name" area1Key="amountRequired" area2Key="amountAchieved" />
+</InnerWrap>
+        </ChartWrap>
+        </DivWrap>
+        <DivWrap>
+          <ChartWrap style={{width: "100%"}}>
+          <InnerWrap>
         <CompositeChartComp compositeChartData={compositeChartData} dataKey="name" areaKey="amountAchieved" barKey="AmountRequired" line1Key="below50" line2Key="above50" />
+        </InnerWrap>
+        </ChartWrap>
+        </DivWrap>
       </MetricsWrap>
     );
 };
 
-const MetricsWrap = styled.article`
-.tooltip-wrap{
-    background-color: white;
-    padding: 20px;
-    border-radius: 5px;
-    p{
-      align-items: center;
-    }
-}
-`;
+
 
 export default DonationMetrics;
