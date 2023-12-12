@@ -76,7 +76,6 @@ export const login = async (user) => {
   
   const refreshToken = generateRefreshToken(foundUser);
   activeRefreshTokens.push(refreshToken);
-  console.log(activeRefreshTokens);
   foundUser.refreshToken = refreshToken;
   await foundUser.save();
 

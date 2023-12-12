@@ -1,4 +1,4 @@
-import React, { ReactNode } from "react";
+import { ReactNode } from "react";
 import { Image } from "semantic-ui-react";
 import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";

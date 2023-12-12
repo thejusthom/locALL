@@ -18,63 +18,40 @@ import Footer from "../footer/footer";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import userService from "../../services/userService";
-import {
-  Avatar,
-  ClickAwayListener,
-  Grow,
-  MenuList,
-  Paper,
-  Popper,
-} from "@mui/material";
-import { deleteUser, saveUser } from "../../store/slices/user-slice";
+import { Avatar } from "@mui/material";
+import { deleteUser } from "../../store/slices/user-slice";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
-import i18n from '../../i18n';
-
-// const initialStateUser = {
-//   person: {} as IPerson,
-//   username: '',
-//   password: ''
-// };
+import i18n from "../../i18n";
 
 function HomeLayout() {
   const user = useSelector((state: any) => state.user);
   const dispatch = useDispatch();
-  const [open, setOpen] = useState(false);
-  const [openMenu, setOpenMenu] = useState(false);
   const [language, setLanguage] = React.useState({
-    checked: true
+    checked: true,
   });
-  const anchorRef = React.useRef<HTMLButtonElement>(null);
   const navigate = useNavigate();
 
   React.useEffect(() => {
-    if(language.checked){
-      i18n.changeLanguage('en');
+    if (language.checked) {
+      i18n.changeLanguage("en");
+    } else {
+      i18n.changeLanguage("ta");
     }
-    else{
-      i18n.changeLanguage('ta');
-    }
-  }, [language])
-  const { t } = useTranslation('common');
+  }, [language]);
+  const { t } = useTranslation("common");
 
   const pages = [
-    { name: t('home'), path: "/" },
-    { name: t('events'), path: "/events" },
-    { name: t('marketplace'), path: "/marketplace" },
-    { name: t('feedshare'), path: "/feedshare" },
-    { name: t('happenings'), path: "/happenings" },
-    { name: t('donations'), path: "/donations" },
+    { name: t("home"), path: "/" },
+    { name: t("events"), path: "/events" },
+    { name: t("marketplace"), path: "/marketplace" },
+    { name: t("feedshare"), path: "/feedshare" },
+    { name: t("happenings"), path: "/happenings" },
+    { name: t("donations"), path: "/donations" },
   ];
 
-  console.log(user);
   const pathname = window.location.pathname;
-  useEffect(() => {
-    console.log(user);
-  }, [user]);
-
-  // console.log(currentUser);
-  // console.log(currentUser.user.username);
+  useEffect(() => {}, [user]);
 
   const [anchorElNav, setAnchorElNav] = useState<null | HTMLElement>(null);
   const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(
@@ -110,39 +87,13 @@ function HomeLayout() {
     }
   };
 
-  const handleToggle = () => {
-    setOpenMenu((prevOpen) => !prevOpen);
-  };
-
-  const handleChange = (event: React.ChangeEvent<HTMLInputElement>, checked: boolean) => {
+  const handleChange = (
+    event: React.ChangeEvent<HTMLInputElement>,
+    checked: boolean
+  ) => {
     setLanguage({ ...language, [event.target.value]: checked });
   };
 
-  const prevOpen = React.useRef(openMenu);
-  React.useEffect(() => {
-    if (prevOpen.current === true && openMenu === false) {
-      anchorRef.current!.focus();
-    }
-    prevOpen.current = openMenu;
-  }, [openMenu]);
-
-  const handleClose = (event: Event | React.SyntheticEvent) => {
-    if (
-      anchorRef.current &&
-      anchorRef.current.contains(event.target as HTMLElement)
-    ) {
-      return;
-    }
-  };
-
-  function handleListKeyDown(event: React.KeyboardEvent) {
-    if (event.key === "Tab") {
-      event.preventDefault();
-      setOpenMenu(false);
-    } else if (event.key === "Escape") {
-      setOpenMenu(false);
-    }
-  }
 
   return (
     <Box sx={{ position: "relative", minHeight: "100vh" }}>
@@ -343,23 +294,31 @@ function HomeLayout() {
         </AppBar>
         <Box sx={{ minHeight: "100vh" }}>
           {pathname !== "/login" && (
-          <LanguageSelectWrap>
-            <div>
-      <Grid component="label" container alignItems="center" spacing={1}>
-      <Grid item>தமிழ்</Grid>
-      <Grid item>
-        <Switch
-        sx={{"& .MuiSwitch-track": {backgroundColor: "#1976d2"}, "& .MuiSwitch-thumb": {backgroundColor: "#1976d2"}}}
-          checked={language.checked} // relevant state for your case
-          onChange={handleChange} // relevant method to handle your change
-          value="checked" // some value you need
-        />
-      </Grid>
-      <Grid item>English</Grid>
-</Grid>
-</div>
-</LanguageSelectWrap>
-)}
+            <LanguageSelectWrap>
+              <div>
+                <Grid
+                  component="label"
+                  container
+                  alignItems="center"
+                  spacing={1}
+                >
+                  <Grid item>தமிழ்</Grid>
+                  <Grid item>
+                    <Switch
+                      sx={{
+                        "& .MuiSwitch-track": { backgroundColor: "#1976d2" },
+                        "& .MuiSwitch-thumb": { backgroundColor: "#1976d2" },
+                      }}
+                      checked={language.checked} // relevant state for your case
+                      onChange={handleChange} // relevant method to handle your change
+                      value="checked" // some value you need
+                    />
+                  </Grid>
+                  <Grid item>English</Grid>
+                </Grid>
+              </div>
+            </LanguageSelectWrap>
+          )}
           <Outlet />
         </Box>
       </Box>
@@ -369,14 +328,14 @@ function HomeLayout() {
 }
 
 const LanguageSelectWrap = styled.section`
-    display: flex;
-    justify-content: right;
-    margin-top: 15px;
-    padding-right: 20px;
-    label{
-      font-size: 18px;
-      font-weight: bold;
-    }
+  display: flex;
+  justify-content: right;
+  margin-top: 15px;
+  padding-right: 20px;
+  label {
+    font-size: 18px;
+    font-weight: bold;
+  }
 `;
 
 export default HomeLayout;
