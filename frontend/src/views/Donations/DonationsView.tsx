@@ -172,10 +172,12 @@ React.useEffect(() => {
         setShowAmountPopup(false);
     };
 
-    const onUpdate = () => {
+    const onUpdate = async(event: any) => {
+        event.preventDefault();
         setShowLoader(true);
         const updatedEvent = {...newDonation};
-        donationServices.updateDonation(loc.pincode, donationId, updatedEvent).then((donation)=> {
+        try{ 
+            await donationServices.updateDonation(loc.pincode, donationId, updatedEvent).then((donation)=> {
             donationServices.getDonations(loc.pincode).then((donation)=> {
                 setDonations(donation);
                 setShowLoader(false);
@@ -183,6 +185,12 @@ React.useEffect(() => {
         );
         toast.success(`${donation.donationName} Updated Successfully!`);
     });
+}
+    catch(err){
+    console.log("Error updating donation:", err);
+    toast.error("Error occured while updating donation!");
+    }
+
             setNewDonation(initialDonationState);
             setIsEdit(false);
             setDonationId("");
@@ -198,28 +206,37 @@ React.useEffect(() => {
            setShowLoader(false);
        });
    };
-   const onDelete = (donationId: string) => {
+   const onDelete = async(donationId: string) => {
     setShowLoader(true);
-       donationServices.deleteDonation(loc.pincode, donationId).then((donation)=> {
+    try{ 
+        await donationServices.deleteDonation(loc.pincode, donationId).then((donation)=> {
            donationServices.getDonations(loc.pincode).then((donation)=> {
                setDonations(donation);
                setShowLoader(false);
            });
                toast.success(`Donation Deleted Successfully!`);
        });
+    }
+       catch(err){
+        console.log("Error deleting donation:", err);
+        toast.error("Error occured while deleting donation!");
+    }
    };
    console.log(new Date())
-    const onSubmit = (event: any) => {
+    const onSubmit = async(event: any) => {
         event.preventDefault();
         setShowLoader(true);
-        // const date = new Date().toLocaleDateString;
-        // console.log(new Date(date.toISOString()))
-        // console.log(date)
-        donationServices.createDonation(loc.pincode, {...newDonation, createdUser: user?.user._id, locationId: loc.pincode}).then((donation)=> {
+        try{ 
+            await donationServices.createDonation(loc.pincode, {...newDonation, createdUser: user?.user._id, locationId: loc.pincode}).then((donation)=> {
             !!donations ? setDonations([...donations, donation]) : setDonations([donation]);
             setShowLoader(false);
             toast.success("Donation Created Successfully!");
         });
+    }
+    catch(err){
+        console.log("Error adding donation:", err);
+        toast.error("Error occured while adding donation!");
+    }
         setShowModal(false);
         setNewDonation(initialDonationState);
     };
