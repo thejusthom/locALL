@@ -1,8 +1,20 @@
+// Imports from react
+import React, { ChangeEvent, useState, useEffect } from "react";
+import { useSelector } from "react-redux";
+import { useTranslation } from "react-i18next";
+import { ToastContainer, toast } from "react-toastify";
+// Imports from mui
 import AspectRatio from "@mui/joy/AspectRatio";
 import Button from "@mui/joy/Button";
 import Card from "@mui/joy/Card";
 import CardContent from "@mui/joy/CardContent";
 import Typography from "@mui/joy/Typography";
+import { Box } from "@mui/system";
+import IconButton from "@mui/joy/IconButton";
+import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
+import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
+import { Avatar } from "@mui/material";
+// Imports from semantic ui
 import {
   Comment,
   Form,
@@ -11,40 +23,39 @@ import {
   Header,
   TextAreaProps,
 } from "semantic-ui-react";
-import React, { ChangeEvent, useState, useEffect } from "react";
+// Imports from project files
 import { Marketplace } from "../../models/marketplace";
-import { Box } from "@mui/system";
 import marketplaceService from "../../services/marketplaceService";
+// Imports for date formatting
 import moment from "moment";
-import IconButton from "@mui/joy/IconButton";
-import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
-import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
-import { useSelector } from "react-redux";
-import { Avatar } from "@mui/material";
-import { ToastContainer, toast } from "react-toastify";
-import { useTranslation } from "react-i18next";
 
+// Type of props given to MarketplaceCard
 type Props = {
   marketplace: Marketplace;
   active: string;
   afterUpdate: () => void;
 };
 
+// MarketplaceCard component
 const MarketplaceCard = (props: Props) => {
-  const { t } = useTranslation('common');
+  // Imports for translation
+  const { t } = useTranslation("common");
 
+  // States for the component
   const [open, setOpen] = React.useState(false);
   const [text, setText] = React.useState("");
   const [update, setUpdate] = React.useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
-  const user = useSelector((state: any) => state.user);
-
   const [formData, setFormData] = useState({
     productName: props.marketplace.productName,
     description: props.marketplace.description,
     price: props.marketplace.price,
     image: props.marketplace.image,
   });
+  // Get user from redux store
+  const user = useSelector((state: any) => state.user);
+
+  // Using useEffect to update the formData state when props.marketplace changes
   useEffect(() => {
     const data = {
       productName: props.marketplace.productName,
@@ -54,6 +65,7 @@ const MarketplaceCard = (props: Props) => {
     };
     setFormData(data);
   }, [props.marketplace]);
+  // Function to clear the form data
   const clearFormData = () => {
     const clData = {
       productName: "",
@@ -63,6 +75,7 @@ const MarketplaceCard = (props: Props) => {
     };
     setFormData(clData);
   };
+  // Function to handle the change in the text area
   const handleChange = (
     e: ChangeEvent<HTMLTextAreaElement>,
     value: TextAreaProps
@@ -70,12 +83,14 @@ const MarketplaceCard = (props: Props) => {
     setText(value.value as string);
   };
 
+  // Function to handle the change in the input fields
   const handleOnChange = (
     event: ChangeEvent<HTMLInputElement> | ChangeEvent<HTMLTextAreaElement>
   ) => {
     event.preventDefault();
     const id = event.target.id;
     const updateData = { ...formData };
+    // If the input field is of type file, then read the file and update the state
     if (
       event.target instanceof HTMLInputElement &&
       event.target.type === "file"
@@ -92,16 +107,19 @@ const MarketplaceCard = (props: Props) => {
         return;
       }
     }
+    // Update the state with the new value if its not a file
     updateData[id as keyof typeof updateData] = event.target.value;
     setFormData(updateData);
   };
 
+  // Function to handle the submit of the form
   const handleSubmit = async () => {
     props.marketplace.productName = formData.productName;
     props.marketplace.description = formData.description;
     props.marketplace.price = formData.price;
     props.marketplace.image = formData.image;
     try {
+      // Send a PUT request to update the listing
       await marketplaceService
         .updateMarketplace(
           props.marketplace.locationId,
@@ -118,6 +136,7 @@ const MarketplaceCard = (props: Props) => {
       toast.error("Error updating listing");
     }
   };
+  // Function to fill the form data
   const fillFormData = () => {
     props.afterUpdate();
     const clData = {
@@ -129,6 +148,7 @@ const MarketplaceCard = (props: Props) => {
     setFormData(clData);
   };
 
+  // Function to handle the submit of the comments
   const handleCommentsSubmit = async () => {
     props.marketplace.comments.push({
       author:
@@ -138,6 +158,7 @@ const MarketplaceCard = (props: Props) => {
       avatar: user?.user?.userImage,
     });
     try {
+      // Send a PUT request to update the listing
       await marketplaceService.updateMarketplace(
         props.marketplace.locationId,
         props.marketplace,
@@ -149,6 +170,7 @@ const MarketplaceCard = (props: Props) => {
     }
   };
 
+  // Function to handle the delete confirmation
   const handleDeleteConfirm = async () => {
     try {
       // Send a DELETE request to delete the listing
@@ -165,6 +187,7 @@ const MarketplaceCard = (props: Props) => {
     }
   };
 
+  // Function to handle the delete cancel
   const handleDeleteCancel = () => {
     setIsDeleteModalOpen(false);
   };

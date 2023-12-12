@@ -1,8 +1,12 @@
+// Imports from mui
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
+//imports from project file
 import { ItemCard } from "./HomeItemCards";
+// Imports from semantic ui
 import { Image } from "semantic-ui-react";
 
+// Type of props given to HomeItemCard
 type Props = {
   item: ItemCard;
 };

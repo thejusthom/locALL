@@ -1,24 +1,36 @@
-import { Box } from "@mui/material";
+// Import from react
 import { useState, useEffect, ChangeEvent } from "react";
+import { useSelector } from "react-redux";
+import { ToastContainer, toast } from "react-toastify";
+import { useTranslation } from "react-i18next";
+// Imports from mui
+import { Box } from "@mui/material";
+import Button from "@mui/joy/Button";
+import Typography from "@mui/joy/Typography";
+// Imports for date formatting
+import moment from "moment";
+// Imports from semantic ui
+import { Form, Image, Modal } from "semantic-ui-react";
+// Imports from project files
 import MarketplaceCard from "./MarketplaceCard";
 import { Marketplace } from "../../models/marketplace";
 import marketplaceService from "../../services/marketplaceService";
-import { useSelector } from "react-redux";
-import Button from "@mui/joy/Button";
-import Typography from "@mui/joy/Typography";
-import { Form, Image, Modal } from "semantic-ui-react";
-import moment from "moment";
-import { ToastContainer, toast } from "react-toastify";
-import { useTranslation } from "react-i18next";
 
+// Type of props given to MarketplaceView
 type Props = {
   active: string;
 };
 
+// View of Marketplace
 const MarketplaceView = (props: Props) => {
-  const { t } = useTranslation('common');
+  // Translation
+  const { t } = useTranslation("common");
 
+  // Get user from redux store
   const user = useSelector((state: any) => state.user);
+  // Get location id from redux store
+  const locationId = useSelector((state: any) => state.location.pincode);
+  // State of marketplace cards
   const [marketplaceCards, setMarketplaceCards] = useState([] as Marketplace[]);
   const [create, setCreate] = useState(false);
   const [update, setUpdate] = useState(false);
@@ -28,8 +40,8 @@ const MarketplaceView = (props: Props) => {
     price: "",
     image: "",
   });
-  const locationId = useSelector((state: any) => state.location.pincode);
 
+  // Using useEffect to call API once mounted and set the data
   useEffect(() => {
     if (props.active === "my-items") {
       marketplaceService
@@ -40,7 +52,8 @@ const MarketplaceView = (props: Props) => {
         .getMarketplace(locationId)
         .then((marketplaceCards) => setMarketplaceCards(marketplaceCards));
     }
-  }, [locationId, props.active, update, user.isLoggedIn,user]);
+  }, [locationId, props.active, update, user.isLoggedIn, user]);
+  // Function to update the state of update
   const afterUpdate = () => {
     if (update === false) {
       setUpdate(true);
@@ -48,6 +61,7 @@ const MarketplaceView = (props: Props) => {
       setUpdate(false);
     }
   };
+  // Function to clear form data
   const clearFormData = () => {
     const clData = {
       productName: "",
@@ -58,12 +72,14 @@ const MarketplaceView = (props: Props) => {
     setFormData(clData);
   };
 
+  // Function to handle on change of input
   const handleOnChange = (
     event: ChangeEvent<HTMLInputElement> | ChangeEvent<HTMLTextAreaElement>
   ) => {
     event.preventDefault();
     const id = event.target.id;
     const updateData = { ...formData };
+    // If input is of type file then read the file and set the state of image
     if (
       event.target instanceof HTMLInputElement &&
       event.target.type === "file"
@@ -80,9 +96,11 @@ const MarketplaceView = (props: Props) => {
         return;
       }
     }
+    // Set the state of other input fields
     updateData[id as keyof typeof updateData] = event.target.value;
     setFormData(updateData);
   };
+  // Function to handle submit of form
   const handleSubmit = async () => {
     const listingDate = moment().format("MMMM Do YYYY, h:mm:ss a");
     const marketplace: Marketplace = {
@@ -94,6 +112,7 @@ const MarketplaceView = (props: Props) => {
       comments: [],
     };
     try {
+      // Call create marketplace service
       await marketplaceService
         .createMarketplace(locationId, marketplace)
         .then(() => {
@@ -129,7 +148,7 @@ const MarketplaceView = (props: Props) => {
       {marketplaceCards.length === 0 && (
         <Box>
           <Typography sx={{ m: 4, ml: 1 }} fontSize="lg" fontWeight="lg">
-          {t("no_posts")}
+            {t("no_posts")}
           </Typography>
         </Box>
       )}
@@ -152,7 +171,7 @@ const MarketplaceView = (props: Props) => {
         }}
         onOpen={() => setCreate(true)}
       >
-        <Modal.Header>  {t("create_listing")}</Modal.Header>
+        <Modal.Header> {t("create_listing")}</Modal.Header>
         <Modal.Content scrolling>
           <Form>
             <Form.Input
