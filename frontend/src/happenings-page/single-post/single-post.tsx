@@ -4,7 +4,7 @@
  */
 import React, { useEffect, useState } from 'react';
 import './single-post.scss';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import happeningsService from '../../services/happeningsService';
 import Happenings from '../../models/happenings';
 import { useSelector } from 'react-redux';
@@ -31,6 +31,7 @@ const SinglePost: React.FC = () => {
     createdUser: {} as IUser
   });
   const currentUser = useSelector((state: any) => state.user);
+  const navigate = useNavigate();
   
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const locationId = useSelector((state: any) => state.location.pincode);
@@ -88,6 +89,11 @@ const SinglePost: React.FC = () => {
         setEditedData((prevData) => ({ ...prevData, image: reader.result as string }));
       };
     }
+  };
+
+  // Function to handle back button click
+  const handleBackClick = () => {
+    navigate('/happenings'); // Navigate to the /happenings page
   };
 
   /**
@@ -174,6 +180,9 @@ const SinglePost: React.FC = () => {
 
   return (
     <div className="singlePost">
+       <Buttons onClick={handleBackClick} className="singlePostBack" variant="outlined" style={{ marginTop: '10px', marginBottom: '15px'}}>
+          Back to Happenings
+        </Buttons>
 
       <Card sx={{ width: '100%', margin: '0 auto', padding: '20px' }}>
         <img className="singlePostImg" src={happening.image} alt="" style={{ width: '100%', marginBottom: '20px' }} />
@@ -209,7 +218,7 @@ const SinglePost: React.FC = () => {
             <span className="singlePostDate">{formatTimestamp(happening.postedDate)}</span>
           </div>
 
-          <p className="singlePostDesc" style={{ marginTop: '20px' }}>
+          <p className="singlePostDesc" style={{ marginTop: '20px', marginBottom: '20px' }}>
             {happening.content}
           </p>
         </div>
@@ -267,7 +276,6 @@ const SinglePost: React.FC = () => {
           <Button onClick={handleDeleteCancel}>Cancel</Button>
         </Modal.Actions>
       </Modal>
-
       <ToastContainer />
     </div>
   );
