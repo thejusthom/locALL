@@ -3,7 +3,7 @@ import { IUser } from "./user";
 export interface IDonation{
     _id?: string;
     donationName: string;
-      postedOn?: string;
+      postedOn?: Date;
       descriptionInfo: string;
       amountRequired: number;
       amountAchieved?: number;

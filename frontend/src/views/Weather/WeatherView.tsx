@@ -184,7 +184,7 @@ const WeatherMainWrap = styled.article`
 `;
 const WeatherWrap = styled.article`
   width: 50%;
-  background-color: #aad3e0;
+  background-color: #3498db;
   box-shadow: 0px 0px 15px 5px #b4b1b1;
   border-radius: 7px;
   padding: 20px 0;

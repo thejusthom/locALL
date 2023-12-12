@@ -10,6 +10,7 @@ import Paper from '@mui/material/Paper';
 import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
+import loginImage from "../../assets/images/loginPageImage.jpg";
 import Typography, { TypographyProps }from '@mui/material/Typography';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { saveUser, deleteUser } from '../../store/slices/user-slice';
@@ -96,12 +97,13 @@ const Login: React.FC = () => {
           sm={4}
           md={7}
           sx={{
-            backgroundImage: 'url(https://images.pexels.com/photos/1167355/pexels-photo-1167355.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940)',
+            backgroundImage: `url(${loginImage})`,
             backgroundRepeat: 'no-repeat',
             backgroundColor: (t : any) =>
               t.palette.mode === 'light' ? t.palette.grey[50] : t.palette.grey[900],
             backgroundSize: 'cover',
             backgroundPosition: 'center',
+            blockSize: "90%"
           }}
         />
         <Grid item xs={12} sm={8} md={5} component={Paper} elevation={6} square>
@@ -114,7 +116,7 @@ const Login: React.FC = () => {
               alignItems: 'center',
             }}
           >
-            <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
+            <Avatar sx={{ m: 1, bgcolor: 'primary.main' }}>
               <LockOutlinedIcon />
             </Avatar>
             <Typography component="h1" variant="h5">

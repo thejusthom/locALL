@@ -8,6 +8,7 @@ import Button from "@mui/joy/Button";
 import Typography from "@mui/joy/Typography";
 import { Form, Image, Modal } from "semantic-ui-react";
 import moment from "moment";
+import { ToastContainer, toast } from "react-toastify";
 
 type Props = {
   active: string;
@@ -92,21 +93,27 @@ const MarketplaceView = (props: Props) => {
       comments: [],
     };
     console.log(marketplace);
-    await marketplaceService
-      .createMarketplace(locationId, marketplace)
-      .then(() => {
-        if (update === false) {
-          setUpdate(true);
-        } else {
-          setUpdate(false);
-        }
-        setCreate(false);
-        clearFormData();
-      });
+    try {
+      await marketplaceService
+        .createMarketplace(locationId, marketplace)
+        .then(() => {
+          if (update === false) {
+            setUpdate(true);
+          } else {
+            setUpdate(false);
+          }
+          setCreate(false);
+          clearFormData();
+          toast.success("Post created successfully");
+        });
+    } catch (err) {
+      toast.error("Error in creating post");
+    }
   };
 
   return (
     <Box sx={{}}>
+      <ToastContainer position="top-center" closeOnClick />
       {props.active === "my-items" && (
         <Button
           variant="solid"
@@ -127,7 +134,7 @@ const MarketplaceView = (props: Props) => {
         </Box>
       )}
       <Box sx={{ display: "flex", m: 1, gap: 2, flexWrap: "wrap" }}>
-        {marketplaceCards.map((marketplaceCard: Marketplace,index) => (
+        {marketplaceCards.map((marketplaceCard: Marketplace, index) => (
           <MarketplaceCard
             key={String(index)}
             marketplace={marketplaceCard}
