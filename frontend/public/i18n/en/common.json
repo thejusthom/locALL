@@ -12,5 +12,12 @@
     "category": "Category",
     "start_date": "Start Date",
     "end_date": "End Date",
-    "actions": "Actions"
+    "actions": "Actions",
+    "create_donation": "Create a Donation",
+    "all_donations": "All Donations",
+    "my_donations": "My Donations",
+    "donation_metrics": "Donation Metrics",
+    "receiver_name": "Receiver Name",
+    "receiver_age": "Receiver Age",
+    "posted_on": "Posted On"
 }
