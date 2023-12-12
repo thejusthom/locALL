@@ -227,14 +227,21 @@ const FeedShareView: React.FC = () => {
                             label="Upload your images here"
                             type="file"
                             id="image"
-                            // required
+                            required
                             onChange={handleOnChange}
                         />
                     </Form.Group>
                     <Button type="submit" onClick={addFeedShare}
                         size="md"
                         color="success"
-                        sx={{ float: "right", ml: 2, mr: 3, mb: 1, fontWeight: 600 }}>
+                        sx={{ float: "right", ml: 2, mr: 3, mb: 1, fontWeight: 600 }}
+                        disabled={
+                            !inputData.foodType ||
+                            !inputData.servings ||
+                            !inputData.organizer ||
+                            !inputData.image ||
+                            !selectedLocation
+                        }>
                         Post</Button>
                     <Button
                         variant="solid"
