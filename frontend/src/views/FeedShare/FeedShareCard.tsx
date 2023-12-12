@@ -351,7 +351,14 @@ const FeedShareCard = (props: Props): React.ReactElement => {
                         color="success"
                         aria-label="Explore Bahamas Islands"
                         sx={{ float: "right", ml: 2, mr: 3, mb: 1, fontWeight: 600 }}
-                        type="submit" onClick={updateFeedShare}>Update</Button>
+                        type="submit" 
+                        disabled={
+                            !inputData.foodType ||
+                            !inputData.servings ||
+                            !inputData.organizer ||
+                            !inputData.image ||
+                            !selectedLocation}
+                        onClick={updateFeedShare}>Update</Button>
                     <Button
                         variant="solid"
                         size="md"
