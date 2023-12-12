@@ -191,6 +191,7 @@ https://docs.mapbox.com/  <br>
 https://stripe.com/docs/payments <br>
 https://openweathermap.org/guide <br>
 https://recharts.org/en-US/guide <br>
+https://nominatim.org/release-docs/develop/api/Overview/
 
  ### Instructions to use the repo
 - You can clone the repo by using HTTP: 
