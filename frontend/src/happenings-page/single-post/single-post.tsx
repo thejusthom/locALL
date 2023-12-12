@@ -120,6 +120,29 @@ const SinglePost: React.FC = () => {
     setIsDeleteModalOpen(true);
   };
 
+  function formatTimestamp(timestamp?: string): string {
+    if (!timestamp) {
+      return 'Timestamp is undefined';
+    }
+
+    const timestampValue = parseInt(timestamp, 10);
+    if (isNaN(timestampValue)) {
+      return 'Invalid timestamp';
+    }
+
+    const options: Intl.DateTimeFormatOptions = {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric',
+      hour: 'numeric',
+      minute: 'numeric',
+      hour12: true,
+    };
+
+    const formattedDate = new Date(timestampValue).toLocaleString('en-US', options);
+    return formattedDate;
+  }
+
   /**
    * Handles the click event when the user confirms the deletion.
    * Sends a DELETE request to delete the happening.
@@ -177,13 +200,13 @@ const SinglePost: React.FC = () => {
               <b>
                 {typeof happening.createdUser === 'string'
                   ? 'Shashikar'
-                  : happening.createdUser?.person?.firstName}
+                  : ` ${happening.createdUser?.person?.firstName}`}
                 {typeof happening.createdUser === 'string'
                   ? 'A'
-                  : happening.createdUser?.person?.lastName}
-              </b>{' '}
+                  : ` ${happening.createdUser?.person?.lastName}`}
+              </b>
             </span>
-            <span className="singlePostDate">{happening.postedDate}</span>
+            <span className="singlePostDate">{formatTimestamp(happening.postedDate)}</span>
           </div>
 
           <p className="singlePostDesc" style={{ marginTop: '20px' }}>
