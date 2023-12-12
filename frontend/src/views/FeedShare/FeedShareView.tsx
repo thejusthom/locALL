@@ -22,7 +22,6 @@ const FeedShareView: React.FC = () => {
     const { t } = useTranslation('common');
 
     const [formOpen, setFormOpen] = React.useState(false);
-    const [feedShareCards, setFeedShareCards] = useState([] as FeedShare[]);
     const locationId = useSelector((state: any) => state.location.pincode);
     const [selectedLocation, setSelectedLocation] = React.useState("");
     const [coordinates, setCoordinates] = React.useState({ latitude: 0, longitude: 0 });
@@ -33,6 +32,12 @@ const FeedShareView: React.FC = () => {
     const [allFeedshare, setAllFeedshare] = useState([] as FeedShare[]);
     const [myFeedshare, setMyFeedshare] = useState([] as FeedShare[]);
 
+
+    /**
+     * Handles the change event when the location is updated.
+     * 
+     * @param event - The event object containing the location change information.
+     */
     const onLocationChange = (event: any) => {
         const location = event?.features[0]?.geometry?.coordinates;
         setCoordinates({ longitude: location[0], latitude: location[1] });
@@ -48,6 +53,9 @@ const FeedShareView: React.FC = () => {
             })
     };
 
+    /**
+     * Toggles the update state between true and false.
+     */
     const afterUpdate = () => {
         if (update === false) {
             setUpdate(true);
@@ -56,6 +64,14 @@ const FeedShareView: React.FC = () => {
         }
     };
 
+    /**
+     * Fetches feedshare data based on the location ID and updates the state variables.
+     * 
+     * @param {string} locationId - The ID of the location.
+     * @param {boolean} update - A flag indicating whether to update the data.
+     * @param {string} userId - The ID of the user.
+     * @returns {void}
+     */
     useEffect(() => {
         feedShareService.getFeedshare(locationId).then((feedShareCards) => setAllFeedshare(feedShareCards));
         feedShareService.getFeedshareByUser(locationId, user?.user?._id).then((feedShareCards) => setMyFeedshare(feedShareCards));
@@ -85,6 +101,10 @@ const FeedShareView: React.FC = () => {
         setInputData(clData);
     };
 
+    /**
+     * Handles the change event of an input element.
+     * @param event - The change event.
+     */
     const handleOnChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const id = event.target.id;
         const updateData = { ...inputData };
@@ -110,6 +130,11 @@ const FeedShareView: React.FC = () => {
         setInputData(updateData);
     };
 
+    /**
+     * Adds a new feed share.
+     * 
+     * @returns {Promise<void>} A promise that resolves when the feed share is added successfully.
+     */
     const addFeedShare = async () => {
         console.log(add);
         const feedShare: FeedShare = {
@@ -124,18 +149,19 @@ const FeedShareView: React.FC = () => {
             createdUser: user?.user?._id,
             _id: null,
         }
-        try{ await feedShareService
-            .createFeedshare(feedShare.locationId, feedShare)
-            .then(() => {
-                allFeedshare.push(feedShare);
-                myFeedshare.push(feedShare);
-                setUpdate(true);
-                setFormOpen(false);
-                clearFormData();
-                toast.success("Feedshare added Successfully!");
-            });
+        try {
+            await feedShareService
+                .createFeedshare(feedShare.locationId, feedShare)
+                .then(() => {
+                    allFeedshare.push(feedShare);
+                    myFeedshare.push(feedShare);
+                    setUpdate(true);
+                    setFormOpen(false);
+                    clearFormData();
+                    toast.success("Feedshare added Successfully!");
+                });
         }
-        catch(err){
+        catch (err) {
             console.log("Error adding feedshare:", err);
             toast.error("Error occured while adding feedshare!");
         }
@@ -148,6 +174,13 @@ const FeedShareView: React.FC = () => {
         };
     }
 
+    /**
+     * Handles the change of the tab in the FeedShareView component.
+     * 
+     * @param {any} event - The event object triggered by the tab change.
+     * @param {string} newValue - The new value of the selected tab.
+     * @returns {void}
+     */
     const handleTabChange = (event: any, newValue: string) => {
         setTab(newValue);
         if (newValue === '0') {
@@ -162,37 +195,42 @@ const FeedShareView: React.FC = () => {
     };
 
     return (
+        /**
+         * Renders the FeedShareView component.
+         * 
+         * @returns The JSX element representing the FeedShareView component.
+         */
         <FeedShareWrap>
             <ToastContainer position="top-center" closeOnClick />
             <TabContext value={tab}>
-                <TabList sx={{margin: "-55px 0 0 0", "& button": {color: "#123abc"}, "& button.Mui-selected": {color: "#123abc"}}} onChange={handleTabChange} aria-label="basic tabs example" TabIndicatorProps={{sx:{backgroundColor: "#123abc"}}}>
+                <TabList sx={{ margin: "0 0 0 0", "& button": { color: "#123abc" }, "& button.Mui-selected": { color: "#123abc" } }} onChange={handleTabChange} aria-label="basic tabs example" TabIndicatorProps={{ sx: { backgroundColor: "#123abc" } }}>
                     <Tab sx={{ fontSize: "16px", fontWeight: "bold" }} label={t('all_feedshare')} value="0" {...a11yProps(0)} />
                     {user?.isLoggedIn && <Tab sx={{ fontSize: "16px", fontWeight: "bold" }} label={t('my_feedshare')} value="1" {...a11yProps(1)} />}
                 </TabList>
                 <TabPanel value="0">
                     {
                         allFeedshare.length === 0 ? <NoDataScreen /> :
-                        allFeedshare.map((feedShareCard: FeedShare) => (
-                            <FeedShareCard
-                                feedShare={feedShareCard}
-                                afterUpdate={afterUpdate} 
-                                type="all"/>
-                        ))
-                        }
+                            allFeedshare.map((feedShareCard: FeedShare) => (
+                                <FeedShareCard
+                                    feedShare={feedShareCard}
+                                    afterUpdate={afterUpdate}
+                                    type="all" />
+                            ))
+                    }
 
                 </TabPanel>
                 <TabPanel value="1">
                     <div className="new-feedshare">
-                        <Button className="new-button" onClick={() => setFormOpen(true)} sx={{bgcolor: "#123abc", margin: "-5px 0 10px -10px"}}>{t('new_listing')}</Button>
+                        <Button className="new-button" onClick={() => setFormOpen(true)} sx={{ bgcolor: "#123abc", margin: "-5px 0 10px -10px" }}>{t('new_listing')}</Button>
                     </div>
                     {
                         myFeedshare.length === 0 ? <NoDataScreen /> :
-                        myFeedshare.map((feedShareCard: FeedShare) => (
-                            <FeedShareCard
-                                feedShare={feedShareCard}
-                                afterUpdate={afterUpdate} 
-                                type="my"/>
-                        ))}
+                            myFeedshare.map((feedShareCard: FeedShare) => (
+                                <FeedShareCard
+                                    feedShare={feedShareCard}
+                                    afterUpdate={afterUpdate}
+                                    type="my" />
+                            ))}
                 </TabPanel>
             </TabContext>
             <Modal
@@ -209,7 +247,7 @@ const FeedShareView: React.FC = () => {
                         <Form.Field required label='Food Type' control='input' width={8}
                             value={inputData.foodType}
                             onChange={handleOnChange}
-                            id="foodType" />                        
+                            id="foodType" />
                         <Form.Field required label='Servings' control='input' width={6}
                             value={inputData.servings}
                             onChange={handleOnChange}
@@ -224,7 +262,7 @@ const FeedShareView: React.FC = () => {
                                 accessToken={process.env.REACT_APP_MAPBOX_API_KEY}
                                 value={selectedLocation}
                                 onRetrieve={onLocationChange}
-                            />}                        
+                            />}
                         <Form.Input
                             fluid
                             label="Upload your images here"
@@ -268,7 +306,7 @@ const FeedShareView: React.FC = () => {
                         Close
                     </Button>
                 </Form>
-            </Modal>        
+            </Modal>
         </FeedShareWrap>
     )
 }

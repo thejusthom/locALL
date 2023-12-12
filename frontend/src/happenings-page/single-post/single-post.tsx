@@ -31,14 +31,14 @@ const SinglePost: React.FC = () => {
     createdUser: {} as IUser
   });
   const currentUser = useSelector((state: any) => state.user);
-  console.log(currentUser);
+  
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const locationId = useSelector((state: any) => state.location.pincode);
   const happeningPathObj = useLocation();
-  console.log(happeningPathObj);
+ 
   const happeningPath = happeningPathObj.pathname.split('/');
   const happeningId = happeningPath[2];
-  console.log(happeningId);
+  
 
   useEffect(() => {
     console.log(locationId);

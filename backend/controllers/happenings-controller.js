@@ -1,10 +1,10 @@
 import * as happeningService from "../services/happenings-service.js";
 import { setResponse, setErrorResponse } from "./response-handler.js";
 
-//method to get all happenings for a location
+// method to get all happenings for a location
 export const get = async (request, response) => {
   try {
-    //getting the locationId from request
+    // getting the locationId from request
     const locationId = request.locationId;
     const happenings = await happeningService.getAll(locationId);
     setResponse(happenings, response, 200);
