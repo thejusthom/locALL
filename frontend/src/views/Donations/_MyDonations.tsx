@@ -5,6 +5,7 @@ import DeleteIcon from "../../assets/images/delete-icon.svg";
 import moment from "moment";
 import { IDonation } from "../../models/donation";
 import { donationCategories } from "./Constants";
+import { useTranslation } from "react-i18next";
 
 interface IMyDonations{
     donations?: IDonation[];
@@ -13,17 +14,18 @@ interface IMyDonations{
 }
 
 const MyDonations = (props: IMyDonations) => {
+    const { t } = useTranslation('common');
     const { donations, onEdit, onDelete } = props;
     
     return(
         <Table>
         <thead>
-            <th>Name</th>
-            <th>Category</th>
-            <th>Receiver Name</th>
-            <th>Receiver Age</th>
-            <th>Posted On</th>
-            <th>Actions</th>
+            <th>{t("name")}</th>
+            <th>{t("category")}</th>
+            <th>{t("receiver_name")}</th>
+            <th>{t("receiver_age")}</th>
+            <th>{t("posted_on")}</th>
+            <th>{t("actions")}</th>
         </thead>
         <tbody>
             {donations?.map((donation) => 
