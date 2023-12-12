@@ -22,13 +22,10 @@ const footer = () => {
           <div className="footer-split">            
             <div className="footer-left">
               <div className="footer__addr">
-                <h1 className="footer__logo">
-                  <Typography variant="subtitle1" sx={{ letterSpacing: 1, mb: 2, fontSize: 25, fontWeight: 'bold', color: 'white' }}>
+                  <Typography variant="subtitle1" sx={{ letterSpacing: 1, mb: 2, fontSize: 15, fontWeight: 'bold', color: 'white' }}>
                     Join locAll today and be an active participant in building a vibrant and connected local community!
                   </Typography>
-                </h1>
-
-                <Typography variant="subtitle1" sx={{ letterSpacing: 1, mb: 2, fontSize: 25, fontWeight: 'bold', color: 'white' }}>
+                <Typography variant="subtitle1" sx={{ letterSpacing: 1, fontSize: 15, fontWeight: 'bold', color: 'white' }}>
                   Contact
                 </Typography>
                 <address>
