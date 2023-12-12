@@ -15,10 +15,11 @@ import TabContext from "@mui/lab/TabContext";
 import TabPanel from "@mui/lab/TabPanel";
 import { ToastContainer, toast } from "react-toastify";
 import NoDataScreen from "../../common/_NoDataScreen";
+import { useTranslation } from "react-i18next";
 
 const FeedShareView: React.FC = () => {
-    // get data from json
-    // const feedShareCards = [...feedShare];
+    const { t } = useTranslation('common');
+
     const [formOpen, setFormOpen] = React.useState(false);
     const [feedShareCards, setFeedShareCards] = useState([] as FeedShare[]);
     const locationId = useSelector((state: any) => state.location.pincode);
@@ -163,8 +164,8 @@ const FeedShareView: React.FC = () => {
             <ToastContainer position="top-center" closeOnClick />
             <TabContext value={tab}>
                 <TabList sx={{ margin: "15px 0 0 0" }} onChange={handleTabChange} aria-label="basic tabs example">
-                    <Tab sx={{ fontSize: "16px", fontWeight: "bold" }} label="All Feedshare" value="0" {...a11yProps(0)} />
-                    {user?.isLoggedIn && <Tab sx={{ fontSize: "16px", fontWeight: "bold" }} label="My Feedshare" value="1" {...a11yProps(1)} />}
+                    <Tab sx={{ fontSize: "16px", fontWeight: "bold" }} label={t('all_feedshare')} value="0" {...a11yProps(0)} />
+                    {user?.isLoggedIn && <Tab sx={{ fontSize: "16px", fontWeight: "bold" }} label={t('my_feedshare')} value="1" {...a11yProps(1)} />}
                 </TabList>
                 <TabPanel value="0">
                     {
@@ -180,7 +181,7 @@ const FeedShareView: React.FC = () => {
                 </TabPanel>
                 <TabPanel value="1">
                     <div className="new-feedshare">
-                        <Button className="new-button" onClick={() => setFormOpen(true)}>New Listing</Button>
+                        <Button className="new-button" onClick={() => setFormOpen(true)}>{t('new_listing')}</Button>
                     </div>
                     {
                         myFeedshare.length === 0 ? <NoDataScreen /> :

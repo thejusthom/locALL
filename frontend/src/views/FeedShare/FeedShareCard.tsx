@@ -12,6 +12,7 @@ import moment from "moment";
 import { SearchBox } from '@mapbox/search-js-react';
 import { useSelector } from "react-redux";
 import { ToastContainer, toast } from "react-toastify";
+import { useTranslation } from "react-i18next";
 
 type Props = {
     feedShare: FeedShare;
@@ -20,7 +21,7 @@ type Props = {
 }
 
 const FeedShareCard = (props: Props): React.ReactElement => {
-
+    const { t } = useTranslation('common');
     const handleSubmit = () => {
         props.feedShare.comments.push({ author: user?.user?.person?.firstName, metaData: moment().format("MMMM Do YYYY, h:mm:ss a")
         , text: text, avatar: "Profile Pic" });
@@ -198,12 +199,12 @@ const FeedShareCard = (props: Props): React.ReactElement => {
                 </div>
                 <div className="description">
                     <h1>{props.feedShare.foodType}</h1>
-                    {props.type==="my" && <img src={EditIcon} width={25} height={25} onClick={() => setEditFormOpen(true)} />}
+                {props.type==="my" && <img src={EditIcon} width={25} height={25} onClick={() => setEditFormOpen(true)} />}
                     {props.type==="my" && <img src={DeleteIcon} width={25} height={25} onClick={() => setIsDeleteModalOpen(true)} /> }
                     <h2>{props.feedShare.address}</h2>
                     <p>{props.feedShare.organizer}</p>
                     <p className="read-more">
-                        <button onClick={() => setOpen(true)}>Read More</button>
+                        <button onClick={() => setOpen(true)}>{t('read_more')}</button>
                     </p>
                 </div>
             </div>
