@@ -18,6 +18,7 @@ const root = ReactDOM.createRoot(
 root.render(
   <Provider store={store}>
   <BrowserRouter basename='/'>
+    {/* i18n provider for internationalization */}
     <I18nextProvider i18n={i18n}>
   <App />
   </I18nextProvider>
