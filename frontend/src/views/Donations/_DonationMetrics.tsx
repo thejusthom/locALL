@@ -11,34 +11,6 @@ interface IDonationMetrics{
 donation: IDonation[];
 }
 
-const data02: any = [
-{
-    "name": "School",
-    "value": 0,
-    "color": "#264478"
-  },
-{
-    "name": "University",
-    "value": 0,
-    "color": "#4472c4"
-  },
- {
-    "name": "Medical",
-    "value": 0,
-    "color": "#12283d"
-  },
-{
-    "name": "Shelter",
-    "value": 0,
-    "color": "#5ba3e7"
-  },
- {
-    "name": "Other",
-    "value": 0,
-    "color": "#636363"
-  }
-];
-
 const DonationMetrics = (props: IDonationMetrics) => {
   
 const data01: any = {
@@ -118,42 +90,6 @@ donations?.forEach((d) => {
  data[d.category][ d.receiver.age < 50 ? "below50" : "above50"] += d.amountRequired
 });
 const compositeChartData = Object.values(data);
-console.log(donations)
-console.log(data);
-//     const RADIAN = Math.PI / 180;
-// const renderCustomizedLabel = ({ cx, cy, midAngle, innerRadius, outerRadius, percent, index }: any) => {
-//   const radius = innerRadius + (outerRadius - innerRadius) * 0.5;
-//   const x = cx + radius * Math.cos(-midAngle * RADIAN);
-//   const y = cy + radius * Math.sin(-midAngle * RADIAN);
-
-//   return (
-//     <text x={x} y={y} fill="white" textAnchor={x > cx ? 'start' : 'end'}>
-//       {`${(percent * 100).toFixed(0)}%`}
-//     </text>
-//   );
-// };
-
-// const CustomTooltip = ({ active, payload, label }: any) => {
-//     console.log(payload, label)
-//     if (active && payload && payload.length) {
-//         const Circle = (props: {fill: string}) => {
-// return(<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 15 15" width="15" height="15">
-// <circle cx="7.5" cy="7.5" r="3" fill={props.fill} />
-// </svg>);
-//         }
-//       return (
-//         <div className="tooltip-wrap">
-//           <p className="label">{label}</p>
-//           <p><span><Circle fill="#123abc" /></span>Amount Required: {payload[0].payload.amountRequired}</p>
-//           <p><span><Circle fill="#1976d2" /></span>Amount Achieved: {payload[0].payload.amountAchieved}</p>
-//           <p><span><Circle fill="#38d200" /></span>Below 50 Age: {payload[0].payload.below50}</p>
-//           <p><span><Circle fill="violet" /></span>Above 50 Age: {payload[0].payload.above50}</p>
-//         </div>
-//       );
-//     }
-//     else return null;
-// }
-
     return(
         <MetricsWrap>
           <DivWrap>
@@ -202,7 +138,6 @@ const MetricsWrap = styled.article`
 }
 `;
 const ChartWrap = styled.section`
-/* background-color: white; */
 width: 700px;
 /* &:hover{
   width: 710px;
