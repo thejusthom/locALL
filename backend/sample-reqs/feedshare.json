@@ -1,0 +1,10 @@
+{
+    "foodType": "Chicken 65",
+    "servings": 6,
+    "postedDate": "2023-12-01T12:00:00Z",
+    "address": "71 Walnut Park, Roxbury",
+    "image": "https://example.com/homemade_pasta_image.jpg",
+    "organizer": "Denny",
+    "createdUser": "655bf12d0764c1503fe03d36",
+    "locationId": "02115"
+}
