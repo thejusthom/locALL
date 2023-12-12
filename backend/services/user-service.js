@@ -105,8 +105,8 @@ export const refreshTokens = async (refreshToken) => {
   
     try {
       const user = jwt.verify(refreshToken, 'myRefreshSecretKey');
+      user._id=user.id;
       activeRefreshTokens = activeRefreshTokens.filter((token) => token !== refreshToken);
-  
       const newAccessToken = generateAccessToken(user);
       const newRefreshToken = generateRefreshToken(user);
   
