@@ -1,6 +1,7 @@
 import mongoose from "mongoose";
 
 const Schema = mongoose.Schema;
+// Schema for the marketplace
 const MarketplaceSchema = new Schema ({
     productName: {
         type: String,

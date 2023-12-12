@@ -4,10 +4,12 @@ import jwt from 'jsonwebtoken';
 // Initialize active refresh tokens array
 let activeRefreshTokens = [];
 
+// Generate access token
 const generateAccessToken = (user) => {
     return jwt.sign({ id: user._id }, 'mySecretKey', { expiresIn: '2m' });
 };
 
+// Generate refresh token
 const generateRefreshToken = (user) => {
     return jwt.sign({ id: user._id }, 'myRefreshSecretKey');
 };
