@@ -7,18 +7,11 @@ export const find = async (request, response) => {
     const locationId = request.locationId;
     console.log(locationId);
     const feedshares = await feedshareService.getAll(locationId);
-    if (feedshares.length == 0) {
-      throw new Error("Feedshares not found");
-    }
     // console.log(feedshares);
     setResponse(feedshares, response, 200);
   } catch (err) {
-    if (err.message === "Feedshares not found") {
-      response.status(404).json({ error: "Feedshares not found" });
-    } else {
-      console.log(err);
-      setErrorResponse(err, response);
-    }
+    console.log(err);
+    setErrorResponse(err, response);
   }
 };
 
@@ -32,9 +25,14 @@ export const post = async (request, response) => {
     };
     // console.log(newFeedShare);
     const feedshare = await feedshareService.save(newFeedShare);
+    if (!feedshare) {
+      throw new Error("feedshare not created");
+    }
     setResponse(feedshare, response, 200);
   } catch (err) {
-    if (err._message === "feedshare validation failed") {
+    if (err.message === "feedshare not created") {
+      response.status(400).json({ error: "feedshare not created" });
+    } else if (err._message === "feedshare validation failed") {
       response.status(400).json({ error: `${err.message}` });
     } else if (err.name === "CastError") {
       response.status(400).json({ error: "Wrong variable Type" });
@@ -49,14 +47,9 @@ export const get = async (request, response) => {
   try {
     const id = request.params.id;
     const feedshare = await feedshareService.find(id);
-    if (!feedshare) {
-      throw new Error("feedshare not found");
-    }
     setResponse(feedshare, response, 200);
   } catch (err) {
-    if (err.message === "feedshare not found") {
-      response.status(404).json({ error: "feedshare not found" });
-    } else if (err.name === "CastError") {
+    if (err.name === "CastError") {
       response.status(400).json({ error: "Wrong variable Type" });
     } else {
       console.log(err);
@@ -80,7 +73,7 @@ export const put = async (request, response) => {
     } else if (err.name === "CastError") {
       response.status(400).json({ error: "Wrong variable Type" });
     } else if (err._message === "feedshare validation failed") {
-        response.status(400).json({ error: `${err.message}` });
+      response.status(400).json({ error: `${err.message}` });
     } else {
       console.log(err);
       setErrorResponse(err, response);
@@ -112,17 +105,10 @@ export const search = async (request, response) => {
   try {
     const params = request.query;
     const feedshare = await feedshareService.search(params);
-    if (!feedshare) {
-      throw new Error("feedshare not found");
-    }
     setResponse(feedshare, response, 200);
   } catch (err) {
-    if (err.message === "feedshare not found") {
-      response.status(404).json({ error: "feedshare not found" });
-    } else {
-      console.log(err);
-      setErrorResponse(err, response);
-    }
+    console.log(err);
+    setErrorResponse(err, response);
   }
 };
 
@@ -132,16 +118,9 @@ export const getByParams = async (request, response) => {
     const params = { ...request.query, locationId };
     console.log(params);
     const feedshare = await feedshareService.getByParams(params);
-    if (!feedshare) {
-      throw new Error("feedshare not found");
-    }
     setResponse(feedshare, response, 200);
   } catch (err) {
-    if (err.message === "feedshare not found") {
-      response.status(404).json({ error: "feedshare not found" });
-    } else {
-      console.log(err);
-      setErrorResponse(err, response);
-    }
+    console.log(err);
+    setErrorResponse(err, response);
   }
 };

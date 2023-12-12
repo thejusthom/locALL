@@ -8,18 +8,11 @@ export const getAll = async (request, response) => {
     //Getting locationId from the request
     const locationId = request.locationId;
     const events = await eventService.getAllEvents(locationId);
-    if (events.length == 0) {
-      throw new Error("Events not found");
-    }
     console.log(events);
     setResponse(events, response, 200);
   } catch (Err) {
-    if (Err.message === "Events not found") {
-      response.status(404).json({ error: "Events not found" });
-    } else {
-      console.log(Err);
-      setErrorResponse(Err, response);
-    }
+    console.log(Err);
+    setErrorResponse(Err, response);
   }
 };
 
@@ -29,15 +22,10 @@ export const getById = async (request, response) => {
     //Getting event id from request
     const id = request.params.eventId;
     const event = await eventService.getEventById(id);
-    if (!event) {
-      throw new Error("Event not found");
-    }
     console.log(event);
     setResponse(event, response, 200);
   } catch (Err) {
-    if (Err.message === "Event not found") {
-      response.status(404).json({ error: "Event not found" });
-    } else if (Err.name === "CastError") {
+    if (Err.name === "CastError") {
       response.status(400).json({ error: "Wrong variable Type" });
     } else {
       console.log(Err);
@@ -59,7 +47,7 @@ export const create = async (request, response) => {
     setResponse(event, response, 200);
   } catch (Err) {
     if (Err.message === "Event not created") {
-      response.status(404).json({ error: "Event not created" });
+      response.status(400).json({ error: "Event not created" });
     } else if (Err._message === "event validation failed") {
       response.status(400).json({ error: `${Err.message}` });
     } else {
@@ -76,17 +64,10 @@ export const getByParams = async (request, response) => {
     const params = { ...request.query, locationId };
     console.log(params);
     const events = await eventService.getByParams(params);
-    if (events.length == 0) {
-      throw new Error("Events not found");
-    }
     setResponse(events, response, 200);
   } catch (err) {
-    if (err.message === "Events not found") {
-      response.status(404).json({ error: "Events not found" });
-    } else {
-      console.log(err);
-      setErrorResponse(err, response);
-    }
+    console.log(err);
+    setErrorResponse(err, response);
   }
 };
 

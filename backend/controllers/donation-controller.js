@@ -7,17 +7,10 @@ export const get = async (request, response) => {
     //getting the locationId from request
     const locationId = request.locationId;
     const donations = await donationService.getAll(locationId);
-    if (donations.length == 0) {
-      throw new Error("Donations not found");
-    }
     setResponse(donations, response, 200);
   } catch (err) {
-    if (err.message === "Donations not found") {
-      response.status(404).json({ error: "Donations not found" });
-    } else {
-      console.log(err);
-      setErrorResponse(err, response);
-    }
+    console.log(err);
+    setErrorResponse(err, response);
   }
 };
 
@@ -37,7 +30,7 @@ export const post = async (request, response) => {
     setResponse(donation, response, 200);
   } catch (err) {
     if (err.message === "Donation not created") {
-      response.status(404).json({ error: "Donation not created" });
+      response.status(400).json({ error: "Donation not created" });
     } else if (err.name === "donation validation failed") {
       response.status(400).json({ error: `${err.message}` });
     } else {
@@ -52,14 +45,9 @@ export const getById = async (request, response) => {
   try {
     const id = request.params.donationId;
     const donation = await donationService.getById(id);
-    if (!donation) {
-      throw new Error("Donation not found");
-    }
     setResponse(donation, response, 200);
   } catch (err) {
-    if (err.message === "Donation not found") {
-      response.status(404).json({ error: "Donation not found" });
-    } else if (err.name === "CastError") {
+    if (err.name === "CastError") {
       response.status(400).json({ error: "Wrong variable Type" });
     } else {
       console.log(err);
@@ -75,17 +63,10 @@ export const getByParams = async (request, response) => {
     const params = { ...request.query, locationId };
     console.log(params);
     const donations = await donationService.getByParams(params);
-    if (donations.length == 0) {
-      throw new Error("Donations not found");
-    }
     setResponse(donations, response, 200);
   } catch (err) {
-    if (err.message === "Donations not found") {
-      response.status(404).json({ error: "Donations not found" });
-    } else {
-      console.log(err);
-      setErrorResponse(err, response);
-    }
+    console.log(err);
+    setErrorResponse(err, response);
   }
 };
 
