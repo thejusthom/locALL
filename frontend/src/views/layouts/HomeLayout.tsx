@@ -1,5 +1,6 @@
 import { Link, Outlet } from "react-router-dom";
 import * as React from "react";
+import styled from "styled-components";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
 import Toolbar from "@mui/material/Toolbar";
@@ -345,8 +346,8 @@ function HomeLayout() {
           </Container>
         </AppBar>
         <Box sx={{ minHeight: "100vh" }}>
-        <button onClick={() => changeLanguage('ta')}>ta</button>
-      <button onClick={() => changeLanguage('en')}>en</button>
+          <LanguageSelectWrap>
+            <div>
       <Grid component="label" container alignItems="center" spacing={1}>
       <Grid item>Tamil</Grid>
       <Grid item>
@@ -358,6 +359,8 @@ function HomeLayout() {
       </Grid>
       <Grid item>English</Grid>
 </Grid>
+</div>
+</LanguageSelectWrap>
           <Outlet />
         </Box>
       </Box>
@@ -365,5 +368,16 @@ function HomeLayout() {
     </Box>
   );
 }
+
+const LanguageSelectWrap = styled.section`
+    display: flex;
+    justify-content: right;
+    margin-top: 15px;
+    padding-right: 20px;
+    label{
+      font-size: 18px;
+      font-weight: bold;
+    }
+`;
 
 export default HomeLayout;
