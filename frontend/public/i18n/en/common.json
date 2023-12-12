@@ -23,5 +23,11 @@
     "all_feedshare": "All Feedshare",
     "my_feedshare": "My Feedshare",
     "new_listing": "New Listing",
-    "read_more": "Read More"
+    "read_more": "Read More",
+    "all_items": "All Items",
+    "my_items": "My Items",
+    "create_post": "Create Post",
+    "no_posts": "No Posts Yet",
+    "create_listing": "Create Listing",
+    "explore": "Explore"
 }
