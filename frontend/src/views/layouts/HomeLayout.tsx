@@ -68,7 +68,7 @@ function HomeLayout() {
   ];
 
   console.log(user);
-
+  const pathname = window.location.pathname;
   useEffect(() => {
     console.log(user);
   }, [user]);
@@ -80,10 +80,6 @@ function HomeLayout() {
   const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(
     null
   );
-
-  const changeLanguage = (lng: string) => {
-    i18n.changeLanguage(lng);
-  }
 
   const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorElNav(event.currentTarget);
@@ -346,12 +342,14 @@ function HomeLayout() {
           </Container>
         </AppBar>
         <Box sx={{ minHeight: "100vh" }}>
+          {pathname !== "/login" && (
           <LanguageSelectWrap>
             <div>
       <Grid component="label" container alignItems="center" spacing={1}>
       <Grid item>Tamil</Grid>
       <Grid item>
         <Switch
+        sx={{"& .MuiSwitch-track": {backgroundColor: "#1976d2"}, "& .MuiSwitch-thumb": {backgroundColor: "#1976d2"}}}
           checked={language.checked} // relevant state for your case
           onChange={handleChange} // relevant method to handle your change
           value="checked" // some value you need
@@ -361,6 +359,7 @@ function HomeLayout() {
 </Grid>
 </div>
 </LanguageSelectWrap>
+)}
           <Outlet />
         </Box>
       </Box>

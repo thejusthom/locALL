@@ -23,6 +23,7 @@ import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
 import { useSelector } from "react-redux";
 import { Avatar } from "@mui/material";
 import { ToastContainer, toast } from "react-toastify";
+import { useTranslation } from "react-i18next";
 
 type Props = {
   marketplace: Marketplace;
@@ -31,6 +32,8 @@ type Props = {
 };
 
 const MarketplaceCard = (props: Props) => {
+  const { t } = useTranslation('common');
+
   const [open, setOpen] = React.useState(false);
   const [text, setText] = React.useState("");
   const [update, setUpdate] = React.useState(false);
@@ -228,7 +231,7 @@ const MarketplaceCard = (props: Props) => {
             sx={{ ml: "auto", alignSelf: "center", fontWeight: 600 }}
             onClick={() => setOpen(true)}
           >
-            Explore
+            {t("explore")}
           </Button>
         </CardContent>
       </Card>

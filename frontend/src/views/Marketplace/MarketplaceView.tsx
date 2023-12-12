@@ -9,12 +9,15 @@ import Typography from "@mui/joy/Typography";
 import { Form, Image, Modal } from "semantic-ui-react";
 import moment from "moment";
 import { ToastContainer, toast } from "react-toastify";
+import { useTranslation } from "react-i18next";
 
 type Props = {
   active: string;
 };
 
 const MarketplaceView = (props: Props) => {
+  const { t } = useTranslation('common');
+
   const user = useSelector((state: any) => state.user);
   const [marketplaceCards, setMarketplaceCards] = useState([] as Marketplace[]);
   const [create, setCreate] = useState(false);
@@ -123,13 +126,13 @@ const MarketplaceView = (props: Props) => {
           sx={{ ml: "auto", alignSelf: "center", fontWeight: 600, mb: 2 }}
           onClick={() => setCreate(true)}
         >
-          Create Post
+          {t("create_post")}
         </Button>
       )}
       {marketplaceCards.length === 0 && (
         <Box>
           <Typography sx={{ m: 4, ml: 1 }} fontSize="lg" fontWeight="lg">
-            No Posts Yet
+          {t("no_posts")}
           </Typography>
         </Box>
       )}
@@ -152,7 +155,7 @@ const MarketplaceView = (props: Props) => {
         }}
         onOpen={() => setCreate(true)}
       >
-        <Modal.Header>Create Listing</Modal.Header>
+        <Modal.Header>  {t("create_listing")}</Modal.Header>
         <Modal.Content scrolling>
           <Form>
             <Form.Input
