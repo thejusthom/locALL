@@ -21,7 +21,7 @@ const FeedShareSchema = new Schema ({
     },
     image: {
         type: String,
-        // required: true
+        required: true
     },
     organizer: {
         type: String,
