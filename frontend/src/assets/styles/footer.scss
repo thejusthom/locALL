@@ -32,50 +32,49 @@
 }
 
 .footer-left {
-    max-width: 700px;
+    max-width: 550px;
     float: left;
-    margin-left: 1em;
 }
 
 .footer__addr {
-    margin-right: 1.25em;
-    margin-bottom: 2em;
+    text-align: center;
   }
 
-  .footer-right{
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    flex-wrap: wrap;
-    flex-direction: column;
-    margin-left: 22em;
-    float: right;
-  }
+.footer-right{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  flex-direction: column;
+  margin-left: 30em;
+  margin-top: -1em;
+  float: right;
+}
 
-  .footer__btn {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    height: 36px;
-    max-width: max-content;
-    background-color: rgba(255, 255, 255, 0.188);
-    border-radius: 100px;
-    color: #ffffff;
-    line-height: 0;
-    margin: 0.6em 0;
-    font-size: 1rem;
-    padding: 0 1.3em;
-    &:hover {
-        background-color: rgba(255, 255, 255, 0.3);
-        color: #ffffff
-    }
+.footer__btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 36px;
+  max-width: max-content;
+  background-color: rgba(255, 255, 255, 0.188);
+  border-radius: 100px;
+  color: #ffffff;
+  line-height: 0;
+  margin: 0.4em 0 0 41%;
+  font-size: 1rem;
+  padding: 0 1.3em;
+  &:hover {
+      background-color: rgba(255, 255, 255, 0.3);
+      color: #ffffff
   }
+}
 
-  address {
-    font-style: normal;
-    color: #ffffff;
-  }
-  
+address {
+  font-style: normal;
+  color: #ffffff;
+}
+
 .social-icon,
 .menuu {
   position: relative;
@@ -124,7 +123,6 @@
   font-weight: 300;
 }
 
-
 @keyframes animateWaves {
   0% {
     background-position-x: 1000px;
@@ -140,5 +138,24 @@
   }
   100% {
     background-positon-x: 0px;
+  }
+}
+
+// Responsive Styles
+@media (max-width: 768px) {
+  .footer {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 20px;
+  }
+
+  .footer-left {
+    margin-left: 0;
+    margin-bottom: 1em;
+  }
+
+  .footer-right {
+    margin-left: 0;
+    margin-top: 1em;
   }
 }
