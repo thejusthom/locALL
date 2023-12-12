@@ -191,6 +191,36 @@ console.log(data);
     );
 };
 
-
+const MetricsWrap = styled.article`
+.tooltip-wrap{
+    background-color: white;
+    padding: 20px;
+    border-radius: 5px;
+    p{
+      align-items: center;
+    }
+}
+`;
+const ChartWrap = styled.section`
+/* background-color: white; */
+width: 700px;
+/* &:hover{
+  width: 710px;
+} */
+display: flex;
+border-radius: 5px;
+    align-items: center;
+    border: solid 1px lightgrey;
+    box-shadow: 0px 0px 10px 1px #b4b1b1;
+`;
+const DivWrap = styled.div`
+display: flex;
+justify-content: space-between;
+margin-top: 40px;
+`;
+const InnerWrap = styled.div`
+width: 100%;
+text-align: -webkit-center;
+`;
 
 export default DonationMetrics;
