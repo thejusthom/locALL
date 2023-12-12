@@ -3,8 +3,11 @@ import React, { MouseEvent } from "react";
 import { Menu, Segment, MenuItemProps } from "semantic-ui-react";
 import MarketplaceView from "./MarketplaceView";
 import { useSelector } from "react-redux";
+import { useTranslation } from "react-i18next";
 
 const MarketplaceNav = () => {
+  const { t } = useTranslation('common');
+
   const [active, setActive] = React.useState("all-items");
   const user = useSelector((state: any) => state.user);
   const handleItemClick = (
@@ -15,13 +18,13 @@ const MarketplaceNav = () => {
     <Box sx={{ m: 4, pl: { md: 5, xs: 2 }, pr: { md: 5, xs: 2 } }}>
       <Menu attached="top" tabular>
         <Menu.Item
-          name="all-items"
+          name={t("all_items")}
           active={active === "all-items"}
           onClick={handleItemClick}
         />
         {user.isLoggedIn && (
           <Menu.Item
-            name="my-items"
+            name={t("my_items")}
             active={active === "my-items"}
             onClick={handleItemClick}
           />

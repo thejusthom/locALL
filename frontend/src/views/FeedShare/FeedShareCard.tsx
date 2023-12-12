@@ -12,6 +12,8 @@ import moment from "moment";
 import { SearchBox } from '@mapbox/search-js-react';
 import { useSelector } from "react-redux";
 import { ToastContainer, toast } from "react-toastify";
+import { useTranslation } from "react-i18next";
+import { Avatar } from "@mui/material";
 
 type Props = {
     feedShare: FeedShare;
@@ -20,7 +22,7 @@ type Props = {
 }
 
 const FeedShareCard = (props: Props): React.ReactElement => {
-
+    const { t } = useTranslation('common');
     const handleSubmit = () => {
         props.feedShare.comments.push({ author: user?.user?.person?.firstName, metaData: moment().format("MMMM Do YYYY, h:mm:ss a")
         , text: text, avatar: "Profile Pic" });
@@ -198,12 +200,12 @@ const FeedShareCard = (props: Props): React.ReactElement => {
                 </div>
                 <div className="description">
                     <h1>{props.feedShare.foodType}</h1>
-                    {props.type==="my" && <img src={EditIcon} width={25} height={25} onClick={() => setEditFormOpen(true)} />}
+                {props.type==="my" && <img src={EditIcon} width={25} height={25} onClick={() => setEditFormOpen(true)} />}
                     {props.type==="my" && <img src={DeleteIcon} width={25} height={25} onClick={() => setIsDeleteModalOpen(true)} /> }
                     <h2>{props.feedShare.address}</h2>
                     <p>{props.feedShare.organizer}</p>
                     <p className="read-more">
-                        <button onClick={() => setOpen(true)}>Read More</button>
+                        <button onClick={() => setOpen(true)}>{t('read_more')}</button>
                     </p>
                 </div>
             </div>
@@ -246,25 +248,38 @@ const FeedShareCard = (props: Props): React.ReactElement => {
                             <Header as="h3" dividing>
                                 Comments
                             </Header>
-                            {props.feedShare.comments.map((comment) => (
-                                <Comment>
-                                    <Comment.Avatar src={`data:image/png;base64,${comment.avatar}`} />
-                                    <Comment.Content>
-                                        <Comment.Author as='span'>{comment.author}</Comment.Author>
-                                        <Comment.Metadata>
-                                            <div>{comment.metaData}</div>
-                                        </Comment.Metadata>
-                                        <Comment.Text>{comment.text}</Comment.Text>
-                                    </Comment.Content>
-                                </Comment>))}
+                            {props.feedShare.comments.map((comment, index) => (
+                                <Comment key={String(index)}>
+                                {comment.avatar ? (
+                                  <Avatar
+                                    alt={comment?.author?.toUpperCase()}
+                                    src={comment.avatar}
+                                    sx={{ float: "left", mr: 1 }}
+                                  />
+                                ) : (
+                                  <Avatar
+                                    alt={comment?.author?.charAt(0).toUpperCase()}
+                                    src="/broken-image.jpg"
+                                    sx={{ float: "left", mr: 1 }}
+                                  />                                  
+                                )}
+                                <Comment.Content>
+                                  <Comment.Author as="span">{comment.author}</Comment.Author>
+                                  <Comment.Metadata>
+                                    <div>{comment.metaData}</div>
+                                  </Comment.Metadata>
+                                  <Comment.Text>{comment.text}</Comment.Text>
+                                </Comment.Content>
+                              </Comment>
+                            ))}
 
-                            <Form onSubmit={handleSubmit}>
+                            {user.isLoggedIn && (<Form onSubmit={handleSubmit}>
                                 <Form.TextArea placeholder='Write your comments here'
                                     name='text' value={text}
                                     onChange={handleChange}
                                 />
                                 <Button type="submit">Post</Button>
-                            </Form>
+                            </Form>)}
                         </Comment.Group>
                     </Modal.Description>
                 </Modal.Content>
@@ -337,7 +352,14 @@ const FeedShareCard = (props: Props): React.ReactElement => {
                         color="success"
                         aria-label="Explore Bahamas Islands"
                         sx={{ float: "right", ml: 2, mr: 3, mb: 1, fontWeight: 600 }}
-                        type="submit" onClick={updateFeedShare}>Update</Button>
+                        type="submit" 
+                        disabled={
+                            !inputData.foodType ||
+                            !inputData.servings ||
+                            !inputData.organizer ||
+                            !inputData.image ||
+                            !selectedLocation}
+                        onClick={updateFeedShare}>Update</Button>
                     <Button
                         variant="solid"
                         size="md"

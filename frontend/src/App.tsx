@@ -1,6 +1,7 @@
 import React from 'react';
 import './App.css';
 import Routes from './routes';
+import { withTranslation } from 'react-i18next';
 import 'slick-carousel/slick/slick.css'
 import 'react-toastify/dist/ReactToastify.css';
 
@@ -10,4 +11,4 @@ function App() {
   );
 }
 
-export default App;
+export default withTranslation()(App);

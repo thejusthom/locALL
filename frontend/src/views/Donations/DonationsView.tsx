@@ -16,6 +16,7 @@ import MyDonations from "./_MyDonations";
 import NoDataScreen from "../../common/_NoDataScreen";
 import Loading from "../../common/_Loader";
 import DonationMetrics from "./_DonationMetrics";
+import { useTranslation } from "react-i18next";
 
 const initialDonationState = {
     donationName: "",
@@ -32,6 +33,9 @@ const initialDonationState = {
 }
 
 const DonationsView = () => {
+
+    const { t } = useTranslation('common');
+
     const [donations, setDonations] = React.useState<IDonation[]>();
     const [showModal, setShowModal] = React.useState(false);
     const [showAmountPopup, setShowAmountPopup] = React.useState(false);
@@ -268,11 +272,11 @@ React.useEffect(() => {
         </Form>
     </FormWrap>
   </Modal>
-        <Button onClick={() => setShowModal(true)}>Create New Donation</Button>
+  {!!user?.user?._id && <Button onClick={() => setShowModal(true)}>{t('create_donation')}</Button>}
         <Tabs sx={{margin: "15px 0 0 0", "& button": {color: "#123abc"}, "& button.Mui-selected": {color: "#123abc"}}} value={tab} onChange={handleTabChange} aria-label="basic tabs example"   TabIndicatorProps={{sx:{backgroundColor: "#123abc"}}}>
-          <Tab sx={{fontSize: "16px", fontWeight: "bold"}} label="All Donations" {...a11yProps(0)} />
-          {!!user?.user?._id && <Tab sx={{fontSize: "16px", fontWeight: "bold"}} label="My Donations" {...a11yProps(1)} />}
-          <Tab sx={{fontSize: "16px", fontWeight: "bold"}} label="Donation Metrics" {...a11yProps(2)} />
+          <Tab sx={{fontSize: "16px", fontWeight: "bold"}} label={t('all_donations')} {...a11yProps(0)} />
+          {!!user?.user?._id && <Tab sx={{fontSize: "16px", fontWeight: "bold"}} label={t('my_donations')} {...a11yProps(1)} />}
+          <Tab sx={{fontSize: "16px", fontWeight: "bold"}} label={t('donation_metrics')} {...a11yProps(2)} />
         </Tabs>
         {tab === 0 ? !!donations?.length ? 
         (<DonationCardsWrap>
@@ -287,7 +291,7 @@ React.useEffect(() => {
 }
 
 const DonationsWrap = styled.div`
-margin: 25px;
+margin: 10px 25px 25px 25px;
 `;
 const Form = styled(BaseForm)`
 height: 235px;

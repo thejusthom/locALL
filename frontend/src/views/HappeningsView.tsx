@@ -11,8 +11,11 @@ import TabPanel from "@mui/lab/TabPanel";
 import { Link } from "react-router-dom";
 import Button from '@mui/material/Button';
 import NoDataScreen from '../common/_NoDataScreen';
+import { useTranslation } from "react-i18next";
 
 const HappeningsView: React.FC = () =>{
+  const { t } = useTranslation('common');
+
   const [allHappenings, setAllHappenings] = useState([] as Happenings[]);
   const [myHappenings, setMyHappenings] = useState([] as Happenings[]);
   const locationId = useSelector((state: any) => state.location.pincode);
@@ -74,8 +77,8 @@ const HappeningsView: React.FC = () =>{
         onChange={(_, newValue) => setTab(newValue)}
         aria-label="happenings tabs"
       >
-        <Tab label="All Happenings" value="0" {...a11yProps(0)} />
-        {currentUser.isLoggedIn && <Tab label="My Happenings" value="1" {...a11yProps(1)} />}
+        <Tab label={t("all_happenings")} value="0" {...a11yProps(0)} />
+        {currentUser.isLoggedIn && <Tab label={t("my_happenings")} value="1" {...a11yProps(1)} />}
       </TabList>
       <TabPanel value="0">
         {allHappenings.length === 0 ? (
@@ -88,7 +91,7 @@ const HappeningsView: React.FC = () =>{
         <TabPanel value="1">
           <Link to={'/happenings/createPost'} className="link" >
             <Button sx={{ mt: 5, ml : 7, mb : 3, mr: 8, width: 193}}  variant="contained">
-              Create New Happening
+              {t("create_happening")}
             </Button>
           </Link>
           {myHappenings.length === 0 ? (
