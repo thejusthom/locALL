@@ -10,6 +10,8 @@ import MenuIcon from "@mui/icons-material/Menu";
 import Container from "@mui/material/Container";
 import Button from "@mui/material/Button";
 import MenuItem from "@mui/material/MenuItem";
+import Switch from "@mui/material/Switch";
+import Grid from "@mui/material/Grid";
 import LocationBar from "../_LocationBar";
 import Footer from "../footer/footer";
 import { useEffect, useState } from "react";
@@ -39,9 +41,20 @@ function HomeLayout() {
   const dispatch = useDispatch();
   const [open, setOpen] = useState(false);
   const [openMenu, setOpenMenu] = useState(false);
+  const [language, setLanguage] = React.useState({
+    checked: true
+  });
   const anchorRef = React.useRef<HTMLButtonElement>(null);
   const navigate = useNavigate();
 
+  React.useEffect(() => {
+    if(language.checked){
+      i18n.changeLanguage('en');
+    }
+    else{
+      i18n.changeLanguage('ta');
+    }
+  }, [language])
   const { t } = useTranslation('common');
 
   const pages = [
@@ -102,6 +115,10 @@ function HomeLayout() {
 
   const handleToggle = () => {
     setOpenMenu((prevOpen) => !prevOpen);
+  };
+
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement>, checked: boolean) => {
+    setLanguage({ ...language, [event.target.value]: checked });
   };
 
   const prevOpen = React.useRef(openMenu);
@@ -330,6 +347,17 @@ function HomeLayout() {
         <Box sx={{ minHeight: "100vh" }}>
         <button onClick={() => changeLanguage('ta')}>ta</button>
       <button onClick={() => changeLanguage('en')}>en</button>
+      <Grid component="label" container alignItems="center" spacing={1}>
+      <Grid item>Tamil</Grid>
+      <Grid item>
+        <Switch
+          checked={language.checked} // relevant state for your case
+          onChange={handleChange} // relevant method to handle your change
+          value="checked" // some value you need
+        />
+      </Grid>
+      <Grid item>English</Grid>
+</Grid>
           <Outlet />
         </Box>
       </Box>
