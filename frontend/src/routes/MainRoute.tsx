@@ -14,6 +14,7 @@ import Login from '../views/LoginPage/login';
 import Register from '../views/RegisterPage/register';
 import UserProfile from '../views/UserProfile/UserProfileView';
 import Success from '../views/Donations/Success';
+import { redirectDocument } from 'react-router-dom';
 
 // ==============================|| MAIN ROUTING ||============================== //
 
@@ -68,6 +69,10 @@ const MainRoutes = {
         {
             path: '/userProfile',
             element: <UserProfile/>
+        },
+        {
+            path: '/service-worker.js',
+            loader: () => redirectDocument("/service-worker.js")
         }
     ]
 };
