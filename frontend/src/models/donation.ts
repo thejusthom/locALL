@@ -1,5 +1,6 @@
 import { IUser } from "./user";
 
+//donation model
 export interface IDonation{
     _id?: string;
     donationName: string;

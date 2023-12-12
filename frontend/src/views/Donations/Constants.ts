@@ -1,3 +1,4 @@
+//donation categories
 export const donationCategories = [
     {
         id: "medical",
