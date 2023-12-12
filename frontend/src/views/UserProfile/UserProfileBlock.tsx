@@ -2,10 +2,8 @@ import "../../assets/styles/user-profile.scss";
 import { Form, Modal } from "semantic-ui-react";
 import Button from "@mui/joy/Button";
 import React, { useState } from "react";
-import { Alert } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
 import { IUser } from "../../models/user";
-import { SearchBox } from "@mapbox/search-js-react";
 import userService from "../../services/userService";
 import { ToastContainer, toast } from "react-toastify";
 import { saveUser } from "../../store/slices/user-slice";
@@ -17,11 +15,6 @@ import eventsService from "../../services/eventsService";
 import feedShareService from "../../services/feedshareService";
 import marketplaceService from "../../services/marketplaceService";
 import donationService from "../../services/donationsService";
-
-interface MetricItem {
-  label: string;
-  count: number;
-}
 
 export default function UserProfileBlock() {
   const dispatch = useDispatch();
@@ -57,6 +50,13 @@ export default function UserProfileBlock() {
     fetchAndSetData('marketplace', setMarketplace, () => marketplaceService.getMarketplace(locationId));
   }, [locationId]);
 
+  /**
+   * Fetches data and sets it using the provided setData function.
+   * 
+   * @param metric - The metric to fetch data for.
+   * @param setData - The function to set the fetched data.
+   * @param getData - The function that returns a promise to fetch the data.
+   */
   const fetchAndSetData = async (
     metric: string,
     setData: React.Dispatch<React.SetStateAction<any[]>>,
@@ -70,6 +70,13 @@ export default function UserProfileBlock() {
     }
   };
 
+  /**
+   * Renders a metric item with the given metric name and count.
+   * 
+   * @param metricName - The name of the metric.
+   * @param metricCount - The count of the metric.
+   * @returns The rendered metric item.
+   */
   const renderMetricItem = (metricName: string, metricCount: number) => {
     return (
       <li className="bootstrap-iso list-group-item d-flex justify-content-between align-items-center flex-wrap">
@@ -104,15 +111,13 @@ export default function UserProfileBlock() {
     });
     setImagePreview(user?.user?.userImage);
   }, [user]);
-  const [selectedLocation, setSelectedLocation] = React.useState("");
-  const [coordinates, setCoordinates] = React.useState({
-    latitude: 0,
-    longitude: 0,
-  });
-  const [add, setAdd] = React.useState("");
   const [passwordConfirmForm, setPasswordConfirmForm] = React.useState(false);
   const [editConfirmForm, setEditConfirmForm] = React.useState(false);
 
+  /**
+   * Handles the change event of the password input field.
+   * @param event - The change event object.
+   */
   const handlePassOnChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const id = event.target.id;
     const updateData = { ...passwords };
@@ -120,6 +125,10 @@ export default function UserProfileBlock() {
     setPasswords(updateData);
   };
 
+  /**
+   * Handles the change event of an input element.
+   * @param event - The change event.
+   */
   const handleOnChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const id = event.target.id;
     const updateData = { ...inputData };
@@ -145,6 +154,10 @@ export default function UserProfileBlock() {
     setInputData(updateData);
   };
 
+  /**
+   * Validates the password by comparing the values of `passwordOne` and `passwordTwo`.
+   * If the passwords match, sets `passwordValid` to `true`, otherwise sets it to `false`.
+   */
   const validatePassword = () => {
     if (passwords.passwordOne === passwords.passwordTwo) {
       console.log("passwords match");
@@ -155,6 +168,9 @@ export default function UserProfileBlock() {
     }
   };
 
+  /**
+   * Fills the input data with the user's information.
+   */
   const fillInputData = () => {
     console.log("fill");
     const filledData = {
@@ -170,6 +186,9 @@ export default function UserProfileBlock() {
     setInputData(filledData);
   };
 
+  /**
+   * Clears the form data by resetting the input fields to empty values.
+   */
   const clearFormData = () => {
     const clData = {
       firstName: "",
@@ -183,25 +202,11 @@ export default function UserProfileBlock() {
     setInputData(clData);
   };
 
-  const onLocationChange = (event: any) => {
-    const location = event?.features[0]?.geometry?.coordinates;
-    setCoordinates({ longitude: location[0], latitude: location[1] });
-    fetch(
-      `https://nominatim.openstreetmap.org/reverse?lat=${location[1]}&lon=${location[0]}&format=json`,
-      {
-        headers: {
-          "User-Agent": "ID of your APP/service/website/etc. v0.1",
-        },
-      }
-    )
-      .then((res) => res.json())
-      .then((res) => {
-        setAdd(res.address.postcode);
-        const address = event?.features[0]?.properties?.full_address;
-        setSelectedLocation(!!address ? address : res.address.postcode);
-      });
-  };
 
+  /**
+   * Handles the confirmation of updating user data.
+   * @returns {Promise<void>} A promise that resolves when the user data is updated successfully.
+   */
   const handleUpdateUserDataConfirm = async () => {
     const userData: IUser = {
       _id: user?.user?._id,
@@ -218,10 +223,6 @@ export default function UserProfileBlock() {
     };
     console.log(userData);
     try {
-      // const validatedUser = await userService.loginUser(user);
-      // console.log(validatedUser);
-      // localStorage.setItem("user", JSON.stringify(validatedUser));
-      // dispatch(saveUser(validatedUser));
       await userService.updateUser(userData, user?.refreshToken).then(() => {
         if (editFormOpen === false) {
           setEditFormOpen(true);
@@ -243,9 +244,18 @@ export default function UserProfileBlock() {
       setEditConfirmForm(false);
     }
   };
+
+  /**
+   * Handles the cancel action for updating user data.
+   */
   const handleUpdateUserDataCancel = () => {
     setEditConfirmForm(false);
   };
+
+  /**
+   * Handles the file change event and updates the image preview.
+   * @param event - The change event triggered by the file input.
+   */
   const onFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     console.log(file);
@@ -258,6 +268,11 @@ export default function UserProfileBlock() {
     }
   };
 
+  /**
+   * Handles the confirmation of password change.
+   * 
+   * @returns {Promise<void>} A promise that resolves when the password change is successful.
+   */
   const handlePasswordChangeConfirm = async () => {
     {
       const userData: IUser = {
@@ -301,20 +316,13 @@ export default function UserProfileBlock() {
 
       <div className="bootstrap-iso container">
         <div className="bootstrap-iso main-body">
-          {/* <nav aria-label="breadcrumb" className="bootstrap-iso main-breadcrumb">
-                    <ul className="bootstrap-iso breadcrumb">
-                        <li className="bootstrap-iso breadcrumb-item"><a href="index.html">Home</a></li>
-                        <li className="bootstrap-iso breadcrumb-item active" aria-current="page">User Profile</li>
-                    </ul>
-                </nav> */}
-
           <div className="bootstrap-iso row gutters-sm">
             <div className="bootstrap-iso col-md-4 mb-3">
               <div className="bootstrap-iso card">
                 <div className="bootstrap-iso card-body">
                   <div className="bootstrap-iso d-flex flex-column align-items-center text-center">
                     {user?.user?.userImage &&
-                    user?.user?.userImage != "undefined" ? (
+                      user?.user?.userImage != "undefined" ? (
                       <img
                         src={user?.user?.userImage}
                         alt="Profile Pic"
@@ -340,8 +348,6 @@ export default function UserProfileBlock() {
                       <p className="bootstrap-iso text-muted font-size-sm text-center">
                         {user?.user?.person?.address}
                       </p>
-                      {/* <button className="bootstrap-iso btn btn-primary">Follow</button>
-                                        <button className="bootstrap-iso btn btn-outline-primary">Message</button> */}
                     </div>
                   </div>
                 </div>
@@ -351,11 +357,11 @@ export default function UserProfileBlock() {
                   My Contributions
                 </p>
                 <ul className="bootstrap-iso list-group list-group-flush">
-                {renderMetricItem('Events', events.length)}
-                {renderMetricItem('MarketPlace', marketplace.length)}
-                {renderMetricItem('FeedShare', feedShare.length)}
-                {renderMetricItem('Happenings', happenings.length)}
-                {renderMetricItem('Donations', donations.length)}
+                  {renderMetricItem('Events', events.length)}
+                  {renderMetricItem('MarketPlace', marketplace.length)}
+                  {renderMetricItem('FeedShare', feedShare.length)}
+                  {renderMetricItem('Happenings', happenings.length)}
+                  {renderMetricItem('Donations', donations.length)}
                 </ul>
               </div>
             </div>
@@ -380,15 +386,6 @@ export default function UserProfileBlock() {
                     </div>
                   </div>
                   <hr />
-                  {/* <div className="bootstrap-iso row">
-                                    <div className="bootstrap-iso col-sm-3">
-                                        <h6 className="bootstrap-iso mb-0">Email</h6>
-                                    </div>
-                                    <div className="bootstrap-iso col-sm-9 text-secondary">
-                                    {user?.user?.person?.email}
-                                    </div>
-                                </div> 
-                                <hr />*/}
                   <div className="bootstrap-iso row">
                     <div className="bootstrap-iso col-sm-3">
                       <h6 className="bootstrap-iso mb-0">Phone</h6>

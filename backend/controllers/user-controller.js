@@ -7,7 +7,6 @@ export const get = async (request, response) => {
     const accessToken = request.headers.authorization.split(" ")[1];
     userService.verifyAccessToken(accessToken);
     const users = await userService.getAll();
-    console.log(users);
     setResponse(users, response, 200);
   } catch (err) {
     if (err.message === "JWT token expired") {
@@ -80,8 +79,6 @@ export const update = async (request, response) => {
   try {
     const accessToken = request.headers.authorization.split(" ")[1];
     const requestingUser = userService.verifyAccessToken(accessToken);
-    console.log(requestingUser);
-    console.log(request.params.id);
     if (requestingUser.id !== request.params.id) {
       throw new Error("You are not authorized to update this user");
     }
@@ -111,8 +108,6 @@ export const remove = async (request, response) => {
   try {
     const accessToken = request.headers.authorization.split(" ")[1];
     const requestingUser = userService.verifyAccessToken(accessToken);
-    console.log(requestingUser);
-    console.log(request.params.id);
     if (requestingUser.id !== request.params.id) {
       throw new Error("You are not authorized to delete this user");
     }
@@ -128,7 +123,6 @@ export const remove = async (request, response) => {
     } else if (err.message === "JWT token expired") {
       response.status(401).json({ error: "JWT token expired" });
     } else {
-      console.log(err);
       setErrorResponse(err, response);
     }
   }

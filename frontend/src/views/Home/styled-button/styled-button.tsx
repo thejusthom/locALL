@@ -1,9 +1,12 @@
-import React, { FC, ReactNode } from 'react'
+// Import from react
+import { FC, ReactNode } from 'react'
+// Imports from mui
 import Box from '@mui/material/Box'
 import { Theme } from '@mui/material'
 import { styled } from '@mui/material/styles'
 import { ButtonProps } from '@mui/material/Button'
 
+// Model given to StyledButton
 interface BaseButtonProps extends Pick<ButtonProps, 'onClick' | 'type' | 'startIcon' | 'endIcon'> {
   variant?: 'contained' | 'outlined' | 'text'
   color?: 'default' | 'primary' | 'secondary' | 'dark' | 'light'
@@ -14,6 +17,7 @@ interface StyledButtonRootProps extends BaseButtonProps {
   theme?: Theme
 }
 
+// StyledButtonRoot styling based on props
 const StyledButtonRoot = styled('button', {
   shouldForwardProp: (prop) =>
     prop !== 'variant' && prop !== 'color' && prop !== 'size' && prop !== 'disableHoverEffect',
@@ -156,6 +160,7 @@ interface Props extends BaseButtonProps {
   children: ReactNode
 }
 
+// StyledButton component
 const StyledButton: FC<Props> = (props: Props) => {
   const { children, onClick, disableHoverEffect, startIcon, endIcon, ...rest } = props
   return (

@@ -19,7 +19,6 @@ const initialState = {
  * CreatePost component.
  */
 const CreatePost: React.FC = () => {
-  const [user, setUser] = useState({} as IUser);
   const locationId = useSelector((state: any) => state.location.pincode);
   const currentUser = useSelector((state: any) => state.user);
   const [newHappening, setNewHappening] = useState<Happenings>(initialState);

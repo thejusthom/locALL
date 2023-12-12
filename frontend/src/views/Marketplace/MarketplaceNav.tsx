@@ -1,15 +1,24 @@
-import { Box } from "@mui/material";
+// Imports from react
 import React, { MouseEvent } from "react";
-import { Menu, Segment, MenuItemProps } from "semantic-ui-react";
-import MarketplaceView from "./MarketplaceView";
 import { useSelector } from "react-redux";
 import { useTranslation } from "react-i18next";
+// Imports from mui
+import { Box } from "@mui/material";
+// Imports from semantic ui
+import { Menu, Segment, MenuItemProps } from "semantic-ui-react";
+// Imports from project files
+import MarketplaceView from "./MarketplaceView";
 
+// Navigation for Marketplace
 const MarketplaceNav = () => {
-  const { t } = useTranslation('common');
+  // Translation
+  const { t } = useTranslation("common");
 
+  // State of active
   const [active, setActive] = React.useState("all-items");
+  // Get user from redux store
   const user = useSelector((state: any) => state.user);
+  // Handle item click and setting active accordingly
   const handleItemClick = (
     e: MouseEvent<HTMLAnchorElement>,
     menu: MenuItemProps
