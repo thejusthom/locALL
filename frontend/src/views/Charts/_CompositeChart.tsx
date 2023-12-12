@@ -10,6 +10,7 @@ import {
     Legend
 } from "recharts";
 
+//composite chart props
 interface ICompositeChartProps{
 compositeChartData: any[];
 dataKey: string;
@@ -19,11 +20,13 @@ line1Key: string;
 line2Key: string;
 }
 
+//composite chart common component
 const CompositeChartComp = (props: ICompositeChartProps) => {
     const { compositeChartData, dataKey, areaKey, barKey, line1Key, line2Key } = props;
+    //custom tooltip to accommodate all data
     const CustomTooltip = ({ active, payload, label }: any) => {
-        console.log(payload, label)
         if (active && payload && payload.length) {
+            //dot before the label
             const Circle = (props: {fill: string}) => {
     return(<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 15 15" width="15" height="15">
     <circle cx="7.5" cy="7.5" r="3" fill={props.fill} />
@@ -32,7 +35,6 @@ const CompositeChartComp = (props: ICompositeChartProps) => {
           return (
             <div className="tooltip-wrap">
               <p className="label">{label}</p>
-              {/* <p className="intro">{getIntroOfPage(label)}</p> */}
               <p><span><Circle fill="#123abc" /></span>Amount Required: {payload[0].payload.amountRequired}</p>
               <p><span><Circle fill="#1976d2" /></span>Amount Achieved: {payload[0].payload.amountAchieved}</p>
               <p><span><Circle fill="#38d200" /></span>Below 50 Age: {payload[0].payload.below50}</p>
@@ -42,7 +44,7 @@ const CompositeChartComp = (props: ICompositeChartProps) => {
         }
         else return null;
     }
-    
+
     return(
         <ComposedChart
         width={1000}
@@ -55,9 +57,9 @@ const CompositeChartComp = (props: ICompositeChartProps) => {
           left: 20,
         }}
       >
-        {/* <CartesianGrid stroke="#f5f5f5" /> */}
         <XAxis dataKey={dataKey} scale="band" />
         <YAxis />
+        {/* custom tooltip */}
         <Tooltip content={<CustomTooltip />} />
         <Legend />
         <Area type="monotone" dataKey={areaKey} fill="#9fbddd" stroke="#1976d2" />

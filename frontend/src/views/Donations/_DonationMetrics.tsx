@@ -12,7 +12,7 @@ donation: IDonation[];
 }
 
 const DonationMetrics = (props: IDonationMetrics) => {
-  
+//pie chart data initial
 const data01: any = {
   "school": {
     "name": "School",
@@ -41,6 +41,7 @@ const data01: any = {
   }
 };
 
+//composite chart data inital
 const data: any = {
   "school": {
     name: 'School',
@@ -78,26 +79,35 @@ const data: any = {
     above50: 0,
   },
 };
-
+//donations
   const donations = [...props.donation];
+  //pie chart data after data manipulation
   donations?.forEach((d) => data01[d.category].value += 1);
   const pieChartData: IPieData[] = Object.values(data01);
+
+   //composite chart data after data manipulation
 donations?.forEach((d) => {
+  //amountRequired
   data[d.category].amountRequired += d.amountRequired;
+  //amountAchieved
   if(!!d.amountAchieved){
     data[d.category].amountAchieved += d.amountAchieved;
   }
+  // below 50 and above 50 data
  data[d.category][ d.receiver.age < 50 ? "below50" : "above50"] += d.amountRequired
 });
 const compositeChartData = Object.values(data);
+
     return(
         <MetricsWrap>
+          {/* pie chart comp */}
           <DivWrap>
           <ChartWrap>
           <InnerWrap>
       <PieChartComp pieChartData={pieChartData} dataKey="value" nameKey="name" />
       </InnerWrap>
       </ChartWrap>
+      {/* bar chart comp */}
       <ChartWrap>
         <InnerWrap>
         <BarChartstackedComp barChartData={compositeChartData} bar1Key="amountRequired" bar2Key="amountAchieved" yAxisKey="name" layout="vertical" />
@@ -105,21 +115,24 @@ const compositeChartData = Object.values(data);
         </ChartWrap>
         </DivWrap>
         <DivWrap>
+          {/* radar chart comp */}
           <ChartWrap>
           <InnerWrap>
 <RadarChartComp radarChartData={compositeChartData} dataKey="name" radar1Name="Below 50" radar1Key="below50" radar2Name="Above 50" radar2Key="above50" />
 </InnerWrap>
         </ChartWrap>
+        {/* area chart comp */}
         <ChartWrap>
           <InnerWrap>
 <AreaChartComp areaChartData={compositeChartData} dataKey="name" area1Key="amountRequired" area2Key="amountAchieved" />
 </InnerWrap>
         </ChartWrap>
         </DivWrap>
+        {/* composite chart comp */}
         <DivWrap>
           <ChartWrap style={{width: "100%"}}>
           <InnerWrap>
-        <CompositeChartComp compositeChartData={compositeChartData} dataKey="name" areaKey="amountAchieved" barKey="AmountRequired" line1Key="below50" line2Key="above50" />
+        <CompositeChartComp compositeChartData={compositeChartData} dataKey="name" areaKey="amountAchieved" barKey="amountRequired" line1Key="below50" line2Key="above50" />
         </InnerWrap>
         </ChartWrap>
         </DivWrap>
@@ -127,6 +140,7 @@ const compositeChartData = Object.values(data);
     );
 };
 
+//styling
 const MetricsWrap = styled.article`
 .tooltip-wrap{
     background-color: white;
@@ -139,9 +153,6 @@ const MetricsWrap = styled.article`
 `;
 const ChartWrap = styled.section`
 width: 700px;
-/* &:hover{
-  width: 710px;
-} */
 display: flex;
 border-radius: 5px;
     align-items: center;

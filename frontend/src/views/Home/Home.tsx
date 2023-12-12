@@ -1,7 +1,7 @@
 import TopHome from "./TopHome";
 import SecondSection from "./SecondSection";
 import HomeItemCards from "./HomeItemCards";
-import WeatherView from "../Weather/WeatherView";
+import WeatherView from "../Weather/WeatherViewComp";
 
 // Main Home page
 const Home = () => {

@@ -102,16 +102,16 @@ const renderEventsByTab = () => {
                     container: mapContainer.current,
                     style: 'mapbox://styles/mapbox/streets-v12',
                     center: [location?.longitude, location?.latitude],
-                    zoom: 13.5
+                    zoom: 14.5
                     });
                 }
     React.useEffect(() => {
-    if (mapContainer.current && !!location?.latitude) {
+if (mapContainer.current && !!location?.latitude) {
         map.current = new mapboxgl.Map({
             container: mapContainer.current,
             style: 'mapbox://styles/mapbox/streets-v12',
             center: [location?.longitude, location?.latitude],
-            zoom: 13.5
+            zoom: 14.5
             });
         
     const url = `https://nominatim.openstreetmap.org/reverse?format=json&lat=${location.latitude}&lon=${location.longitude}`;
@@ -249,7 +249,7 @@ const onSubmit = async(event: any) => {
     const start = startDate?.toLocaleDateString() || "";
     const end = endDate?.toLocaleDateString() || "";
     try{ 
-        await eventsService.createEvent(add, {...newEvent, address: {...coordinates}, startDate: start, endDate: end, createdUser: "6573fcd148338641e52772f3", organiser}).then((event)=> {
+        await eventsService.createEvent(add, {...newEvent, address: {...coordinates}, startDate: start, endDate: end, createdUser: user.user._id, organiser}).then((event)=> {
         !!events ? setEvents([...events, event]) : setEvents([event]);
         setShowLoader(false);
         toast.success("Event Created Successfully!");
@@ -281,7 +281,8 @@ const onEdit = (eventId: string) => {
         setShowLoader(false);
     });
 };
-const onDelete = async(eventId: string) => {
+const onDelete = async(eventId: string, event: any) => {
+    event.preventDefault();
     setShowLoader(true);
     try{ 
         await eventsService.deleteEvent(loc.pincode, eventId).then((event)=> {
@@ -294,7 +295,8 @@ const onDelete = async(eventId: string) => {
         toast.error("Error occured while deleting event!");
         }
 };
-const onUpdate = async() => {
+const onUpdate = async(event: any) => {
+    event.preventDefault();
     setShowLoader(true);
     const start = startDate?.toLocaleDateString() || "";
     const end = endDate?.toLocaleDateString() || "";

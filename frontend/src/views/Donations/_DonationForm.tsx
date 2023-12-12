@@ -3,6 +3,7 @@ import { InputWrap, MandatoryStar } from "../Events/_FormFields";
 import { donationCategories } from "./Constants";
 import { IDonation } from "../../models/donation";
 
+//donation form props
 interface IDonationForm{
     isEdit: boolean;
 newDonation: IDonation;
@@ -14,7 +15,9 @@ onAmountChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
 onImageChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
+//donation form component
 const DonationForm = (props: IDonationForm) => {
+  //props
     const { 
         newDonation,
         onNameChange,

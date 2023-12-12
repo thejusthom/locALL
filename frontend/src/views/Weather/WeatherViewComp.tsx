@@ -6,7 +6,9 @@ import { ToastContainer } from "react-toastify";
 import { Box } from "@mui/system";
 import Typography from "@mui/material/Typography";
 
+//weather view comp
 const WeatherView = () => {
+  //open weather api key
   const apiKey = process.env.REACT_APP_OPEN_WEATHER_API_KEY;
   var ad = {
     coord: {
@@ -53,6 +55,7 @@ const WeatherView = () => {
   };
   var [wdata, setWData] = React.useState(ad);
   var d = new Date();
+  //months
   var months = [
     "Jan",
     "Feb",
@@ -71,6 +74,7 @@ const WeatherView = () => {
     d.getDate() + "-" + months[d.getMonth()] + "-" + d.getUTCFullYear();
   const selectLocation = (state: any) => state.location.city;
   const city = useSelector(selectLocation);
+  //useEffect
   React.useEffect(() => {
     if (!!city) {
       const url =
@@ -86,6 +90,7 @@ const WeatherView = () => {
   }, [city]);
   return (
     <Box id="weather-section" sx={{ pb: 5, pt: 5 , backgroundColor: "#f6f6f6" }}>
+      {/* top description */}
       <Typography
         component="h2"
         sx={{
@@ -129,6 +134,7 @@ const WeatherView = () => {
                 }
                 alt=""
               />
+              {/* weather max and min temp */}
               <TempWrap>
                 <h5>{wdata.main.temp}</h5>
                 <div className="row align-self-center">
@@ -154,6 +160,7 @@ const WeatherView = () => {
                   Latitude {wdata.coord.lat}
                 </p>
               </WeatherData>
+              {/*weather description with specs*/}
               <ExtraDescription>
                 <p>
                   <i className="fas fa-thermometer-three-quarters"></i>{" "}

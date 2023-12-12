@@ -5,17 +5,20 @@ import { Button } from "../Events/_EventsForm";
 import ProgressBar from "./_ProgressBar";
 import { IDonation } from "../../models/donation";
 
+// donation card props
 interface IDonationCardProps{
     donation: IDonation;
 handleMakePayment: (id: string) => void;
 }
 
+//donation card
 const DonationCard = (props: IDonationCardProps) => {
     const { donation, handleMakePayment } = props;
     let percentage = !!donation.amountAchieved ? Math.round((donation.amountAchieved/donation.amountRequired)*100) : 0;
     if(percentage > 100){
         percentage = 100;
     }
+    //progress bar color based on percentage
     const progressColor = () => {
         if(percentage < 50){
             return "#ff1414";
@@ -31,12 +34,12 @@ const DonationCard = (props: IDonationCardProps) => {
         }
     };
     return(
-
         <Card>
         <img src={!!donation.image ? donation.image : User} loading="lazy" />
         <div>
         <Top>
             <Title>{donation.donationName}</Title>
+            {/* progress bar */}
             {!!donation._id && <ProgressBar id={donation._id} bgcolor={progressColor()} height={20} progress={percentage} donationRequired={donation.amountRequired} donationAchieved={donation.amountAchieved || 0} />}
         </Top>
         <Name>
@@ -52,7 +55,6 @@ const DonationCard = (props: IDonationCardProps) => {
 
 const Card = styled.section`
 display: flex;
-/* background-color: #fbf3f3; */
 box-shadow: 0px 0px 15px 5px #b4b1b1;
 &:hover{
     width: 1150px;

@@ -18,13 +18,12 @@ import Loading from "../../common/_Loader";
 import DonationMetrics from "./_DonationMetrics";
 import { useTranslation } from "react-i18next";
 
+//initial new donation creation state
 const initialDonationState = {
     donationName: "",
       descriptionInfo: "",
       amountRequired: 0,
-    //   amountAchieved: 0,
       category: "medical",
-    //   image: "",
       receiver: {
         name: "",
         age: 0,
@@ -32,10 +31,13 @@ const initialDonationState = {
         }
 }
 
+//donations view comp
 const DonationsView = () => {
 
+    //useTranslation
     const { t } = useTranslation('common');
 
+    //useState
     const [donations, setDonations] = React.useState<IDonation[]>();
     const [showModal, setShowModal] = React.useState(false);
     const [showAmountPopup, setShowAmountPopup] = React.useState(false);
@@ -48,30 +50,30 @@ const DonationsView = () => {
     const [contributionAmount, setContributionAmount] = React.useState(0);
     const [showLoader, setShowLoader] = React.useState(true);
 
+    //useSelector
     const selectLocation = (state: any) => state.location;
 const loc = useSelector(selectLocation);
 const user = useSelector((state: any) => state.user);
 
+//useEffect
 React.useEffect(() => {
     const pincode = loc.pincode;
     if(tab === 0){
         setShowLoader(true);
 donationServices.getDonations(pincode).then((donation)=> {
-    // const availableEvents = event.filter((e: IEvent) => !!e.endDate && moment(e.endDate) >= moment());
-    setDonations(donation)});
+    setDonations(donation.reverse())});
     setShowLoader(false);
-    console.log("dsijd")
 }
     else{
         setShowLoader(true);
         donationServices
         .getDonationByParams(pincode, user?.user._id)
-        .then((donation => {setDonations(donation)
+        .then((donation => {setDonations(donation.reverse())
             setShowLoader(false);}));
-        console.log("ij")
     }
 }, [loc, user?.user?._id, tab]);
 
+//validation check for mandatory fields
 React.useEffect(() => {
     const newDonationValues = Object.values(newDonation);
     const receiverValues = Object.values(newDonation.receiver);
@@ -90,24 +92,29 @@ React.useEffect(() => {
         };
       }
 
+      //functions
+
+      //donation amount change handling
       const onChangeDonationAmount = (id: string) => {
         setSelectedId(id);
         setShowAmountPopup(true);
       }
 
+           //make payment handling
     const handleMakePayment = async(event: any) => {
         event.preventDefault();
        const donation = donations?.find((i) => i._id === selectedId);
        console.log(donation)
         if(!!process.env.REACT_APP_STRIPE_PUBLISHING_KEY){
-
+//stripe
         const stripe = await loadStripe(process.env.REACT_APP_STRIPE_PUBLISHING_KEY);
-  
+  //request body
         const body = {
             products:[{name: donation?.donationName, price:contributionAmount}],
             donation,
             pincode: loc.pincode
         }
+        //headers
         const headers = {
             "Content-Type":"application/json"
         }
@@ -118,18 +125,18 @@ React.useEffect(() => {
         });
   
         const session = await response.json();
-        console.log(donation)
         !!donation && donationServices.updateDonation(loc.pincode, selectedId, {...donation, amountAchieved: (donation.amountAchieved || 0) + contributionAmount});
-        console.log(session);
   
         const result = await stripe?.redirectToCheckout({
             sessionId:session.id
         });
         
-        if(!!result && result.error){
-            console.log(result.error);
-        }}
+        // if(!!result && result.error){
+        //     console.log(result.error);
+        // }}
     }
+    }
+    //modal close handling
         const onCloseModal = () => {
         setNewDonation(initialDonationState);
         if(isEdit){
@@ -138,6 +145,7 @@ React.useEffect(() => {
         }
         setShowModal(false);
     };
+    //on fields change
     const onNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setNewDonation({...newDonation, donationName: e.target.value});
     }
@@ -172,6 +180,7 @@ React.useEffect(() => {
         setShowAmountPopup(false);
     };
 
+    //updating donation
     const onUpdate = async(event: any) => {
         event.preventDefault();
         setShowLoader(true);
@@ -179,7 +188,7 @@ React.useEffect(() => {
         try{ 
             await donationServices.updateDonation(loc.pincode, donationId, updatedEvent).then((donation)=> {
             donationServices.getDonations(loc.pincode).then((donation)=> {
-                setDonations(donation);
+                setDonations(donation.reverse());
                 setShowLoader(false);
             }
         );
@@ -187,7 +196,6 @@ React.useEffect(() => {
     });
 }
     catch(err){
-    console.log("Error updating donation:", err);
     toast.error("Error occured while updating donation!");
     }
 
@@ -196,6 +204,7 @@ React.useEffect(() => {
             setDonationId("");
             setShowModal(false);
     };
+        //editing donation
     const onEdit = (donationId: string) => {
         setShowLoader(true);
         donationServices.getDonationById(loc.pincode, donationId).then((donation)=> {
@@ -206,49 +215,52 @@ React.useEffect(() => {
            setShowLoader(false);
        });
    };
-   const onDelete = async(donationId: string) => {
+       //deleting donation
+   const onDelete = async(donationId: string, event: any) => {
+    event.preventDefault();
     setShowLoader(true);
     try{ 
         await donationServices.deleteDonation(loc.pincode, donationId).then((donation)=> {
            donationServices.getDonations(loc.pincode).then((donation)=> {
-               setDonations(donation);
+               setDonations(donation.reverse());
                setShowLoader(false);
            });
                toast.success(`Donation Deleted Successfully!`);
        });
     }
        catch(err){
-        console.log("Error deleting donation:", err);
         toast.error("Error occured while deleting donation!");
     }
    };
-   console.log(new Date())
+       //submitting donation
     const onSubmit = async(event: any) => {
         event.preventDefault();
         setShowLoader(true);
         try{ 
             await donationServices.createDonation(loc.pincode, {...newDonation, createdUser: user?.user._id, locationId: loc.pincode}).then((donation)=> {
-            !!donations ? setDonations([...donations, donation]) : setDonations([donation]);
+            !!donations ? setDonations([...donations, donation].reverse()) : setDonations([donation].reverse());
             setShowLoader(false);
             toast.success("Donation Created Successfully!");
         });
     }
     catch(err){
-        console.log("Error adding donation:", err);
         toast.error("Error occured while adding donation!");
     }
         setShowModal(false);
         setNewDonation(initialDonationState);
     };
+    //tab change handling
     const handleTabChange = (event: any, newValue: number) => {
         setTab(newValue);
       };
     return(
         <DonationsWrap>
         <ToastContainer position="top-center" closeOnClick />
+        {/* loader when page is loading */}
         <Modal isOpen={showLoader}>
         <Loading isLoading={showLoader} />
         </Modal>
+        {/* creation and editing modal */}
         <Modal isOpen={showModal}>
   <EventsForm 
   isEdit={isEdit}
@@ -271,6 +283,7 @@ React.useEffect(() => {
             }
     />
   </Modal>
+  {/* contribution modal */}
   <Modal isOpen={showAmountPopup}>
     <FormWrap>
         <Form>
@@ -289,12 +302,14 @@ React.useEffect(() => {
         </Form>
     </FormWrap>
   </Modal>
+  {/* based on login to edit */}
   {!!user?.user?._id && <Button onClick={() => setShowModal(true)}>{t('create_donation')}</Button>}
         <Tabs sx={{margin: "15px 0 0 0", "& button": {color: "#123abc"}, "& button.Mui-selected": {color: "#123abc"}}} value={tab} onChange={handleTabChange} aria-label="basic tabs example"   TabIndicatorProps={{sx:{backgroundColor: "#123abc"}}}>
           <Tab sx={{fontSize: "16px", fontWeight: "bold"}} label={t('all_donations')} {...a11yProps(0)} />
           {!!user?.user?._id && <Tab sx={{fontSize: "16px", fontWeight: "bold"}} label={t('my_donations')} {...a11yProps(1)} />}
           <Tab sx={{fontSize: "16px", fontWeight: "bold"}} label={t('donation_metrics')} {...a11yProps(2)} />
         </Tabs>
+        {/* component rendering based on tab selected */}
         {tab === 0 ? !!donations?.length ? 
         (<DonationCardsWrap>
         {donations.map((donation) => {return(<DonationCard donation={donation} handleMakePayment={onChangeDonationAmount} />)} )}

@@ -8,6 +8,7 @@ import {
     Legend
 } from "recharts";
 
+//bar chart props
 interface IBarChartProps{
 barChartData: any[];
 yAxisKey: string;
@@ -16,6 +17,7 @@ bar2Key: string;
 layout: 'horizontal' | 'vertical';
 }
 
+//stacked bar chart common component
 const BarChartstackedComp = (props: IBarChartProps) => {
     const { bar1Key, bar2Key, barChartData, yAxisKey, layout } = props;
     return(
