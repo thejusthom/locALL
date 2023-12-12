@@ -11,6 +11,8 @@ import {
   Typography
 } from '@mui/material';
 import { IUser } from '../../models/user';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const SinglePost: React.FC = () => {
   const [happening, setHappening] = useState({} as Happenings);
@@ -76,8 +78,10 @@ const SinglePost: React.FC = () => {
       console.log(updatedHappening);
       setHappening(updatedHappening);
       setIsEditing(false);
+      toast.success('Happening updated successfully');
     } catch (error) {
       console.error('Error updating happening:', error);
+      toast.error('Error updating happening');
     }
   };
 
@@ -92,8 +96,10 @@ const SinglePost: React.FC = () => {
       // Close the delete confirmation modal
       setIsDeleteModalOpen(false);
       window.location.replace('/happenings');
+      toast.success('Happening deleted successfully');
     } catch (error) {
       console.error('Error deleting happening:', error);
+      toast.error('Error deleting happening');
     }
   };
 
@@ -196,6 +202,8 @@ const SinglePost: React.FC = () => {
           <Button onClick={handleDeleteCancel}>Cancel</Button>
         </Modal.Actions>
       </Modal>
+
+      <ToastContainer />
     </div>
   );
 };
