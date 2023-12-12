@@ -31,8 +31,6 @@ const Posts: React.FC<Props> = (props: Props): ReactElement =>{
   const [user, setUser] = useState<IUser>(initialStateUser);
   const currentUser : IUser = useSelector((state: any) => state.user);
   const location = useSelector((state: any) => state.location);
-  console.log(location);
-  console.log(currentUser);
  
   useEffect(() => {
     setUser(currentUser);

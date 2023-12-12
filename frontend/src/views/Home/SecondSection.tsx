@@ -1,5 +1,8 @@
-import React, { ReactNode } from "react";
+// Imports from react
+import { ReactNode } from "react";
+// Imports from semantic ui
 import { Image } from "semantic-ui-react";
+// Imports from mui
 import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
 import Container from "@mui/material/Container";
@@ -10,12 +13,14 @@ import ArticleIcon from "@mui/icons-material/Article";
 import LocalLibraryIcon from "@mui/icons-material/LocalLibrary";
 import EventIcon from "@mui/icons-material/Event";
 
+// Model of data
 interface Data {
   title: string;
   description: string;
   icon?: ReactNode;
 }
 
+// Static data given to data
 export const data: Data[] = [
   {
     title: "Local Marketplace",
@@ -42,6 +47,7 @@ export const data: Data[] = [
   },
 ];
 
+// Second section of Home page
 const SecondSection = () => {
   return (
     <Box
