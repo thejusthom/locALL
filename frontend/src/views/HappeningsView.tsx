@@ -89,7 +89,7 @@ const HappeningsView: React.FC = () =>{
         {allHappenings.length === 0 ? (
           <NoDataScreen />
         ) : (
-          <Posts posts={allHappenings} />
+          <Posts posts={allHappenings.reverse()} />
         )}
       </TabPanel>
       {/* Show my happenings tab if user is logged in */}
@@ -105,7 +105,7 @@ const HappeningsView: React.FC = () =>{
           {myHappenings.length === 0 ? (
             <NoDataScreen />
           ) : (
-            <Posts posts={myHappenings} />
+            <Posts posts={myHappenings.reverse()} />
           )}
         </TabPanel>
       )}
