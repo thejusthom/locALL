@@ -349,6 +349,7 @@ function HomeLayout() {
       <Grid item>Tamil</Grid>
       <Grid item>
         <Switch
+        sx={{"& .MuiSwitch-track": {backgroundColor: "#1976d2"}, "& .MuiSwitch-thumb": {backgroundColor: "#1976d2"}}}
           checked={language.checked} // relevant state for your case
           onChange={handleChange} // relevant method to handle your change
           value="checked" // some value you need
