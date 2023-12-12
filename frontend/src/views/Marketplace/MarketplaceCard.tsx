@@ -408,15 +408,17 @@ const MarketplaceCard = (props: Props) => {
               onChange={handleOnChange}
               required
             />
-            <Image
-              size="medium"
-              style={{ position: "sticky", top: 0 }}
-              src={formData.image}
-              srcSet={formData.image}
-              alt={"No images added"}
-              label="Image Preview"
-              wrapped
-            />
+            <Box sx={{ m: 1, ml: 0 }}>
+              <Image
+                size="medium"
+                style={{ position: "sticky", top: 0 }}
+                src={formData.image}
+                srcSet={formData.image}
+                alt={"No images added"}
+                label="Image Preview"
+                wrapped
+              />
+            </Box>
             <Form.Input
               fluid
               label="Upload your images here"
