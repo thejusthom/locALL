@@ -12,16 +12,73 @@ import { saveUser } from "../../store/slices/user-slice";
 import ProfilePic from "../../assets/images/Profile-pic.jpg";
 import { Image } from "semantic-ui-react";
 import { useEffect } from "react";
+import happeningsService from "../../services/happeningsService";
+import eventsService from "../../services/eventsService";
+import feedShareService from "../../services/feedshareService";
+import marketplaceService from "../../services/marketplaceService";
+import donationService from "../../services/donationsService";
+
+interface MetricItem {
+  label: string;
+  count: number;
+}
 
 export default function UserProfileBlock() {
   const dispatch = useDispatch();
   const user = useSelector((state: any) => state.user);
+  const locationId = useSelector((state: any) => state.location.pincode);
   const [passwordValid, setPasswordValid] = useState(false);
   const [passwordFormOpen, setPasswordFormOpen] = React.useState(false);
   const [passwords, setPasswords] = useState({
     passwordOne: "",
     passwordTwo: "",
   });
+
+  const [donations, setDonations] = useState<any[]>([]);
+  const [happenings, setHappenings] = useState<any[]>([]);
+  const [feedShare, setFeedShare] = useState<any[]>([]);
+  const [events, setEvents] = useState<any[]>([]);
+  const [marketplace, setMarketplace] = useState<any[]>([]);
+
+  useEffect(() => {
+    // Fetch and set data for donations
+    fetchAndSetData('donations', setDonations, () => donationService.getDonations(locationId));
+
+    // Fetch and set data for happenings
+    fetchAndSetData('happenings', setHappenings, () => happeningsService.getAllHappenings(locationId));
+
+    // Fetch and set data for feedShare
+    fetchAndSetData('feedShare', setFeedShare, () => feedShareService.getFeedshare(locationId));
+
+    // Fetch and set data for events
+    fetchAndSetData('events', setEvents, () => eventsService.getEvents(locationId));
+
+    // Fetch and set data for marketplace
+    fetchAndSetData('marketplace', setMarketplace, () => marketplaceService.getMarketplace(locationId));
+  }, [locationId]);
+
+  const fetchAndSetData = async (
+    metric: string,
+    setData: React.Dispatch<React.SetStateAction<any[]>>,
+    getData: () => Promise<any>
+  ) => {
+    try {
+      const data = await getData();
+      setData(data);
+    } catch (error) {
+      console.error(`Error fetching ${metric}:`, error);
+    }
+  };
+
+  const renderMetricItem = (metricName: string, metricCount: number) => {
+    return (
+      <li className="bootstrap-iso list-group-item d-flex justify-content-between align-items-center flex-wrap">
+        <h6 className="bootstrap-iso mb-0">{metricName}</h6>
+        <span className="bootstrap-iso text-secondary">{metricCount}</span>
+      </li>
+    );
+  };
+
   const [imagePreview, setImagePreview] = useState<string | undefined>(
     user?.user?.userImage
   );
@@ -294,26 +351,11 @@ export default function UserProfileBlock() {
                   My Contributions
                 </p>
                 <ul className="bootstrap-iso list-group list-group-flush">
-                  <li className="bootstrap-iso list-group-item d-flex justify-content-between align-items-center flex-wrap">
-                    <h6 className="bootstrap-iso mb-0">Events</h6>
-                    <span className="bootstrap-iso text-secondary">1</span>
-                  </li>
-                  <li className="bootstrap-iso list-group-item d-flex justify-content-between align-items-center flex-wrap">
-                    <h6 className="bootstrap-iso mb-0">MarketPlace</h6>
-                    <span className="bootstrap-iso text-secondary">0</span>
-                  </li>
-                  <li className="bootstrap-iso list-group-item d-flex justify-content-between align-items-center flex-wrap">
-                    <h6 className="bootstrap-iso mb-0">FeedShare</h6>
-                    <span className="bootstrap-iso text-secondary">5</span>
-                  </li>
-                  <li className="bootstrap-iso list-group-item d-flex justify-content-between align-items-center flex-wrap">
-                    <h6 className="bootstrap-iso mb-0">Happenings</h6>
-                    <span className="bootstrap-iso text-secondary">2</span>
-                  </li>
-                  <li className="bootstrap-iso list-group-item d-flex justify-content-between align-items-center flex-wrap">
-                    <h6 className="bootstrap-iso mb-0">Donations</h6>
-                    <span className="bootstrap-iso text-secondary">7</span>
-                  </li>
+                {renderMetricItem('Events', events.length)}
+                {renderMetricItem('MarketPlace', marketplace.length)}
+                {renderMetricItem('FeedShare', feedShare.length)}
+                {renderMetricItem('Happenings', happenings.length)}
+                {renderMetricItem('Donations', donations.length)}
                 </ul>
               </div>
             </div>

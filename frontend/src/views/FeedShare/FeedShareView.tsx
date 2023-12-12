@@ -1,21 +1,22 @@
 import FeedShare from "../../models/feedShare"
-import { SyntheticEvent, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import FeedShareCard from "./FeedShareCard";
 import { useSelector } from 'react-redux'
 import feedShareService from "../../services/feedshareService";
-import { Form, Modal } from "semantic-ui-react";
+import { Form, Modal, Image } from "semantic-ui-react";
 import React from "react";
 import '../../assets/styles/feedshare.scss';
 import { SearchBox } from '@mapbox/search-js-react';
 import Button from "@mui/joy/Button";
 import moment from "moment";
-import { Tab, Tabs } from "@mui/material";
+import { Tab } from "@mui/material";
 import TabList from "@mui/lab/TabList";
 import TabContext from "@mui/lab/TabContext";
 import TabPanel from "@mui/lab/TabPanel";
 import { ToastContainer, toast } from "react-toastify";
 import NoDataScreen from "../../common/_NoDataScreen";
 import { useTranslation } from "react-i18next";
+import styled from "styled-components";
 
 const FeedShareView: React.FC = () => {
     const { t } = useTranslation('common');
@@ -80,6 +81,7 @@ const FeedShareView: React.FC = () => {
             postedDate: '',
             locationId: ''
         };
+        setSelectedLocation('');
         setInputData(clData);
     };
 
@@ -160,10 +162,10 @@ const FeedShareView: React.FC = () => {
     };
 
     return (
-        <div>
+        <FeedShareWrap>
             <ToastContainer position="top-center" closeOnClick />
             <TabContext value={tab}>
-                <TabList sx={{ margin: "15px 0 0 0" }} onChange={handleTabChange} aria-label="basic tabs example">
+                <TabList sx={{margin: "-55px 0 0 0", "& button": {color: "#123abc"}, "& button.Mui-selected": {color: "#123abc"}}} onChange={handleTabChange} aria-label="basic tabs example" TabIndicatorProps={{sx:{backgroundColor: "#123abc"}}}>
                     <Tab sx={{ fontSize: "16px", fontWeight: "bold" }} label={t('all_feedshare')} value="0" {...a11yProps(0)} />
                     {user?.isLoggedIn && <Tab sx={{ fontSize: "16px", fontWeight: "bold" }} label={t('my_feedshare')} value="1" {...a11yProps(1)} />}
                 </TabList>
@@ -181,7 +183,7 @@ const FeedShareView: React.FC = () => {
                 </TabPanel>
                 <TabPanel value="1">
                     <div className="new-feedshare">
-                        <Button className="new-button" onClick={() => setFormOpen(true)}>{t('new_listing')}</Button>
+                        <Button className="new-button" onClick={() => setFormOpen(true)} sx={{bgcolor: "#123abc", margin: "-5px 0 10px -10px"}}>{t('new_listing')}</Button>
                     </div>
                     {
                         myFeedshare.length === 0 ? <NoDataScreen /> :
@@ -222,7 +224,7 @@ const FeedShareView: React.FC = () => {
                                 accessToken={process.env.REACT_APP_MAPBOX_API_KEY}
                                 value={selectedLocation}
                                 onRetrieve={onLocationChange}
-                            />}
+                            />}                        
                         <Form.Input
                             fluid
                             label="Upload your images here"
@@ -230,6 +232,15 @@ const FeedShareView: React.FC = () => {
                             id="image"
                             required
                             onChange={handleOnChange}
+                        />
+                        <Image
+                            size="medium"
+                            style={{ position: "sticky", top: 0 }}
+                            src={inputData.image}
+                            srcSet={inputData.image}
+                            alt={"No images added"}
+                            label="Image Preview"
+                            wrapped
                         />
                     </Form.Group>
                     <Button type="submit" onClick={addFeedShare}
@@ -258,8 +269,12 @@ const FeedShareView: React.FC = () => {
                     </Button>
                 </Form>
             </Modal>        
-        </div>
+        </FeedShareWrap>
     )
 }
+
+const FeedShareWrap = styled.div`
+margin: 10px 25px 25px 25px;
+`;
 
 export default FeedShareView;

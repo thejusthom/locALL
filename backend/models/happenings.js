@@ -12,7 +12,7 @@ const HappeningSchema = new Schema({
         required: true
     },
     postedDate: {
-        type: Date,
+        type: String,
         required: true
     },
     //to get the user object from User Schema

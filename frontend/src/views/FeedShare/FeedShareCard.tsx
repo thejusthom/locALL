@@ -330,20 +330,21 @@ const FeedShareCard = (props: Props): React.ReactElement => {
                             value={inputData.organizer}
                             onChange={handleOnChange}
                             id="organizer" />
-                        <Form.Field required label='Location' />
-                        {!!process.env.REACT_APP_MAPBOX_API_KEY &&
-                            <SearchBox
-                                accessToken={'pk.eyJ1IjoiYXNobWl5YS12aWpheWFjaGFuZHJhbiIsImEiOiJjbHBnMXRxc3oxaXd3MmlwcG5zZjBpdXNqIn0.GqCCjkCcmFsgrpMnl7ntzw'}
-                                value={selectedLocation}
-                                onRetrieve={onLocationChange}
-                            />}
                         <Form.Input
                             fluid
                             label="Upload your images here"
                             type="file"
                             id="image"
-                            required
                             onChange={handleOnChange}
+                        />
+                        <Image
+                            size="medium"
+                            style={{ position: "sticky", top: 0 }}
+                            src={inputData.image}
+                            srcSet={inputData.image}
+                            alt={"No images added"}
+                            label="Existing Image"
+                            wrapped
                         />
                     </Form.Group>
                     <Button
@@ -356,9 +357,7 @@ const FeedShareCard = (props: Props): React.ReactElement => {
                         disabled={
                             !inputData.foodType ||
                             !inputData.servings ||
-                            !inputData.organizer ||
-                            !inputData.image ||
-                            !selectedLocation}
+                            !inputData.organizer}
                         onClick={updateFeedShare}>Update</Button>
                     <Button
                         variant="solid"

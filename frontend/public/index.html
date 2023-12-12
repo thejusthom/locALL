@@ -17,6 +17,20 @@
       user's mobile device or desktop. See https://developers.google.com/web/fundamentals/web-app-manifest/
     -->
     <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
+
+    <script>
+      /* global google */
+      google.accounts.id.initialize({
+        clientId: "981652052222-usoi7fad1fu3ojocm5slbmnu2mpb64br.apps.googleusercontent.com",
+        callback: handleCallBackGoogle
+      });
+    
+      google.accounts.id.renderButton(
+        document.getElementById("googleButton"),
+        {theme: "outline", size: "large", shape: "rectangular", text: "continue_with", width: "300", height: "50"}
+      );
+    </script>
     <!--
       Notice the use of %PUBLIC_URL% in the tags above.
       It will be replaced with the URL of the `public` folder during the build.
