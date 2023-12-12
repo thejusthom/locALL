@@ -40,7 +40,7 @@ const MarketplaceView = (props: Props) => {
         .getMarketplace(locationId)
         .then((marketplaceCards) => setMarketplaceCards(marketplaceCards));
     }
-  }, [locationId, props.active, update, user.isLoggedIn]);
+  }, [locationId, props.active, update, user.isLoggedIn,user]);
   const afterUpdate = () => {
     if (update === false) {
       setUpdate(true);
@@ -75,14 +75,12 @@ const MarketplaceView = (props: Props) => {
         reader.onloadend = () => {
           reader.result as string;
           updateData[id as keyof typeof updateData] = reader.result as string;
-          console.log(updateData);
           setFormData(updateData);
         };
         return;
       }
     }
     updateData[id as keyof typeof updateData] = event.target.value;
-    console.log(updateData);
     setFormData(updateData);
   };
   const handleSubmit = async () => {
@@ -95,7 +93,6 @@ const MarketplaceView = (props: Props) => {
       _id: null,
       comments: [],
     };
-    console.log(marketplace);
     try {
       await marketplaceService
         .createMarketplace(locationId, marketplace)

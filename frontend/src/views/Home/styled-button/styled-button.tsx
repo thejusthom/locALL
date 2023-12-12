@@ -1,4 +1,4 @@
-import React, { FC, ReactNode } from 'react'
+import { FC, ReactNode } from 'react'
 import Box from '@mui/material/Box'
 import { Theme } from '@mui/material'
 import { styled } from '@mui/material/styles'

@@ -15,7 +15,6 @@ import React, { ChangeEvent, useState, useEffect } from "react";
 import { Marketplace } from "../../models/marketplace";
 import { Box } from "@mui/system";
 import marketplaceService from "../../services/marketplaceService";
-import image from "../../assets/images/no-image.jpg";
 import moment from "moment";
 import IconButton from "@mui/joy/IconButton";
 import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
@@ -88,14 +87,12 @@ const MarketplaceCard = (props: Props) => {
         reader.onloadend = () => {
           reader.result as string;
           updateData[id as keyof typeof updateData] = reader.result as string;
-          console.log(updateData);
           setFormData(updateData);
         };
         return;
       }
     }
     updateData[id as keyof typeof updateData] = event.target.value;
-    console.log(updateData);
     setFormData(updateData);
   };
 
@@ -165,7 +162,6 @@ const MarketplaceCard = (props: Props) => {
         });
     } catch (error) {
       toast.error("Error deleting listing");
-      console.error("Error deleting listing:", error);
     }
   };
 
