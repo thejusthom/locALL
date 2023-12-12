@@ -13,18 +13,20 @@ const MarketplaceNav = () => {
   const handleItemClick = (
     e: MouseEvent<HTMLAnchorElement>,
     menu: MenuItemProps
-  ) => setActive(menu.name as string);
+  ) => setActive(menu.value as string);
   return (
     <Box sx={{ m: 4, pl: { md: 5, xs: 2 }, pr: { md: 5, xs: 2 } }}>
       <Menu attached="top" tabular>
         <Menu.Item
           name={t("all_items")}
+          value="all-items"
           active={active === "all-items"}
           onClick={handleItemClick}
         />
         {user.isLoggedIn && (
           <Menu.Item
             name={t("my_items")}
+            value="my-items"
             active={active === "my-items"}
             onClick={handleItemClick}
           />

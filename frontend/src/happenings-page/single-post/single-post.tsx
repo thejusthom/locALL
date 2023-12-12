@@ -1,3 +1,7 @@
+/**
+ * SinglePost component displays a single happening post.
+ * It allows the user to view, edit, and delete the happening.
+ */
 import React, { useEffect, useState } from 'react';
 import './single-post.scss';
 import { useLocation } from 'react-router-dom';
@@ -11,7 +15,12 @@ import {
   Typography
 } from '@mui/material';
 import { IUser } from '../../models/user';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
+/**
+ * SinglePost component
+ */
 const SinglePost: React.FC = () => {
   const [happening, setHappening] = useState({} as Happenings);
   const [isEditing, setIsEditing] = useState(false);
@@ -36,6 +45,10 @@ const SinglePost: React.FC = () => {
     happeningsService.getHappeningById(locationId, happeningId).then((happening) => setHappening(happening));
   }, [happeningId]);
 
+  /**
+   * Handles the click event when the user clicks the Edit button.
+   * Populates the form with existing data and sets the isEditing state to true.
+   */
   const handleEditClick = () => {
     // Populate the form with existing data
     setEditedData({
@@ -47,12 +60,22 @@ const SinglePost: React.FC = () => {
     setIsEditing(true);
   };
 
+  /**
+   * Handles the change event when the user edits the form inputs.
+   * Updates the editedData state with the new values.
+   * @param event - The change event
+   */
   const handleEditChange = (event: React.ChangeEvent<HTMLInputElement> | React.ChangeEvent<HTMLTextAreaElement>) => {
     event.preventDefault();
     const { id, value } = event.target;
     setEditedData((prevData) => ({ ...prevData, [id]: value }));
   };
 
+  /**
+   * Handles the change event when the user selects an image file.
+   * Reads the file and updates the editedData state with the image data.
+   * @param event - The change event
+   */
   const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     event.preventDefault();
     const file = event.target.files?.[0];
@@ -67,6 +90,12 @@ const SinglePost: React.FC = () => {
     }
   };
 
+  /**
+   * Handles the submit event when the user clicks the Save Changes button.
+   * Sends a PUT request to update the happening.
+   * Refreshes the happening data after a successful update.
+   * Displays a success toast message.
+   */
   const handleEditSubmit = async () => {
     try {
       // Send a PUT request to update the happening
@@ -76,15 +105,28 @@ const SinglePost: React.FC = () => {
       console.log(updatedHappening);
       setHappening(updatedHappening);
       setIsEditing(false);
+      toast.success('Happening updated successfully');
     } catch (error) {
       console.error('Error updating happening:', error);
+      toast.error('Error updating happening');
     }
   };
 
+  /**
+   * Handles the click event when the user clicks the Delete button.
+   * Opens the delete confirmation modal.
+   */
   const handleDeleteClick = () => {
     setIsDeleteModalOpen(true);
   };
 
+  /**
+   * Handles the click event when the user confirms the deletion.
+   * Sends a DELETE request to delete the happening.
+   * Closes the delete confirmation modal.
+   * Redirects the user to the happenings page.
+   * Displays a success toast message.
+   */
   const handleDeleteConfirm = async () => {
     try {
       // Send a DELETE request to delete the happening
@@ -92,11 +134,17 @@ const SinglePost: React.FC = () => {
       // Close the delete confirmation modal
       setIsDeleteModalOpen(false);
       window.location.replace('/happenings');
+      toast.success('Happening deleted successfully');
     } catch (error) {
       console.error('Error deleting happening:', error);
+      toast.error('Error deleting happening');
     }
   };
 
+  /**
+   * Handles the click event when the user cancels the deletion.
+   * Closes the delete confirmation modal.
+   */
   const handleDeleteCancel = () => {
     setIsDeleteModalOpen(false);
   };
@@ -196,6 +244,8 @@ const SinglePost: React.FC = () => {
           <Button onClick={handleDeleteCancel}>Cancel</Button>
         </Modal.Actions>
       </Modal>
+
+      <ToastContainer />
     </div>
   );
 };
