@@ -9,7 +9,9 @@ import { SearchBox } from "@mapbox/search-js-react";
 import userService from "../../services/userService";
 import { ToastContainer, toast } from "react-toastify";
 import { saveUser } from "../../store/slices/user-slice";
-import ProfilePic from "../../assets/images/Profile-pic.jpg"
+import ProfilePic from "../../assets/images/Profile-pic.jpg";
+import { Image } from "semantic-ui-react";
+import { useEffect } from "react";
 
 export default function UserProfileBlock() {
   const dispatch = useDispatch();
@@ -20,6 +22,9 @@ export default function UserProfileBlock() {
     passwordOne: "",
     passwordTwo: "",
   });
+  const [imagePreview, setImagePreview] = useState<string | undefined>(
+    user?.user?.userImage
+  );
   const [editFormOpen, setEditFormOpen] = React.useState(false);
   const [inputData, setInputData] = React.useState({
     firstName: user?.user?.person?.firstName,
@@ -30,6 +35,18 @@ export default function UserProfileBlock() {
     zipcode: user?.user?.person?.zipcode,
     username: user?.user?.username,
   });
+  useEffect(() => {
+    setInputData({
+      firstName: user?.user?.person?.firstName,
+      lastName: user?.user?.person?.lastName,
+      email: user?.user?.person?.email,
+      phoneNumber: user?.user?.person?.phoneNumber,
+      address: user?.user?.person?.address,
+      zipcode: user?.user?.person?.zipcode,
+      username: user?.user?.username,
+    });
+    setImagePreview(user?.user?.userImage);
+  }, [user]);
   const [selectedLocation, setSelectedLocation] = React.useState("");
   const [coordinates, setCoordinates] = React.useState({
     latitude: 0,
@@ -137,9 +154,10 @@ export default function UserProfileBlock() {
         firstName: inputData.firstName,
         lastName: inputData.lastName,
         phoneNumber: inputData.phoneNumber,
-        address: selectedLocation,
-        zipcode: add,
+        address: user?.user?.person?.address,
+        zipcode: user?.user?.person?.zipcode,
       },
+      userImage: imagePreview,
     };
     console.log(userData);
     try {
@@ -147,13 +165,18 @@ export default function UserProfileBlock() {
       // console.log(validatedUser);
       // localStorage.setItem("user", JSON.stringify(validatedUser));
       // dispatch(saveUser(validatedUser));
-      await userService.updateUser(userData).then(() => {
+      await userService.updateUser(userData, user?.refreshToken).then(() => {
         if (editFormOpen === false) {
           setEditFormOpen(true);
         } else {
           setEditFormOpen(false);
         }
         clearFormData();
+        const accessToken = user?.accessToken;
+        const refreshToken = user?.refreshToken;
+        const uUser = { user: userData, accessToken, refreshToken };
+        localStorage.setItem("user", JSON.stringify(uUser));
+        dispatch(saveUser(uUser));
         toast.success("User details Changed Successfully!");
         setEditConfirmForm(false);
       });
@@ -165,6 +188,17 @@ export default function UserProfileBlock() {
   };
   const handleUpdateUserDataCancel = () => {
     setEditConfirmForm(false);
+  };
+  const onFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    console.log(file);
+    if (file) {
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onloadend = () => {
+        setImagePreview(reader.result as string);
+      };
+    }
   };
 
   const handlePasswordChangeConfirm = async () => {
@@ -180,9 +214,15 @@ export default function UserProfileBlock() {
           address: user?.user?.person?.address,
           zipcode: user?.user?.person?.zipcode,
         },
+        userImage: imagePreview,
       };
       try {
-        await userService.updateUser(userData).then(() => {
+        await userService.updateUser(userData, user?.refreshToken).then(() => {
+          const accessToken = user?.accessToken;
+          const refreshToken = user?.refreshToken;
+          const uUser = { user: userData, accessToken, refreshToken };
+          localStorage.setItem("user", JSON.stringify(uUser));
+          dispatch(saveUser(uUser));
           setPasswordConfirmForm(false);
           toast.success("Password Changed Successfully!");
         });
@@ -216,18 +256,22 @@ export default function UserProfileBlock() {
               <div className="bootstrap-iso card">
                 <div className="bootstrap-iso card-body">
                   <div className="bootstrap-iso d-flex flex-column align-items-center text-center">
-                    { user?.user?.userImage  && user?.user?.userImage != 'undefined' ? <img
-                      src={user?.user?.userImage}
-                      alt="Profile Pic"
-                      className="bootstrap-iso rounded-circle"
-                      width="150"/>:
-                    (<img
-                      src={ProfilePic}
-                      alt="Profile Pic"
-                      className="bootstrap-iso rounded-circle"
-                      width="150"
-                    />)
-}
+                    {user?.user?.userImage &&
+                    user?.user?.userImage != "undefined" ? (
+                      <img
+                        src={user?.user?.userImage}
+                        alt="Profile Pic"
+                        className="bootstrap-iso rounded-circle"
+                        width="150"
+                      />
+                    ) : (
+                      <img
+                        src={ProfilePic}
+                        alt="Profile Pic"
+                        className="bootstrap-iso rounded-circle"
+                        width="150"
+                      />
+                    )}
                     <div className="bootstrap-iso mt-3 text-center">
                       <h4>
                         {user?.user?.person?.firstName}{" "}
@@ -349,7 +393,10 @@ export default function UserProfileBlock() {
                     <div className="bootstrap-iso col-sm-12">
                       <button
                         className="bootstrap-iso btn edit-btn"
-                        onClick={() => setEditFormOpen(true)}
+                        onClick={() => {
+                          setEditFormOpen(true);
+                          fillInputData();
+                        }}
                       >
                         Edit
                       </button>
@@ -454,32 +501,23 @@ export default function UserProfileBlock() {
               onChange={handleOnChange}
               id="phoneNumber"
             />
-            <Form.Field label="Location" />
-            {!!process.env.REACT_APP_MAPBOX_API_KEY && (
-              <SearchBox
-                accessToken={
-                  "pk.eyJ1IjoiYXNobWl5YS12aWpheWFjaGFuZHJhbiIsImEiOiJjbHBnMXRxc3oxaXd3MmlwcG5zZjBpdXNqIn0.GqCCjkCcmFsgrpMnl7ntzw"
-                }
-                value={selectedLocation}
-                onRetrieve={onLocationChange}
-              />
-            )}
+            <Image
+              size="medium"
+              style={{ position: "sticky", top: 0 }}
+              src={imagePreview}
+              srcSet={imagePreview}
+              alt={"No images added"}
+              label="Profile Pic Preview"
+              wrapped
+            />
             <Form.Input
               fluid
               label="Upload your photo"
               type="file"
               id="image"
-              onChange={handleOnChange}
+              onChange={onFileChange}
             />
           </Form.Group>
-          <Form.Field
-            label="Username"
-            control="input"
-            width={8}
-            value={inputData.username}
-            onChange={handleOnChange}
-            id="username"
-          />
           <Button
             type="submit"
             onClick={() => {

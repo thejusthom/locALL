@@ -44,15 +44,9 @@ export const getById = async (request, response) => {
     userService.verifyAccessToken(accessToken);
     const id = request.params.id;
     const user = await userService.getById(id);
-    if (!user) {
-      throw new Error("User not found");
-    }
     setResponse(user, response, 200);
   } catch (err) {
-    if (err.message === "User not found") {
-      // Handle the case where the user is not found
-      response.status(404).json({ error: "User not found" });
-    } else if (err.message === "JWT token expired") {
+    if (err.message === "JWT token expired") {
       response.status(401).json({ error: "JWT token expired" });
     } else if (err.name === "CastError") {
       response.status(400).json({ error: "Wrong variable Type" });
@@ -70,15 +64,10 @@ export const getByParams = async (request, response) => {
     userService.verifyAccessToken(accessToken);
     const params = { ...request.query };
     const users = await userService.getByParams(params);
-    if (!users) {
-      throw new Error("Users not found");
-    }
     setResponse(users, response, 200);
   } catch (err) {
     if (err.message === "JWT token expired") {
       response.status(401).json({ error: "JWT token expired" });
-    } else if (err.message === "Users not found") {
-      response.status(404).json({ error: "Users not found" });
     } else {
       console.log(err);
       setErrorResponse(err, response);
