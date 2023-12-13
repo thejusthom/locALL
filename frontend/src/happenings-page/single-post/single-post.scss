@@ -1,0 +1,78 @@
+// Styles for the wrapper of a single post
+.singlePostWrapper {
+  padding: 20px;
+  padding-right: 0;
+}
+
+// Styles for the image of a single post
+.singlePostImg {
+  width: 100%;
+  height: 300px;
+  border-radius: 5px;
+  object-fit: cover;
+}
+
+// Styles for the title of a single post
+.singlePostTitle {
+  text-align: center;
+  margin: 10px;
+  font-size: 28px;
+  font-family: "Lora", sans-serif;
+}
+
+// Styles for the first icon in a single post
+.singlePostIcon:first-child {
+  color: teal;
+}
+
+// Styles for the last icon in a single post
+.singlePostIcon:last-child {
+  color: tomato;
+}
+
+// Styles for the edit button in a single post
+.singlePostEdit {
+  float: right;
+  font-size: 16px;
+}
+
+// Styles for the icons in a single post
+.singlePostIcon {
+  margin-left: 10px;
+  cursor: pointer;
+}
+
+// Styles for the information section in a single post
+.singlePostInfo {
+  margin-bottom: 20px;
+  display: flex;
+  justify-content: space-between;
+  font-size: 16px;
+  color: #be9656;
+  font-family: "Varela Round", Arial, Helvetica, sans-serif;
+}
+
+// Styles for the author section in a single post
+.singlePostAuthor{
+  margin-left: 5px;
+}
+
+// Styles for the description of a single post
+.singlePostDesc {
+  color: #666;
+  font-size: 18px;
+  line-height: 25px;
+  white-space: pre-line;
+}
+
+// Styles for the first letter of the description in a single post
+.singlePostDesc::first-letter {
+  margin-left: 20px;
+  font-size: 30px;
+  font-weight: 600;
+}
+
+// Styles for a single post
+.singlePost{
+  margin: 40px;
+}

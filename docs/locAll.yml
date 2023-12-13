@@ -12,6 +12,11 @@ tags:
     description: List of all endpoints related to Marketplace
   - name: Events
     description: List of all endpoints related to Events
+  - name: Feedshare
+    description: List of all endpoints related to Feedshare
+  - name: Donation
+    description: List of all endpoints related to donation
+    
 paths:
   /users:
     post:
@@ -583,6 +588,311 @@ paths:
             application/json: 
               schema:
                $ref: "#/components/schemas/Error"
+               
+  /{location_id}/feedshare:
+    get:
+      tags:
+      - Feedshare
+      summary: Retrives all feedshare listings in at a specific location
+      parameters:
+        - name: location_id
+          in: path
+          description: ID of the specific location to retrieve its listings
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: All the Feedshare details
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Feedshare'
+        "500":
+            description: Internal Server Error
+            content:
+              application/json: 
+                schema:
+                  $ref: '#/components/schemas/Error'
+    post:
+      tags:
+      - Feedshare
+      summary: Retrives all feedshare listings in at a specific location
+      parameters:
+        - name: location_id
+          in: path
+          description: ID of the specific location to retrieve its food listing
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Feedshare'
+      responses:
+        "201":
+          description: Feedshare created successfully
+        "401":
+          description: Unauthenticated request
+          content:
+            application/json: 
+              schema:
+                $ref: '#/components/schemas/Error'              
+
+                          
+
+  /{location_id}/feedshare/{feedshare_id}:
+    get:
+      tags:
+       - Feedshare
+      summary: Retrive a specific feedshare listing based on listingId and locationId
+      parameters:
+      - name: location_id
+        in: path
+        description: ID of the specific location to retrieve its listings
+        required: true
+        schema:
+          type: integer
+      - name: feedshare_id
+        in: path
+        description: ID to retrive required feedshare listing
+        required: true
+        schema:
+          type: integer
+      responses:
+        "200": 
+          description: Listing Details
+          content: 
+            application/json:
+              schema: 
+                $ref: '#/components/schemas/Listing'
+        "404":
+          description: Listing not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+    put:
+      tags:
+        - Feedshare
+      summary: Update an existing feeshare based on ID
+      parameters: 
+      - name: location_id
+        in: path
+        description: ID of the specific location to retrieve its listings
+        required: true
+        schema:
+          type: integer
+      - name: feedshare_id
+        in: path
+        description: ID to retrive required marketplace listing
+        required: true
+        schema:
+          type: integer
+      requestBody:
+        description: Details of the listing to update
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Feedshare'
+        required: true
+      responses:
+        "200":
+          description: Updated Listing
+        "404":
+          description: Listing not found
+          content:
+            application/json: 
+              schema:
+               $ref: "#/components/schemas/Error"
+    delete:
+      tags:
+        - Feedshare
+      summary: Delete an existing feedshare listing based on ID
+      parameters: 
+      - name: location_id
+        in: path
+        description: ID of the specific location to retrieve its listings
+        required: true
+        schema:
+          type: integer
+      - name: feedshare_id
+        in: path
+        description: ID to retrive required feedshare listing
+        required: true
+        schema:
+          type: integer
+      responses:
+        '200':
+          description: Listing deleted!
+        "404":
+          description: Listing not found
+          content:
+            application/json: 
+              schema:
+               $ref: "#/components/schemas/Error"
+        "500":
+          description: Internal Server Error
+          content:
+            application/json: 
+              schema:
+               $ref: '#/components/schemas/Error'
+               
+  /{location_id}/donation:
+    get:
+      tags:
+      - Donation
+      summary: Retrieve all donation listings at a specific location
+      parameters:
+        - name: location_id
+          in: path
+          description: ID of the specific location to retrieve its donation listings
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: All the Donation details
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Donation'
+        "500":
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    post:
+      tags:
+      - Donation
+      summary: Create a new donation listing at a specific location
+      parameters:
+        - name: location_id
+          in: path
+          description: ID of the specific location to create a new donation listing
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Donation'
+      responses:
+        "201":
+          description: Donation created successfully
+        "401":
+          description: Unauthenticated request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  
+  /{location_id}/donation/{donation_id}:
+    get:
+      tags:
+      - Donation
+      summary: Retrieve a specific donation listing based on donationId and locationId
+      parameters:
+        - name: location_id
+          in: path
+          description: ID of the specific location to retrieve its donation listings
+          required: true
+          schema:
+            type: integer
+        - name: donation_id
+          in: path
+          description: ID to retrieve the required donation listing
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Donation Details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Donation'
+        "404":
+          description: Donation not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+    put:
+      tags:
+      - Donation
+      summary: Update an existing donation based on ID
+      parameters:
+        - name: location_id
+          in: path
+          description: ID of the specific location to retrieve its donation listings
+          required: true
+          schema:
+            type: integer
+        - name: donation_id
+          in: path
+          description: ID to retrieve the required donation listing
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        description: Details of the donation to update
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Donation'
+        required: true
+      responses:
+        "200":
+          description: Updated Donation
+        "404":
+          description: Donation not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+    delete:
+      tags:
+      - Donation
+      summary: Delete an existing donation listing based on ID
+      parameters:
+        - name: location_id
+          in: path
+          description: ID of the specific location to retrieve its donation listings
+          required: true
+          schema:
+            type: integer
+        - name: donation_id
+          in: path
+          description: ID to retrieve the required donation listing
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Donation deleted!
+        "404":
+          description: Donation not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "500":
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
 
 components:
   schemas:
@@ -734,7 +1044,123 @@ components:
         - endDate
         - address
         - organizer
+    
+    Feedshare:
+      type: object
+      properties:
+        feedshareId:
+          type: string
+          description: id of the listing
+          example: "FS01"
+        foodtype:
+          type: string
+          description: type of food
+          example: "Donuts"
+        servings:
+          type: string
+          description: number of servings
+          example: "4 servings"
+        postedDate:
+          type: string
+          format: date-time
+          description: posting date of the listing
+          example: '2017-07-21T17:32:28Z'
+        address:
+          type: string
+          description: address to collect food
+          example: "71 Walnut Park"
+        image:
+          type: string
+          description: src of the image
+          example: "/happening/image"
+        organizer:
+          type: string
+          description: Organized by
+          example: "Joe Doe"
+        createdUser:
+          type: string
+          description: Posted by
+          example: "Joe Doe"
+        locationId:
+          type: string
+          description: location zip code of event
+          example: "02119"
+      required:
+        - feedshareId
+        - foodtype
+        - servings
+        - postedDate
+        - address
+        - organizer
+        - locationId
 
+    Donation:
+      type: object
+      properties:
+        donationId:
+          type: string
+          example: "D001"
+          description: "Unique identifier for the donation."
+        donationName:
+          type: string
+          example: "Emergency Relief Fund"
+          description: "Name or title of the donation."
+        postedOn:
+          type: string
+          format: date-time
+          example: "2023-12-01T12:00:00Z"
+          description: "Date and time when the donation was posted."
+        descriptionInfo:
+          type: string
+          example: "Providing financial assistance for disaster relief"
+          description: "Description or details about the donation."
+        amountRequired:
+          type: number
+          example: 5000
+          description: "Total amount of funds required for the donation."
+        amountAchieved:
+          type: number
+          description: "Total amount of funds achieved for the donation."
+        image:
+          type: string
+          example: "/donation/image.jpg"
+          description: "URL or path to an image associated with the donation."
+        createdUser:
+          type: string
+          example: "user123"
+          description: "User ID of the creator or organizer of the donation."
+        locationId:
+          type: string
+          example: "02134"
+          description: "Location identifier or zip code for the donation."
+        receiver:
+          type: object
+          properties:
+            name:
+              type: string
+              example: "John Doe"
+            age:
+              type: number
+              example: 35
+            contact:
+              type: string
+              example: "+1234567890"
+          description: "Details of the recipient or beneficiary of the donation."
+        category:
+          type: string
+          example: "Humanitarian Aid"
+          description: "Category or type of the donation (e.g., Humanitarian Aid)."
+      required:
+        - donationId
+        - donationName
+        - postedOn
+        - descriptionInfo
+        - amountRequired
+        - locationId
+        - receiver
+        - category
+
+        
     Error:
       type: object
       properties: 
