@@ -19,6 +19,7 @@ onEndDateChange: (date: Date) => void;
 onLocationChange: (event: any) => void;
 onOrganiserChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
 isEdit: boolean;
+accessToken: string;
 }
 
 const FormFieldsComponent = (props: IFormFields) => {
@@ -35,7 +36,8 @@ const FormFieldsComponent = (props: IFormFields) => {
         onEndDateChange,
         onLocationChange,
         onOrganiserChange,
-        isEdit
+        isEdit, 
+        accessToken
     } = props;
     const { eventName, descriptionInfo, category } = newEvent;
     return(
@@ -69,7 +71,7 @@ const FormFieldsComponent = (props: IFormFields) => {
  {!isEdit && <InputWrap>
   <label>Location: <MandatoryStar>*</MandatoryStar></label>
   <SearchBox 
-accessToken={'pk.eyJ1IjoiYXNobWl5YS12aWpheWFjaGFuZHJhbiIsImEiOiJjbHBnMXRxc3oxaXd3MmlwcG5zZjBpdXNqIn0.GqCCjkCcmFsgrpMnl7ntzw'}
+accessToken={accessToken}
 value={selectedLocation}
 onRetrieve={onLocationChange}
 />
@@ -86,11 +88,11 @@ onRetrieve={onLocationChange}
 )
 };
 
-const InputWrap = styled.div`
+export const InputWrap = styled.div`
     margin-bottom: 20px;
     display: flex;
 `;
-const MandatoryStar = styled.span`
+export const MandatoryStar = styled.span`
 color: #A71313;
 `;
 

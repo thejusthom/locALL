@@ -5,30 +5,48 @@ import { IUser } from '../../models/user';
 import { useSelector } from 'react-redux';
 import happeningsService from '../../services/happeningsService';
 
+/**
+ * Initial state for the CreatePost component.
+ */
 const initialState = {
   title: '',
   content: '',
-  createdUser: '',
+  createdUser: {} as IUser,
   image: '',
 };
 
+/**
+ * CreatePost component.
+ */
 const CreatePost: React.FC = () => {
-  const [user, setUser] = useState({} as IUser);
   const locationId = useSelector((state: any) => state.location.pincode);
+  const currentUser = useSelector((state: any) => state.user);
   const [newHappening, setNewHappening] = useState<Happenings>(initialState);
-  const [imagePreview, setImagePreview] = useState<string | null>('https://images.pexels.com/photos/1167355/pexels-photo-1167355.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940');
+  const [imagePreview, setImagePreview] = useState<string | null>('');
 
+  /**
+   * Event handler for the title input change.
+   * @param event - The change event.
+   */
   const onTitleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setNewHappening({ ...newHappening, title: event.target.value });
   };
 
+  /**
+   * Event handler for the description textarea change.
+   * @param event - The change event.
+   */
   const onDescChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
     setNewHappening({ ...newHappening, content: event.target.value });
   };
 
+  /**
+   * Event handler for the file input change.
+   * @param event - The change event.
+   */
   const onFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
-
+  
     if (file) {
       const reader = new FileReader();
       reader.readAsDataURL(file);
@@ -36,12 +54,19 @@ const CreatePost: React.FC = () => {
         setImagePreview(reader.result as string);
         setNewHappening({ ...newHappening, image: reader.result as string });
       };
+    } else {
+      setImagePreview('https://images.pexels.com/photos/1167355/pexels-photo-1167355.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940');
+      setNewHappening({ ...newHappening, image: 'https://images.pexels.com/photos/1167355/pexels-photo-1167355.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940' });
     }
   };
-
+  
+  /**
+   * Event handler for creating a happening.
+   * @param event - The form event.
+   */
   const createHappening = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    happeningsService.createHappening("02119", { ...newHappening, createdUser: '656c36ac5a586d16ebae1886' });
+    happeningsService.createHappening(locationId, { ...newHappening, createdUser: currentUser?.user?._id });
     window.location.replace('/happenings');
   };
 
