@@ -35,7 +35,7 @@ const MyEvents = (props: IMyEvents) => {
                 {!!event._id &&
                 <td>
                     <img src={EditIcon} width={25} height={25} onClick={() => onEdit(event._id || "")} />
-                    <img src={DeleteIcon} width={25} height={25} onClick={(event: any) => onDelete(event._id || "", event)} />
+                    <img src={DeleteIcon} width={25} height={25} onClick={(e: any) => onDelete(event._id || "", e)} />
                 </td>
                 }
             </tr>

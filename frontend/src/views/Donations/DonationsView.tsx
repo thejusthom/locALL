@@ -104,7 +104,6 @@ React.useEffect(() => {
     const handleMakePayment = async(event: any) => {
         event.preventDefault();
        const donation = donations?.find((i) => i._id === selectedId);
-       console.log(donation)
         if(!!process.env.REACT_APP_STRIPE_PUBLISHING_KEY){
 //stripe
         const stripe = await loadStripe(process.env.REACT_APP_STRIPE_PUBLISHING_KEY);
@@ -130,10 +129,6 @@ React.useEffect(() => {
         const result = await stripe?.redirectToCheckout({
             sessionId:session.id
         });
-        
-        // if(!!result && result.error){
-        //     console.log(result.error);
-        // }}
     }
     }
     //modal close handling
@@ -338,7 +333,7 @@ const DonationCardsWrap = styled.article`
     display: flex;
     flex-direction: column;
     align-items: center;
-margin: 60px 40px;
+margin: 10px 40px;
 section{
     margin: 20px 0;
 }

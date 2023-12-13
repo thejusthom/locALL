@@ -256,7 +256,6 @@ const onSubmit = async(event: any) => {
     });
 }
 catch(err){
-    console.log("Error submitting event:", err);
     toast.error("Error occured while submitting event!");
     }
     setShowModal(false);
@@ -282,6 +281,7 @@ const onEdit = (eventId: string) => {
     });
 };
 const onDelete = async(eventId: string, event: any) => {
+    console.log(eventId)
     event.preventDefault();
     setShowLoader(true);
     try{ 
@@ -291,7 +291,6 @@ const onDelete = async(eventId: string, event: any) => {
     });
 }
     catch(err){
-        console.log("Error deleting event:", err);
         toast.error("Error occured while deleting event!");
         }
 };
@@ -308,7 +307,6 @@ const onUpdate = async(event: any) => {
 });
     }
     catch(err){
-        console.log("Error updating event:", err);
         toast.error("Error occured while updating event!");
         }
         setNewEvent(initialNewEvent);

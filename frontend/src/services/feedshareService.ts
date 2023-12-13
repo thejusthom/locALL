@@ -21,7 +21,6 @@ const getFeedshareByUser = async (locationId:string, createdUser:string) => {
 
 const updateFeedshare = async (locationId:string,body:FeedShare,_id:number) => {
     const response = await axios.put(API_URL + locationId +"/feedshare/"+_id,body);
-    console.log(response.data);
     return response.data;
 }
 

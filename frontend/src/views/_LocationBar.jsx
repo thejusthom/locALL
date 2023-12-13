@@ -57,7 +57,6 @@ function success(position) {
       }
     }).then(res => res.json())
       .then(res => {
-        console.log(res)
         setAdd(res.address?.postcode);
         setSelectedLocation(res.address?.postcode);
         setCity(res.address.city);
