@@ -36,3 +36,9 @@
     transform: rotate(360deg);
   }
 }
+
+/* common font and text color */
+body, html, button{
+  font-family: "Roboto","Helvetica","Arial",sans-serif !important;
+  color: #3e3e3e;
+}

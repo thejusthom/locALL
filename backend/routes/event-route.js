@@ -8,6 +8,10 @@ eventRouter.route('/')
   .get(eventController.getAll)
   .post(eventController.create);
 
+// Specific path to get users using params
+eventRouter.route('/params')
+.get(eventController.getByParams);
+
 // get, update and delete a event by id
 eventRouter.route('/:eventId')
   .get(eventController.getById)

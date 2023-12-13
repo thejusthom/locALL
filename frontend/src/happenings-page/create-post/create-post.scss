@@ -1,72 +1,72 @@
 .write {
-  padding-top: 50px;
+  padding-top: 50px; // Adds top padding to the .write element
 }
 
 .writeImg {
-  margin-left: 150px;
-  width: 70vw;
-  height: 250px;
-  border-radius: 10px;
-  object-fit: cover;
+  margin-left: 150px; // Adds left margin to the .writeImg element
+  width: 70vw; // Sets the width of the .writeImg element to 70% of the viewport width
+  height: 250px; // Sets the height of the .writeImg element to 250 pixels
+  border-radius: 10px; // Adds border radius to the .writeImg element
+  object-fit: cover; // Sets the object-fit property of the .writeImg element to cover
 }
 
 .writeForm {
-  position: relative;
+  position: relative; // Sets the position of the .writeForm element to relative
 }
 
 .writeFormGroup {
-  margin-left: 150px;
-  display: flex;
-  align-items: center;
+  margin-left: 150px; // Adds left margin to the .writeFormGroup element
+  display: flex; // Displays the .writeFormGroup element as a flex container
+  align-items: center; // Aligns the items of the .writeFormGroup element vertically
 }
 
 .writeIcon {
-  width: 25px;
-  height: 25px;
-  font-size: 20px;
-  border: 1px solid;
-  border-radius: 50%;
-  color: rgb(129, 125, 125);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
+  width: 25px; // Sets the width of the .writeIcon element to 25 pixels
+  height: 25px; // Sets the height of the .writeIcon element to 25 pixels
+  font-size: 20px; // Sets the font size of the .writeIcon element to 20 pixels
+  border: 1px solid; // Adds a 1 pixel solid border to the .writeIcon element
+  border-radius: 50%; // Adds border radius to the .writeIcon element
+  color: rgb(129, 125, 125); // Sets the color of the .writeIcon element
+  display: flex; // Displays the .writeIcon element as a flex container
+  align-items: center; // Aligns the items of the .writeIcon element vertically
+  justify-content: center; // Centers the items of the .writeIcon element horizontally
+  cursor: pointer; // Sets the cursor style of the .writeIcon element to pointer
 }
 
 .writeInput {
-  font-size: 30px;
-  border: none;
-  padding: 20px;
-  width: 70vw;
+  font-size: 30px; // Sets the font size of the .writeInput element to 30 pixels
+  border: none; // Removes the border of the .writeInput element
+  padding: 20px; // Adds padding to the .writeInput element
+  width: 70vw; // Sets the width of the .writeInput element to 70% of the viewport width
 }
 
 .writeInput::placeholder {
-  color: rgb(189, 185, 185);
-  font-weight: 400;
+  color: rgb(189, 185, 185); // Sets the color of the placeholder text of the .writeInput element
+  font-weight: 400; // Sets the font weight of the placeholder text of the .writeInput element
 }
 
 .writeInput:focus {
-  outline-style: none;
+  outline-style: none; // Removes the outline style when the .writeInput element is focused
 }
 
 .writeText {
-  width: 70vw;
-  // height: 100vh;
-  font-family: inherit;
-  font-size: 20px;
+  width: 70vw; // Sets the width of the .writeText element to 70% of the viewport width
+  // height: 100vh; // Commented out height property
+  font-family: inherit; // Inherits the font family from the parent element for the .writeText element
+  font-size: 20px; // Sets the font size of the .writeText element to 20 pixels
 }
 
 .writeSubmit {
-  position: absolute;
-  top: 20px;
-  right: 320px;
-  color: white;
-  background-color: teal;
-  padding: 10px;
-  border: none;
-  border-radius: 10px;
-  font-size: 16px;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
+  position: absolute; // Sets the position of the .writeSubmit element to absolute
+  top: 20px; // Sets the top position of the .writeSubmit element to 20 pixels
+  right: 320px; // Sets the right position of the .writeSubmit element to 320 pixels
+  color: white; // Sets the color of the .writeSubmit element to white
+  background-color: teal; // Sets the background color of the .writeSubmit element to teal
+  padding: 10px; // Adds padding to the .writeSubmit element
+  border: none; // Removes the border of the .writeSubmit element
+  border-radius: 10px; // Adds border radius to the .writeSubmit element
+  font-size: 16px; // Sets the font size of the .writeSubmit element to 16 pixels
+  cursor: pointer; // Sets the cursor style of the .writeSubmit element to pointer
+  display: flex; // Displays the .writeSubmit element as a flex container
+  align-items: center; // Aligns the items of the .writeSubmit element vertically
 }

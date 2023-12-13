@@ -18,8 +18,9 @@ const MapContainer = styled.section`
 text-align: -webkit-center;
 margin-top: 20px;
 .title{
-    font-size: 16px;
-    color: red;
+    font-size: 18px;
+    margin-bottom: 10px;
+    color: #123abc;
 }
 .geocoder {
 position: absolute;
@@ -28,6 +29,15 @@ right: 10%;
 top: 14%;
 text-decoration: none;
 list-style-type: none;
+}
+.popup{
+  color: #3e3e3e;
+  p{
+    font-size: 13.5px;
+  }
+  button{
+    background-color: #123abc;
+  }
 }
 .map-container {
   height: 500px;

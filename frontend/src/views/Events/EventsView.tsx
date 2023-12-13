@@ -9,12 +9,15 @@ import Tab from '@mui/material/Tab';
 import ReactModal from 'react-modal';
 import 'react-datepicker/dist/react-datepicker.css';
 import moment from "moment";
-import EvenstForm, { Button } from "./_EventsForm";
+import EventsForm, { Button } from "./_EventsForm";
 import { iconList } from "./Constants";
 import MyEvents from "./_MyEvents";
 import EventsMap from "./_EventsMap";
 import FormFieldsComponent from "./_FormFields";
 import { ToastContainer, toast } from "react-toastify";
+import NoDataScreen from "../../common/_NoDataScreen";
+import Loading from "../../common/_Loader";
+import { useTranslation } from "react-i18next";
 
 const initialNewEvent = {
     eventName: "",
@@ -30,7 +33,12 @@ const initialNewEvent = {
       }
 }
 const EventsView = () => {
+
 const selectLocation = (state: any) => state.location;
+const user = useSelector((state: any) => state.user);
+
+const { t } = useTranslation('common');
+
 const loc = useSelector(selectLocation);
 const [location, setLocation] = React.useState<{ latitude: number; longitude: number;}>({latitude: loc.latitude, longitude: loc.longitude});
 const [add,setAdd] = React.useState('');
@@ -46,35 +54,64 @@ const [tab, setTab] = React.useState(0);
 const [isEdit, setIsEdit] = React.useState<boolean>(false);
 const [eventId, setEventId] = React.useState<string>("");
 const [isValid, setIsValid] = React.useState<boolean>(true);
+const [showLoader, setShowLoader] = React.useState(true);
 
 React.useEffect(() => {
     setLocation({latitude: loc.latitude, longitude: loc.longitude});
 map.current?.setCenter([loc.longitude, loc.latitude]);
-setAdd(loc.pincode);
-eventsService.getEvents(loc.pincode).then((event)=> {
-    const availableEvents = event.filter((e: IEvent) => !!e.endDate && moment(e.endDate) >= moment());
-    setEvents(availableEvents)});
+const pincode = loc.pincode;
+setAdd(pincode);
+// if(!!user._id){
+renderEventsByTab();
 }, [loc]);
+
+React.useEffect(() => {
+    // if(!!user?.user?._id){
+renderEventsByTab();
+    // }
+}, [user?.user?._id, tab]);
+
+const renderEventsByTab = () => {
+    if(tab === 0){
+        setShowLoader(true);
+    eventsService.getEvents(loc.pincode).then((event)=> {
+       const availableEvents = event.filter((e: IEvent) => !!e.endDate && moment(e.endDate) >= moment());
+    setEvents(availableEvents);
+    setShowLoader(false);
+    })
+    }
+        else{
+            setShowLoader(true);
+            eventsService
+            .getEventByParams(loc.pincode, user?.user?._id)
+            .then((event => {
+                setEvents(event);
+                setShowLoader(false);
+            }));
+        }
+};
 
   const mapContainer = React.useRef<HTMLDivElement | null>(null);
   const map = React.useRef<mapboxgl.Map | null>(null);
 
-	mapboxgl.accessToken = 'pk.eyJ1IjoiYXNobWl5YS12aWpheWFjaGFuZHJhbiIsImEiOiJjbHBnMXRxc3oxaXd3MmlwcG5zZjBpdXNqIn0.GqCCjkCcmFsgrpMnl7ntzw';
+	if(!!process.env.REACT_APP_MAPBOX_API_KEY){
+        mapboxgl.accessToken = process.env.REACT_APP_MAPBOX_API_KEY
+    };
             if (!map.current && mapContainer.current && !!location?.latitude) {
                 map.current = new mapboxgl.Map({
                     container: mapContainer.current,
                     style: 'mapbox://styles/mapbox/streets-v12',
                     center: [location?.longitude, location?.latitude],
-                    zoom: 15
+                    zoom: 14.5
                     });
                 }
     React.useEffect(() => {
-    if (mapContainer.current && !!location?.latitude) {
+if (mapContainer.current && !!location?.latitude) {
         map.current = new mapboxgl.Map({
             container: mapContainer.current,
             style: 'mapbox://styles/mapbox/streets-v12',
             center: [location?.longitude, location?.latitude],
-            zoom: 15.25
+            zoom: 14.5
             });
         
     const url = `https://nominatim.openstreetmap.org/reverse?format=json&lat=${location.latitude}&lon=${location.longitude}`;
@@ -110,7 +147,7 @@ eventsService.getEvents(loc.pincode).then((event)=> {
                   ({
                     'type': 'Feature',
                     'properties': {
-                        'description': '<strong class="title">'+event.eventName+'</strong><p>'+event.descriptionInfo+'</p><p>Contact: '+event.organiser?.name+' ('+event.organiser?.contact+')</p><p>Date: '+event.startDate+' - '+event.endDate+'</p><button onclick="(function(){window.open(\'https://maps.google.com?q='+location.latitude+','+location.longitude+'\');})();">Open in Google Maps</button>',
+                        'description': '<div class="popup"><h2 class="title">'+event.eventName+'</h2><p>'+event.descriptionInfo+'</p><p>Contact: '+event.organiser?.name+' ('+event.organiser?.contact+')</p><p>Date: '+event.startDate+' - '+event.endDate+'</p><button class="maps-button" onclick="(function(){window.open(\'https://maps.google.com?q='+location.latitude+','+location.longitude+'\');})();">Open in Google Maps</button><div>',
                         'icon': event.category,
                     },
                     'geometry': {
@@ -206,22 +243,31 @@ setSelectedLocation(!!address ? address : res.address.postcode);
 const onOrganiserChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setOrganiser({...organiser, [e.target.id]: e.target.value});
 }
-const onSubmit = (event: any) => {
+const onSubmit = async(event: any) => {
+    setShowLoader(true);
     event.preventDefault();
     const start = startDate?.toLocaleDateString() || "";
     const end = endDate?.toLocaleDateString() || "";
-    eventsService.createEvent(add, {...newEvent, address: {...coordinates}, startDate: start, endDate: end, createdUser: "656bbf4a3b7690ac27e2bcfb", organiser}).then((event)=> {
+    try{ 
+        await eventsService.createEvent(add, {...newEvent, address: {...coordinates}, startDate: start, endDate: end, createdUser: user.user._id, organiser}).then((event)=> {
         !!events ? setEvents([...events, event]) : setEvents([event]);
+        setShowLoader(false);
         toast.success("Event Created Successfully!");
     });
+}
+catch(err){
+    toast.error("Error occured while submitting event!");
+    }
     setShowModal(false);
     setNewEvent(initialNewEvent);
     setCoordinates({longitude: 0, latitude:0});
+    setSelectedLocation("");
     setStartDate(undefined);
     setEndDate(undefined);
     setOrganiser({name: "", contact: ""});
 };
 const onEdit = (eventId: string) => {
+    setShowLoader(true);
      eventsService.getEventById(loc.pincode, eventId).then((event)=> {
         setNewEvent(event);
         setCoordinates({...event.address});
@@ -231,33 +277,44 @@ const onEdit = (eventId: string) => {
         setIsEdit(true);
         setEventId(eventId);
         setShowModal(true);
+        setShowLoader(false);
     });
 };
-const onDelete = (eventId: string) => {
-    eventsService.deleteEvent(loc.pincode, eventId).then((event)=> {
-        eventsService.getEvents(loc.pincode).then((event)=> {
-            const availableEvents = event.filter((e: IEvent) => !!e.endDate && moment(e.endDate) >= moment());
-            setEvents(availableEvents)
-        });
+const onDelete = async(eventId: string, event: any) => {
+    console.log(eventId)
+    event.preventDefault();
+    setShowLoader(true);
+    try{ 
+        await eventsService.deleteEvent(loc.pincode, eventId).then((event)=> {
+        renderEventsByTab();
             toast.success(`Event Deleted Successfully!`);
     });
+}
+    catch(err){
+        toast.error("Error occured while deleting event!");
+        }
 };
-const onUpdate = () => {
+const onUpdate = async(event: any) => {
+    event.preventDefault();
+    setShowLoader(true);
     const start = startDate?.toLocaleDateString() || "";
     const end = endDate?.toLocaleDateString() || "";
     const updatedEvent = {...newEvent, address: {...coordinates}, organiser, startDate: start, endDate: end};
-    eventsService.updateEvent(loc.pincode, eventId, updatedEvent).then((event)=> {
-        eventsService.getEvents(loc.pincode).then((event)=> {
-            const availableEvents = event.filter((e: IEvent) => !!e.endDate && moment(e.endDate) >= moment());
-            setEvents(availableEvents)}
-    );
+    try{ 
+        await eventsService.updateEvent(loc.pincode, eventId, updatedEvent).then((event)=> {
+    renderEventsByTab();
     toast.success(`${event.eventName} Updated Successfully!`);
 });
+    }
+    catch(err){
+        toast.error("Error occured while updating event!");
+        }
         setNewEvent(initialNewEvent);
         setCoordinates({longitude: 0, latitude:0});
         setStartDate(undefined);
         setEndDate(undefined);
         setOrganiser({name: "", contact: ""});
+        setSelectedLocation("");
         setIsEdit(false);
         setEventId("");
         setShowModal(false);
@@ -273,6 +330,7 @@ function a11yProps(index: number) {
     setCoordinates({longitude: 0, latitude:0});
     setStartDate(undefined);
     setEndDate(undefined);
+    setSelectedLocation("");
     setOrganiser({name: "", contact: ""});
     if(isEdit){
         setIsEdit(false);
@@ -281,28 +339,30 @@ function a11yProps(index: number) {
     setShowModal(false);
 };
   const handleTabChange = (event: any, newValue: number) => {
-    eventsService.getEvents(loc.pincode).then((event)=> {
-        const availableEvents = event.filter((e: IEvent) => !!e.endDate && moment(e.endDate) >= moment());
-        setEvents(newValue === 0 ? availableEvents : event)});
     setTab(newValue);
   };
     return(
-        
-        <EventsContainer><ToastContainer position="top-center" closeOnClick />
-        <Button 
+        <EventsContainer>
+            <ToastContainer position="top-center" closeOnClick />
+            <Modal isOpen={showLoader}>
+        <Loading isLoading={showLoader} />
+        </Modal>
+        {!!user?.user?._id &&<Button 
         onClick={() => setShowModal(true)}
-        >Create an Event</Button>
-               <Tabs sx={{margin: "15px 0 0 0"}} value={tab} onChange={handleTabChange} aria-label="basic tabs example">
-          <Tab sx={{fontSize: "16px", fontWeight: "bold"}} label="All Events" {...a11yProps(0)} />
-          <Tab sx={{fontSize: "16px", fontWeight: "bold"}} label="My Events" {...a11yProps(1)} />
+        >{t('create_event')}</Button>}
+               <Tabs sx={{margin: "15px 0 0 0", "& button": {color: "#123abc"}, "& button.Mui-selected": {color: "#123abc"}}} value={tab} onChange={handleTabChange} aria-label="basic tabs example"
+               TabIndicatorProps={{sx:{backgroundColor: "#123abc"}}}>
+          <Tab sx={{fontSize: "16px", fontWeight: "bold"}} label={t('all_events')} {...a11yProps(0)} />
+          {!!user?.user?._id && <Tab sx={{fontSize: "16px", fontWeight: "bold"}} label={t('my_events')} {...a11yProps(1)} />}
         </Tabs>
 <Modal isOpen={showModal}>
-  <EvenstForm isEdit={isEdit}
+  <EventsForm isEdit={isEdit}
    eventName={newEvent.eventName}
    onCloseModal={onCloseModal} 
    onUpdate={onUpdate} 
    onSubmit={onSubmit}
    isDisabled={!isValid}
+   type="Event"
    children={<FormFieldsComponent
               newEvent={newEvent}
               onCategoryChange={onCategoryChange}
@@ -316,34 +376,44 @@ function a11yProps(index: number) {
               onEndDateChange={onEndDateChange}
               onLocationChange={onLocationChange} 
               onOrganiserChange={onOrganiserChange}
-              isEdit={isEdit} />
+              isEdit={isEdit}
+              accessToken={mapboxgl.accessToken} />
             }
     />
   </Modal>
-   {tab === 0 && !!events ? 
+   {tab === 0 ? !!events?.length ? 
 (<EventsMap
-mapContainer={mapContainer} />)
-    : (
-        <MyEvents
+mapContainer={mapContainer} />) 
+:  (<NoDataScreen />)
+    : !!events?.length ?
+       (<MyEvents
         events={events}
         onEdit={onEdit}
-        onDelete={onDelete} />
-    )
+        onDelete={onDelete} />)
+        : (<NoDataScreen />)
      }
     </EventsContainer>
-    // </ToastContainer>
     );
 }
 
 const EventsContainer = styled.article`
-margin: 25px;
+margin: 10px 25px 25px 25px;
+.maps-button{
+    background-color: #1976d2;
+color: white;
+cursor: pointer;
+border: none;
+border-radius: 25px;
+font-size: 14px;
+padding: 7px 17px;
+}
 `;
 
-const Modal = styled(ReactModal)`
+export const Modal = styled(ReactModal)`
 inset: unset;
 width: 100%;
 height: 100%;
-background-color: rgba(0,0,0,0.3);
+background-color: rgba(231, 231, 231, 0.4)
 `;
 
 export default EventsView;

@@ -18,5 +18,16 @@ router.route('/:id')
     .put(userController.update)
     .delete(userController.remove);
 
+// Specific path to login
+router.route('/login')
+    .post(userController.loginUser);
+
+// Specific path to logout
+router.route('/logout')
+    .post(userController.logout);
+
+// Specific path to refresh token
+router.route('/refresh-token')
+    .post(userController.refreshTokens);
 
 export default router;

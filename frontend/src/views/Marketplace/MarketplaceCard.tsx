@@ -1,8 +1,20 @@
+// Imports from react
+import React, { ChangeEvent, useState, useEffect } from "react";
+import { useSelector } from "react-redux";
+import { useTranslation } from "react-i18next";
+import { ToastContainer, toast } from "react-toastify";
+// Imports from mui
 import AspectRatio from "@mui/joy/AspectRatio";
 import Button from "@mui/joy/Button";
 import Card from "@mui/joy/Card";
 import CardContent from "@mui/joy/CardContent";
 import Typography from "@mui/joy/Typography";
+import { Box } from "@mui/system";
+import IconButton from "@mui/joy/IconButton";
+import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
+import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
+import { Avatar } from "@mui/material";
+// Imports from semantic ui
 import {
   Comment,
   Form,
@@ -11,41 +23,49 @@ import {
   Header,
   TextAreaProps,
 } from "semantic-ui-react";
-import React, { ChangeEvent, useState, useEffect } from "react";
+// Imports from project files
 import { Marketplace } from "../../models/marketplace";
-import { Box } from "@mui/system";
 import marketplaceService from "../../services/marketplaceService";
-import image from "../../assets/images/no-image.jpg";
+// Imports for date formatting
 import moment from "moment";
-import IconButton from "@mui/joy/IconButton";
-import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
 
+// Type of props given to MarketplaceCard
 type Props = {
   marketplace: Marketplace;
   active: string;
   afterUpdate: () => void;
 };
 
+// MarketplaceCard component
 const MarketplaceCard = (props: Props) => {
+  // Imports for translation
+  const { t } = useTranslation("common");
+
+  // States for the component
   const [open, setOpen] = React.useState(false);
   const [text, setText] = React.useState("");
   const [update, setUpdate] = React.useState(false);
-
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [formData, setFormData] = useState({
     productName: props.marketplace.productName,
     description: props.marketplace.description,
     price: props.marketplace.price,
     image: props.marketplace.image,
   });
+  // Get user from redux store
+  const user = useSelector((state: any) => state.user);
+
+  // Using useEffect to update the formData state when props.marketplace changes
   useEffect(() => {
-    const clData = {
+    const data = {
       productName: props.marketplace.productName,
       description: props.marketplace.description,
       price: props.marketplace.price,
       image: props.marketplace.image,
     };
-    setFormData(clData);
+    setFormData(data);
   }, [props.marketplace]);
+  // Function to clear the form data
   const clearFormData = () => {
     const clData = {
       productName: "",
@@ -55,6 +75,7 @@ const MarketplaceCard = (props: Props) => {
     };
     setFormData(clData);
   };
+  // Function to handle the change in the text area
   const handleChange = (
     e: ChangeEvent<HTMLTextAreaElement>,
     value: TextAreaProps
@@ -62,12 +83,14 @@ const MarketplaceCard = (props: Props) => {
     setText(value.value as string);
   };
 
+  // Function to handle the change in the input fields
   const handleOnChange = (
     event: ChangeEvent<HTMLInputElement> | ChangeEvent<HTMLTextAreaElement>
   ) => {
     event.preventDefault();
     const id = event.target.id;
     const updateData = { ...formData };
+    // If the input field is of type file, then read the file and update the state
     if (
       event.target instanceof HTMLInputElement &&
       event.target.type === "file"
@@ -79,35 +102,41 @@ const MarketplaceCard = (props: Props) => {
         reader.onloadend = () => {
           reader.result as string;
           updateData[id as keyof typeof updateData] = reader.result as string;
-          console.log(updateData);
           setFormData(updateData);
         };
         return;
       }
     }
+    // Update the state with the new value if its not a file
     updateData[id as keyof typeof updateData] = event.target.value;
-    console.log(updateData);
     setFormData(updateData);
   };
 
+  // Function to handle the submit of the form
   const handleSubmit = async () => {
-    const listingDate = moment().format("MMMM Do YYYY, h:mm:ss a");
     props.marketplace.productName = formData.productName;
     props.marketplace.description = formData.description;
     props.marketplace.price = formData.price;
     props.marketplace.image = formData.image;
-    marketplaceService
-      .updateMarketplace(
-        props.marketplace.locationId,
-        props.marketplace,
-        props.marketplace._id
-      )
-      .then(() => {
-        setUpdate(false);
-        clearFormData();
-        props.afterUpdate();
-      });
+    try {
+      // Send a PUT request to update the listing
+      await marketplaceService
+        .updateMarketplace(
+          props.marketplace.locationId,
+          props.marketplace,
+          props.marketplace._id
+        )
+        .then(() => {
+          setUpdate(false);
+          clearFormData();
+          props.afterUpdate();
+          toast.success("Listing updated successfully");
+        });
+    } catch (error) {
+      toast.error("Error updating listing");
+    }
   };
+  // Function to fill the form data
   const fillFormData = () => {
     props.afterUpdate();
     const clData = {
@@ -119,28 +148,54 @@ const MarketplaceCard = (props: Props) => {
     setFormData(clData);
   };
 
-  const handleCommentsSubmit = () => {
+  // Function to handle the submit of the comments
+  const handleCommentsSubmit = async () => {
     props.marketplace.comments.push({
       author:
-        typeof props.marketplace.createdUser === "string"
-          ? ""
-          : props.marketplace.createdUser.person.firstName +
-            " " +
-            props.marketplace.createdUser.person.lastName,
+        user?.user?.person?.firstName + " " + user?.user?.person?.lastName,
       metaData: moment().format("MMMM Do YYYY, h:mm:ss a"),
       text: text,
-      avatar: "Profile Pic",
+      avatar: user?.user?.userImage,
     });
-    marketplaceService.updateMarketplace(
-      props.marketplace.locationId,
-      props.marketplace,
-      props.marketplace._id
-    );
-    setText("");
+    try {
+      // Send a PUT request to update the listing
+      await marketplaceService.updateMarketplace(
+        props.marketplace.locationId,
+        props.marketplace,
+        props.marketplace._id
+      );
+      setText("");
+    } catch (error) {
+      toast.error("Error posting comment");
+    }
   };
+
+  // Function to handle the delete confirmation
+  const handleDeleteConfirm = async () => {
+    try {
+      // Send a DELETE request to delete the listing
+      await marketplaceService
+        .deleteMarketplace(props.marketplace.locationId, props.marketplace._id)
+        .then(() => {
+          // Close the delete confirmation modal
+          setIsDeleteModalOpen(false);
+          props.afterUpdate();
+          toast.success("Listing deleted successfully");
+        });
+    } catch (error) {
+      toast.error("Error deleting listing");
+    }
+  };
+
+  // Function to handle the delete cancel
+  const handleDeleteCancel = () => {
+    setIsDeleteModalOpen(false);
+  };
+
   return (
     <Box>
-      <Card sx={{ width: 320 }}>
+      <ToastContainer position="top-center" closeOnClick />
+      <Card sx={{ width: 320, height: 310 }}>
         <div>
           <Typography level="title-lg">
             {props.marketplace.productName}
@@ -149,16 +204,28 @@ const MarketplaceCard = (props: Props) => {
             {props.marketplace.listingDate}
           </Typography>
           {props.active === "my-items" && (
-            <IconButton
-              aria-label="bookmark Bahamas Islands"
-              variant="plain"
-              color="neutral"
-              size="sm"
-              sx={{ position: "absolute", top: "0.875rem", right: "0.5rem" }}
-              onClick={() => setUpdate(true)}
-            >
-              <EditOutlinedIcon />
-            </IconButton>
+            <Box>
+              <IconButton
+                aria-label="bookmark Bahamas Islands"
+                variant="plain"
+                color="neutral"
+                size="sm"
+                sx={{ position: "absolute", top: "0.875rem", right: "2.5rem" }}
+                onClick={() => setUpdate(true)}
+              >
+                <EditOutlinedIcon />
+              </IconButton>
+              <IconButton
+                aria-label="bookmark Bahamas Islands"
+                variant="plain"
+                color="neutral"
+                size="sm"
+                sx={{ position: "absolute", top: "0.875rem", right: "0.5rem" }}
+                onClick={() => setIsDeleteModalOpen(true)}
+              >
+                <DeleteOutlineIcon />
+              </IconButton>
+            </Box>
           )}
         </div>
         <AspectRatio minHeight="120px" maxHeight="200px">
@@ -183,7 +250,7 @@ const MarketplaceCard = (props: Props) => {
             sx={{ ml: "auto", alignSelf: "center", fontWeight: 600 }}
             onClick={() => setOpen(true)}
           >
-            Explore
+            {t("explore")}
           </Button>
         </CardContent>
       </Card>
@@ -201,7 +268,7 @@ const MarketplaceCard = (props: Props) => {
         <Modal.Content image scrolling>
           <Image
             size="medium"
-            style={{ position: "sticky", top: 0 }}
+            style={{ position: { md: "sticky", xs: "block" }, top: 0 }}
             src={props.marketplace.image}
             srcSet={props.marketplace.image}
             alt={props.marketplace.productName}
@@ -216,10 +283,10 @@ const MarketplaceCard = (props: Props) => {
                   Posted by{" "}
                   {typeof props.marketplace.createdUser === "string"
                     ? ""
-                    : props.marketplace.createdUser.person.firstName}{" "}
-                  {typeof props.marketplace.createdUser === "string"
+                    : props.marketplace.createdUser?.person?.firstName}{" "}
+                  {typeof props.marketplace?.createdUser === "string"
                     ? ""
-                    : props.marketplace.createdUser.person.lastName}
+                    : props.marketplace.createdUser?.person?.lastName}
                 </p>
                 <Typography level="body-sm">
                   &nbsp; &nbsp; on {props.marketplace.listingDate}
@@ -239,12 +306,25 @@ const MarketplaceCard = (props: Props) => {
               <Header as="h3" dividing>
                 Comments
               </Header>
-              {props.marketplace.comments.map((comment) => (
-                <Comment>
-                  <Comment.Avatar
-                    src={comment.avatar}
-                    srcSet={[comment.avatar, image]}
-                  />
+              {props.marketplace.comments.map((comment, index) => (
+                <Comment key={String(index)}>
+                  {comment.avatar ? (
+                    <Avatar
+                      alt={comment.author.toUpperCase()}
+                      src={comment.avatar}
+                      sx={{ float: "left", mr: 1 }}
+                    />
+                  ) : (
+                    <Avatar
+                      alt={comment?.author?.charAt(0).toUpperCase()}
+                      src="/broken-image.jpg"
+                      sx={{ float: "left", mr: 1 }}
+                    />
+                    // <Comment.Avatar
+                    //   alt={comment.author.toUpperCase()}
+                    //   src="/broken-image.jpg"
+                    // />
+                  )}
                   <Comment.Content>
                     <Comment.Author as="span">{comment.author}</Comment.Author>
                     <Comment.Metadata>
@@ -255,15 +335,19 @@ const MarketplaceCard = (props: Props) => {
                 </Comment>
               ))}
 
-              <Form onSubmit={handleCommentsSubmit}>
-                <Form.TextArea
-                  placeholder="Write your comments here"
-                  name="text"
-                  value={text}
-                  onChange={handleChange}
-                />
-                <Button type="submit">Post</Button>
-              </Form>
+              {user.isLoggedIn && (
+                <Form onSubmit={handleCommentsSubmit}>
+                  <Form.TextArea
+                    placeholder="Write your comments here"
+                    name="text"
+                    value={text}
+                    onChange={handleChange}
+                  />
+                  <Button type="submit" disabled={!text}>
+                    Post
+                  </Button>
+                </Form>
+              )}
             </Comment.Group>
           </Modal.Description>
         </Modal.Content>
@@ -324,15 +408,17 @@ const MarketplaceCard = (props: Props) => {
               onChange={handleOnChange}
               required
             />
-            <Image
-              size="medium"
-              style={{ position: "sticky", top: 0 }}
-              src={formData.image}
-              srcSet={formData.image}
-              alt={"No images added"}
-              label="Image Preview"
-              wrapped
-            />
+            <Box sx={{ m: 1, ml: 0 }}>
+              <Image
+                size="medium"
+                style={{ position: "sticky", top: 0 }}
+                src={formData.image}
+                srcSet={formData.image}
+                alt={"No images added"}
+                label="Image Preview"
+                wrapped
+              />
+            </Box>
             <Form.Input
               fluid
               label="Upload your images here"
@@ -349,6 +435,12 @@ const MarketplaceCard = (props: Props) => {
               sx={{ ml: "auto", alignSelf: "center", fontWeight: 600 }}
               onClick={handleSubmit}
               type="submit"
+              disabled={
+                !formData.productName ||
+                !formData.price ||
+                !formData.description ||
+                !formData.image
+              }
             >
               Update
             </Button>
@@ -367,6 +459,25 @@ const MarketplaceCard = (props: Props) => {
             }}
           >
             Close
+          </Button>
+        </Modal.Actions>
+      </Modal>
+
+      <Modal
+        dimmer="inverted"
+        open={isDeleteModalOpen}
+        onClose={handleDeleteCancel}
+      >
+        <Modal.Header>Delete Listing</Modal.Header>
+        <Modal.Content>
+          <p>Are you sure you want to delete this listing?</p>
+        </Modal.Content>
+        <Modal.Actions>
+          <Button color="danger" onClick={handleDeleteConfirm} sx={{ mr: 2 }}>
+            Delete
+          </Button>
+          <Button color="neutral" onClick={handleDeleteCancel}>
+            Cancel
           </Button>
         </Modal.Actions>
       </Modal>

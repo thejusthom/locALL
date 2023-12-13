@@ -1,6 +1,7 @@
 import { ICoordinates } from "./location";
 import { IUser } from "./user";
 
+//events model
 export interface IEvent {
     _id?: string;
     eventName: string;

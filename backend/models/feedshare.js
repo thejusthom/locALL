@@ -21,7 +21,7 @@ const FeedShareSchema = new Schema ({
     },
     image: {
         type: String,
-        // required: true
+        required: true
     },
     organizer: {
         type: String,
@@ -29,7 +29,8 @@ const FeedShareSchema = new Schema ({
     },
     createdUser: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'User'
+        ref: 'User',
+        required: true
     },
     locationId: {
         type: String,

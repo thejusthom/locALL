@@ -1,7 +1,10 @@
+// Importing mongoose library
 import mongoose from 'mongoose';
 
+// Creating a schema object
 const Schema = mongoose.Schema;
 
+// Defining the Happening schema
 const HappeningSchema = new Schema({
     title: {
         type: String,
@@ -12,10 +15,10 @@ const HappeningSchema = new Schema({
         required: true
     },
     postedDate: {
-        type: Date,
+        type: String,
         required: true
     },
-    //to get the user object from User Schema
+    // Reference to the User schema to get the user object
     createdUser: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User'
@@ -33,5 +36,8 @@ const HappeningSchema = new Schema({
         versionKey: false
     });
 
+// Creating a model using the Happening schema
 const HappeningModel = mongoose.model('Happening', HappeningSchema);
+
+// Exporting the Happening model
 export default HappeningModel;
