@@ -69,7 +69,7 @@ const HappeningsView: React.FC = () =>{
       {/* Tab list */}
       <TabList
         sx={{
-          margin: "15px 0 0 0",
+          margin: "0 0 0 60px",
           '& .MuiTab-root': {
             fontSize: "16px",
             fontWeight: "bold",
