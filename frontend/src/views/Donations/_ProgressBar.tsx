@@ -13,11 +13,12 @@ interface IProgressBar{
 }
 
 const ProgressBar = (props: IProgressBar) => {
+  //props
     const { id, bgcolor, progress, height, donationRequired, donationAchieved } = props;
-    // const [showPopOver, setShowPopOver] = React.useState(false);
+    //useState
     const [anchorEl, setAnchorEl] = React.useState<HTMLDivElement | null>(null);
+    //functions
     const onShowPopOver = (event: React.MouseEvent<HTMLDivElement>) => {
-        // setShowPopOver(true);
         setAnchorEl(event.currentTarget);
     }
     const handleClose = () => {
@@ -26,13 +27,13 @@ const ProgressBar = (props: IProgressBar) => {
     const open = Boolean(anchorEl);
 	return (
 	<Parentdiv height={height}>
+    {/* popover to show amount achieved/amount required */}
         <Popover
   id={id}
   open={open}
   anchorEl={anchorEl}
   onClose={handleClose}
   anchorOrigin={{
-    // vertical: -46,
     vertical: 'bottom',
     horizontal: 'left',
   }}
@@ -59,7 +60,12 @@ const ProgressBar = (props: IProgressBar) => {
               left: "calc(50% - 6px)"
             }
           }}
-        /><PopOver>${donationAchieved} / ${donationRequired}</PopOver></Popover>
+        />
+        <PopOver>
+          ${donationAchieved} / ${donationRequired}
+          </PopOver>
+        </Popover>
+        {/* progress inner bar */}
 	<Childdiv id={id} progress={progress} bgColor={bgcolor} onMouseOver={onShowPopOver}>
 		<ProgressText>{`${progress}%`}</ProgressText>
 	</Childdiv>

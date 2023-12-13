@@ -514,7 +514,8 @@ export default function UserProfileBlock() {
         }}
       >
         <Modal.Header>Edit Personal Details</Modal.Header>
-        <Form>
+        <Form sx={{outerHeight: "80%"}}>
+        <Modal.Content scrolling>
           <Form.Group grouped>
             <Form.Field
               label="First Name"
@@ -557,6 +558,8 @@ export default function UserProfileBlock() {
               onChange={onFileChange}
             />
           </Form.Group>
+                 </Modal.Content>
+          <Modal.Actions>
           <Button
             type="submit"
             onClick={() => {
@@ -564,7 +567,7 @@ export default function UserProfileBlock() {
             }}
             size="md"
             color="primary"
-            sx={{ float: "right", ml: 2, mr: 3, mb: 1, fontWeight: 600 }}
+            sx={{ float: "right", ml: 2, mt:2, mr: 3, mb: 1, fontWeight: 600 }}
           >
             Change
           </Button>
@@ -573,7 +576,7 @@ export default function UserProfileBlock() {
             size="md"
             color="primary"
             aria-label="Explore Bahamas Islands"
-            sx={{ float: "left", ml: 2, mr: 3, mb: 1, fontWeight: 600 }}
+            sx={{ float: "left", ml: 2, mt: 2, mr: 3, mb: 1, fontWeight: 600 }}
             onClick={() => {
               setEditFormOpen(false);
               clearFormData();
@@ -581,7 +584,9 @@ export default function UserProfileBlock() {
           >
             Close
           </Button>
+          </Modal.Actions>
         </Form>
+ 
       </Modal>
 
       <Modal

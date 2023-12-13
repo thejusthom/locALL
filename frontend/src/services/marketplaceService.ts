@@ -8,7 +8,6 @@ const getMarketplace = async (locationId: string) => {
     const response = await axios.get(API_URL + locationId + "/marketplace");
     return response.data;
   } catch (error) {
-    console.log(error);
     return [];
   }
 };
@@ -24,7 +23,6 @@ const getMarketplaceByParams = async (
     );
     return response.data;
   } catch (error) {
-    console.log(error);
     return [];
   }
 };

@@ -7,7 +7,7 @@
     "doc": "docs"
   },
   "dependencies": {
-    "@stripe/stripe-js": "^2.4.0",
+    "@stripe/react-stripe-js": "^2.4.0",
     "cors": "^2.8.5",
     "debug": "^4.3.4",
     "dotenv": "^16.3.1",

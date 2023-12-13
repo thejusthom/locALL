@@ -7,6 +7,7 @@ import {
     Tooltip, Area
 } from "recharts";
 
+//area chart props
 interface IAreaChartProps{
 areaChartData: any[];
 dataKey: string;
@@ -14,6 +15,7 @@ area1Key: string;
 area2Key: string;
 }
 
+//area chart common component
 const AreaChartComp = (props: IAreaChartProps) => {
     const { areaChartData, area1Key, area2Key, dataKey } = props;
     return(

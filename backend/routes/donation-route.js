@@ -8,7 +8,7 @@ donationRouter.route('/')
     .get(donationController.get)
     .post(donationController.post);
     
-    // Specific path to get users using params
+// Specific path to get users using params
 donationRouter.route('/params')
 .get(donationController.getByParams);
 

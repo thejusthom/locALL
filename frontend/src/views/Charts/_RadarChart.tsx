@@ -9,6 +9,7 @@ import {
     Legend
 } from "recharts";
 
+// radar chart props
 interface IRadarChartProps{
 radarChartData: any[];
 dataKey: string;
@@ -18,6 +19,7 @@ radar1Key: string;
 radar2Key: string;
 }
 
+// radar chart common component
 const RadarChartComp = (props: IRadarChartProps) => {
     const { radar1Key, radar1Name, radar2Key, radar2Name, radarChartData, dataKey } = props;
 

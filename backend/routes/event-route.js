@@ -8,7 +8,7 @@ eventRouter.route('/')
   .get(eventController.getAll)
   .post(eventController.create);
 
-  // Specific path to get users using params
+// Specific path to get users using params
 eventRouter.route('/params')
 .get(eventController.getByParams);
 

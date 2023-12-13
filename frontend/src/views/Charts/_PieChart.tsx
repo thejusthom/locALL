@@ -1,5 +1,4 @@
 import * as React from "react";
-import styled from "styled-components";
 import {
     PieChart,
     Pie,
@@ -7,21 +6,25 @@ import {
     Cell 
 } from "recharts";
 
+// pie chart data
 export interface IPieData{
 name: string;
 value: number;
 color: string;
 }
 
+// pie chart props
 interface IPieChartComp{
     pieChartData: IPieData[];
     dataKey: string;
     nameKey: string;
 }
 
+//pie chart common component
 const PieChartComp = (props: IPieChartComp) => {
     const { pieChartData, dataKey, nameKey } = props;
     const RADIAN = Math.PI / 180;
+    //custom label to display the percentage
     const renderCustomizedLabel = ({ cx, cy, midAngle, innerRadius, outerRadius, percent, index }: any) => {
       const radius = innerRadius + (outerRadius - innerRadius) * 0.5;
       const x = cx + radius * Math.cos(-midAngle * RADIAN);
@@ -36,6 +39,7 @@ const PieChartComp = (props: IPieChartComp) => {
     return(
         <PieChart width={730} height={400}>
         <Tooltip />
+        {/* text inside the pie chart */}
         <text x={365} y={200} textAnchor="middle" dominantBaseline="middle">
 Categories
 </text>

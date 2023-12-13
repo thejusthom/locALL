@@ -3,6 +3,7 @@ import styled from "styled-components";
 import { Link } from "react-router-dom";
 import SuccessfulIcon from "../../assets/images/successfulIcon.svg";
 
+// success page for payment completion
 const Success = () => {
   return (
     <SuccessWrap>
@@ -15,6 +16,7 @@ const Success = () => {
   )
 }
 
+//styling
 const SuccessWrap = styled.article`
 width: 100%;
 height: 100%;
@@ -28,8 +30,6 @@ span{
 }
 `;
 const SuccessDiv = styled.div`
-/* width: 100%;
-height: 100%; */
 position: absolute;
 top: 32%;
 left: 13%;

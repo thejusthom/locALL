@@ -7,18 +7,21 @@ import { IDonation } from "../../models/donation";
 import { donationCategories } from "./Constants";
 import { useTranslation } from "react-i18next";
 
+// my donations props
 interface IMyDonations{
     donations?: IDonation[];
     onEdit: (id: string) => void;
-    onDelete: (id: string) => void;
+    onDelete: (id: string, event: any) => void;
 }
 
+// my donations comp
 const MyDonations = (props: IMyDonations) => {
     const { t } = useTranslation('common');
     const { donations, onEdit, onDelete } = props;
     
     return(
         <Table>
+            {/* columns */}
         <thead>
             <th>{t("name")}</th>
             <th>{t("category")}</th>
@@ -27,6 +30,7 @@ const MyDonations = (props: IMyDonations) => {
             <th>{t("posted_on")}</th>
             <th>{t("actions")}</th>
         </thead>
+        {/* rows */}
         <tbody>
             {donations?.map((donation) => 
            <tr key={donation._id}>
@@ -38,7 +42,7 @@ const MyDonations = (props: IMyDonations) => {
                 {!!donation._id &&
                 <td>
                     <img src={EditIcon} width={25} height={25} onClick={() => onEdit(donation._id || "")} />
-                    <img src={DeleteIcon} width={25} height={25} onClick={() => onDelete(donation._id || "")} />
+                    <img src={DeleteIcon} width={25} height={25} onClick={(event: any) => onDelete(donation._id || "", event)} />
                 </td>
                 }
             </tr>

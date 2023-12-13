@@ -6,8 +6,8 @@ interface ILoading{
 isLoading: boolean;
 }
 
+//Loader Component to display when API calls are in progress or when some data manipulation is occuring
 const Loading = (props: ILoading) => {
-//  const style = {textAlign: 'center'};
   return (
     <LoadingWrap>
       <SpinnerDotted color={"#123abc"} size={95} enabled={props.isLoading} />
@@ -19,7 +19,6 @@ const LoadingWrap = styled.section`
 position: fixed;
 top: 50%;
 left: 50%;
-/* transform: "translate(-50%, -50%)" */
 `;
 
 export default Loading;

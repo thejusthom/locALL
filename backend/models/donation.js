@@ -2,6 +2,7 @@ import mongoose from 'mongoose';
 
 const Schema = mongoose.Schema;
 
+//donation schema
 const donationSchema = new Schema({
   donationName: {
     type: String,
@@ -25,7 +26,6 @@ const donationSchema = new Schema({
   },
   image: {
     type: String,
-    // required: true
 },
   createdUser: {
     type: mongoose.Schema.Types.ObjectId,

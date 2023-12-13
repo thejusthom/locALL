@@ -9,7 +9,7 @@ import { useTranslation } from "react-i18next";
 interface IMyEvents{
     events?: IEvent[];
     onEdit: (id: string) => void;
-    onDelete: (id: string) => void;
+    onDelete: (id: string, event: any) => void;
 }
 
 const MyEvents = (props: IMyEvents) => {
@@ -35,7 +35,7 @@ const MyEvents = (props: IMyEvents) => {
                 {!!event._id &&
                 <td>
                     <img src={EditIcon} width={25} height={25} onClick={() => onEdit(event._id || "")} />
-                    <img src={DeleteIcon} width={25} height={25} onClick={() => onDelete(event._id || "")} />
+                    <img src={DeleteIcon} width={25} height={25} onClick={(e: any) => onDelete(event._id || "", e)} />
                 </td>
                 }
             </tr>
