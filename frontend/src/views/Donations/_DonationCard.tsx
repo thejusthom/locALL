@@ -46,7 +46,7 @@ const DonationCard = (props: IDonationCardProps) => {
         <span>{donation.receiver?.name}</span> | <span>{donation.receiver?.age}</span>
         </Name>
         <p>{donation.descriptionInfo}</p>
-        <p className="amount">Required amount: <strong>{donation.amountRequired}</strong></p>
+        <p className="amount">Required amount: <strong>$ {donation.amountRequired}</strong></p>
  <Button onClick={() => !!donation._id && handleMakePayment(donation._id)}>Help Now</Button>
         </div>
     </Card>
