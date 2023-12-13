@@ -276,7 +276,7 @@ const SinglePost: React.FC = () => {
           <Button onClick={handleDeleteCancel}>Cancel</Button>
         </Modal.Actions>
       </Modal>
-      <ToastContainer />
+      <ToastContainer position="top-center" closeOnClick />
     </div>
   );
 };
